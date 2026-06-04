@@ -1,0 +1,17 @@
+{
+  "src": [
+    "pages/Splash",
+    "pages/LoginPage",
+    "pages/RegisterPage",
+    "pages/ChatPage",
+    "pages/DevicesPage",
+    "pages/SettingsPage",
+    "pages/FileManagerPage",
+    "pages/AccountPage",
+    "pages/S3SettingsPage",
+    "pages/VersionHistoryPage",
+    "pages/AppLogPage",
+    "pages/QrScanPage",
+    "pages/MembershipPage"
+  ]
+}

@@ -1,0 +1,510 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* System UI fonts; Web does not bundle WenYuan (Windows Flutter only). */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
+  --font-display: var(--font-display);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-bubble-own: var(--bubble-own);
+  --color-border-strong: var(--border-strong);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-success: var(--success);
+  --color-success-surface: var(--success-surface);
+  --color-warning: var(--warning);
+  --color-warning-surface: var(--warning-surface);
+  --color-danger: var(--danger);
+  --color-danger-surface: var(--danger-surface);
+  --color-accent-soft: var(--accent-soft);
+  /* Radius aligned to Flutter: sm=12 md=16 lg=20 */
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 1.75rem;
+  --radius-3xl: 2rem;
+  --radius-4xl: 2.25rem;
+}
+
+/* Full-viewport atmosphere: sits behind app content (see layout `app-root`). */
+.app-root {
+  isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  .app-root {
+    overflow-x: clip;
+  }
+}
+
+.app-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 88% 52% at 50% -18%,
+      color-mix(in oklch, var(--primary) 13%, transparent) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 42% 38% at 108% 8%,
+      color-mix(in oklch, var(--accent-soft) 70%, transparent) 0%,
+      transparent 52%
+    ),
+    var(--background);
+}
+
+.dark .app-atmosphere {
+  background:
+    radial-gradient(
+      ellipse 88% 48% at 50% -12%,
+      color-mix(in oklch, var(--primary) 20%, transparent) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 40% 36% at 96% 12%,
+      color-mix(in oklch, var(--chart-2) 24%, transparent) 0%,
+      transparent 48%
+    ),
+    var(--background);
+}
+
+.app-atmosphere::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.32;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+}
+
+.dark .app-atmosphere::after {
+  opacity: 0.1;
+  mix-blend-mode: overlay;
+}
+
+:root {
+  --text-scale: 1;
+  --font-weight-base: 450;
+  --font-primary: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-secondary: var(--font-primary);
+  --font-body: var(--font-primary);
+  --font-display: var(--font-primary);
+  --font-mono: var(--font-primary), ui-monospace, monospace;
+
+  /* Zinc gray scale aligned with Flutter AppThemeColors (shell #E8EBF0 / content white) */
+  --background: #e8ebf0;
+  --foreground: oklch(0.21 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.21 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.21 0 0);
+  --primary: oklch(0.596 0.145 163.225);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(1 0 0);
+  --secondary-foreground: oklch(0.21 0 0);
+  --muted: oklch(0.97 0.002 264);
+  --muted-foreground: oklch(0.552 0 0);
+  --accent: oklch(1 0 0);
+  --accent-foreground: oklch(0.21 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.596 0.145 163.225);
+  --chart-1: oklch(0.596 0.145 163.225);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.508 0.118 165.612);
+  --chart-4: oklch(0.765 0.177 163.223);
+  --chart-5: oklch(0.432 0.095 166.913);
+  --radius: 1rem;
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.21 0 0);
+  --sidebar-primary: oklch(0.596 0.145 163.225);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.97 0.002 264);
+  --sidebar-accent-foreground: oklch(0.21 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.596 0.145 163.225);
+  --bubble-own: oklch(0.93 0.045 160);
+  --border-strong: oklch(0.871 0 0);
+  --text-tertiary: oklch(0.705 0 0);
+  --success: oklch(0.546 0.175 142.8);
+  --success-surface: oklch(0.968 0.022 166);
+  --warning: oklch(0.626 0.152 71);
+  --warning-surface: oklch(0.98 0.016 73);
+  --danger: oklch(0.577 0.245 27.325);
+  --danger-surface: oklch(0.977 0.013 17);
+  --accent-soft: color-mix(in oklch, var(--primary) 10%, var(--background));
+}
+
+.dark {
+  /* Zinc gray scale aligned with Flutter AppThemeColors (dark) */
+  --background: oklch(0.21 0 0);
+  --foreground: oklch(1 0 0);
+  --card: oklch(0.274 0 0);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.274 0 0);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(0.696 0.17 162.48);
+  --primary-foreground: oklch(0.21 0 0);
+  --secondary: oklch(0.274 0 0);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.235 0 0);
+  --muted-foreground: oklch(0.705 0 0);
+  --accent: oklch(0.37 0 0);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.808 0.087 22);
+  --border: oklch(0.37 0 0);
+  --input: oklch(0.37 0 0);
+  --ring: oklch(0.696 0.17 162.48);
+  --chart-1: oklch(0.696 0.17 162.48);
+  --chart-2: oklch(0.765 0.177 163.223);
+  --chart-3: oklch(0.596 0.145 163.225);
+  --chart-4: oklch(0.845 0.143 164.978);
+  --chart-5: oklch(0.508 0.118 165.612);
+  --sidebar: oklch(0.274 0 0);
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.696 0.17 162.48);
+  --sidebar-primary-foreground: oklch(0.21 0 0);
+  --sidebar-accent: oklch(0.274 0 0);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.37 0 0);
+  --sidebar-ring: oklch(0.696 0.17 162.48);
+  --bubble-own: oklch(0.30 0.07 160);
+  --border-strong: oklch(0.442 0 0);
+  --text-tertiary: oklch(0.552 0 0);
+  --success: oklch(0.793 0.209 151);
+  --success-surface: oklch(0.231 0.066 153 / 55%);
+  --warning: oklch(0.852 0.176 85);
+  --warning-surface: oklch(0.254 0.072 48 / 50%);
+  --danger: oklch(0.808 0.087 22);
+  --danger-surface: oklch(0.245 0.079 22 / 45%);
+  --accent-soft: oklch(0.35 0.04 163);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    text-rendering: optimizeLegibility;
+    max-width: 100%;
+    overflow-x: hidden;
+    font-size: calc(100% * var(--text-scale, 1));
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-primary), var(--font-secondary), ui-sans-serif, system-ui, sans-serif;
+    font-weight: var(--font-weight-base, 450);
+    line-height: 1.65;
+    font-synthesis: none;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  @supports (overflow: clip) {
+    html,
+    body {
+      overflow-x: clip;
+    }
+  }
+
+  ::selection {
+    background: color-mix(in oklch, var(--primary) 30%, transparent);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(0.7 0 0 / 0.2);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.5 0 0 / 0.35);
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: oklch(0.6 0 0 / 0.25);
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.7 0 0 / 0.4);
+  }
+}
+
+@keyframes app-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes app-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes app-glow-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.42;
+  }
+  50% {
+    transform: translate(3%, -2%) scale(1.03);
+    opacity: 0.52;
+  }
+}
+
+@keyframes landing-orbit-pulse {
+  0%,
+  100% {
+    opacity: 0.38;
+    transform: rotate(-11deg) scale(1);
+  }
+  50% {
+    opacity: 0.72;
+    transform: rotate(-7deg) scale(1.025);
+  }
+}
+
+@keyframes landing-beam-flow {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
+}
+
+.font-display {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    font-synthesis: none;
+  }
+
+  /** 10–11px 级标签：略增字距改善汉字密排可读性（按需加在组件上） */
+  .tracking-cjk-micro {
+    letter-spacing: 0.03em;
+  }
+
+  .animate-app-fade-up {
+    animation: app-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-app-fade-in {
+    animation: app-fade-in 0.45s ease-out both;
+  }
+
+  .animate-app-glow-drift {
+    animation: app-glow-drift 14s ease-in-out infinite;
+  }
+
+  .app-stagger-1 {
+    animation-delay: 60ms;
+  }
+  .app-stagger-2 {
+    animation-delay: 0.12s;
+  }
+  .app-stagger-3 {
+    animation-delay: 0.18s;
+  }
+  .app-stagger-4 {
+    animation-delay: 0.24s;
+  }
+  .app-stagger-5 {
+    animation-delay: 0.32s;
+  }
+  .app-stagger-6 {
+    animation-delay: 0.4s;
+  }
+  .app-stagger-7 {
+    animation-delay: 0.48s;
+  }
+  .app-stagger-8 {
+    animation-delay: 0.56s;
+  }
+  .app-stagger-9 {
+    animation-delay: 0.64s;
+  }
+  .app-stagger-10 {
+    animation-delay: 0.72s;
+  }
+  .app-stagger-11 {
+    animation-delay: 0.8s;
+  }
+
+  .item-selected-soft {
+    /* Mix primary into card (not page background) — matches Flutter surface + primary@10% */
+    background: color-mix(in oklch, var(--primary) 12%, var(--card));
+    @apply ring-1 ring-primary/25 shadow-sm;
+  }
+
+  .surface-glass {
+    @apply border border-border/80 bg-card/80 shadow-sm backdrop-blur-xl;
+    box-shadow: 0 1px 0 color-mix(in oklch, var(--foreground) 5%, transparent);
+  }
+
+  .landing-shell {
+    --foreground: oklch(0.98 0.006 210);
+    --card: oklch(0.24 0.025 215);
+    --card-foreground: oklch(0.98 0.006 210);
+    --background: oklch(0.18 0.024 220);
+    --muted: oklch(0.31 0.024 220);
+    --muted-foreground: oklch(0.78 0.018 215);
+    --border: oklch(0.45 0.03 215);
+    --secondary: oklch(0.29 0.025 215);
+    --secondary-foreground: oklch(0.96 0.006 210);
+    /* Light theme keeps a darker --primary; on landing/docs dark canvas use a brighter accent. */
+    --primary: oklch(0.8 0.17 162.48);
+    --primary-foreground: oklch(0.16 0.022 225);
+    --ring: oklch(0.8 0.17 162.48);
+    --docs-link: oklch(0.93 0.14 168);
+    --docs-link-hover: oklch(0.98 0.1 168);
+    --docs-link-decoration: oklch(0.93 0.14 168 / 0.78);
+    color: var(--foreground);
+    background:
+      radial-gradient(circle at 14% 10%, color-mix(in oklch, var(--primary) 38%, transparent), transparent 30rem),
+      radial-gradient(circle at 82% 18%, color-mix(in oklch, var(--chart-2) 30%, transparent), transparent 34rem),
+      radial-gradient(circle at 50% 44%, oklch(0.31 0.035 215 / 72%), transparent 42rem),
+      linear-gradient(180deg, oklch(0.22 0.028 220), oklch(0.18 0.026 220) 52%, oklch(0.16 0.022 225));
+  }
+
+  .landing-shell .docs-markdown a {
+    color: var(--docs-link);
+    text-decoration-color: var(--docs-link-decoration);
+  }
+
+  .landing-shell .docs-markdown a:hover {
+    color: var(--docs-link-hover);
+    text-decoration-color: var(--docs-link-hover);
+  }
+
+  .landing-shell::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(color-mix(in oklch, var(--foreground) 5%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklch, var(--foreground) 5%, transparent) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(circle at 50% 0%, black, transparent 72%);
+    opacity: 0.3;
+  }
+
+  .landing-glow-orb {
+    position: absolute;
+    border-radius: 9999px;
+    pointer-events: none;
+    background: radial-gradient(circle, color-mix(in oklch, var(--primary) 32%, transparent), transparent 68%);
+    filter: blur(42px);
+  }
+
+  .landing-gradient-text {
+    background: linear-gradient(100deg, oklch(1 0 0), color-mix(in oklch, var(--primary) 72%, white), oklch(0.88 0.12 205));
+    background-clip: text;
+    color: transparent;
+  }
+
+  .landing-glass-card,
+  .landing-device-card,
+  .landing-flow-panel {
+    border: 1px solid color-mix(in oklch, var(--foreground) 16%, transparent);
+    background:
+      linear-gradient(135deg, color-mix(in oklch, var(--card) 78%, transparent), color-mix(in oklch, var(--card) 48%, transparent)),
+      color-mix(in oklch, var(--background) 52%, transparent);
+    box-shadow:
+      0 1px 0 color-mix(in oklch, var(--foreground) 14%, transparent) inset,
+      0 24px 80px color-mix(in oklch, black 24%, transparent);
+    backdrop-filter: blur(24px);
+  }
+
+  .landing-orbit {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in oklch, var(--primary) 40%, transparent);
+    box-shadow: 0 0 44px color-mix(in oklch, var(--primary) 28%, transparent);
+    animation: landing-orbit-pulse 8s ease-in-out infinite;
+  }
+
+  .landing-orbit-1 {
+    inset: 25% -6% 18% 10%;
+    transform: rotate(-11deg);
+  }
+
+  .landing-orbit-2 {
+    inset: 36% 8% 28% -2%;
+    animation-delay: -3s;
+    border-color: color-mix(in oklch, var(--chart-2) 32%, transparent);
+  }
+
+  .landing-beam {
+    position: absolute;
+    left: -12%;
+    right: -12%;
+    top: 46%;
+    height: 70px;
+    transform: rotate(-7deg);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklch, var(--primary) 12%, transparent),
+      color-mix(in oklch, var(--primary) 78%, transparent),
+      color-mix(in oklch, var(--chart-2) 45%, transparent),
+      transparent
+    );
+    background-size: 200% 100%;
+    filter: blur(8px);
+    animation: landing-beam-flow 4.8s linear infinite;
+  }

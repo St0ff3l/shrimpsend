@@ -1,0 +1,7 @@
+/* Localized display name under home screen icon */
+"CFBundleDisplayName" = "虾传";
+
+"NSCameraUsageDescription" = "用于扫描二维码登录";
+"NSLocalNetworkUsageDescription" = "用于发现和连接局域网内的其他设备以传输文件";
+"NSPhotoLibraryUsageDescription" = "用于将接收的图片、视频保存到相册";
+"NSPhotoLibraryAddUsageDescription" = "用于将接收的图片、视频保存到相册";

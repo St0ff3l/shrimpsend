@@ -1,0 +1,7 @@
+# Template locale: app_en.arb. Keep app_zh.arb keys in sync (same keys as app_en).
+# Naming: screen_feature_purpose; use placeholders in ARB for dynamic segments (ICU).
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-dir: lib/l10n/generated
+nullable-getter: false

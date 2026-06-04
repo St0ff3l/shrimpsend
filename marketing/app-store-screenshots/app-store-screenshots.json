@@ -1,0 +1,259 @@
+{
+  "appName": "虾传",
+  "themeId": "shrimpsend-emerald",
+  "locales": [
+    "zh"
+  ],
+  "locale": "zh",
+  "device": "ipad",
+  "orientation": "portrait",
+  "appIcon": "/app-icon.png",
+  "slidesByDevice": {
+    "iphone": [
+      {
+        "id": "ss-connect",
+        "layout": "device-bottom",
+        "label": {
+          "zh": "连接"
+        },
+        "headline": {
+          "zh": "所有设备，\n一眼即连"
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/01-connect.png"
+      },
+      {
+        "id": "ss-transfer",
+        "layout": "device-bottom",
+        "label": {
+          "zh": "传输"
+        },
+        "headline": {
+          "zh": "像发消息一样\n传文件"
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/02-transfer.png"
+      },
+      {
+        "id": "ss-s3-relay",
+        "layout": "device-bottom",
+        "label": {
+          "zh": "S3 云端"
+        },
+        "headline": {
+          "zh": "跨网不稳？\n云端接力"
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/03-s3-relay.png",
+        "inverted": true
+      },
+      {
+        "id": "ss-files",
+        "layout": "device-bottom",
+        "label": {
+          "zh": "文件"
+        },
+        "headline": {
+          "zh": "每次传输，\n清晰归档"
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/04-files.png"
+      }
+    ],
+    "android": [
+      {
+        "id": "ss-connect",
+        "layout": "hero",
+        "label": {
+          "zh": "连接"
+        },
+        "headline": {
+          "zh": "所有设备，\n一眼即连"
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/01-connect.png"
+      },
+      {
+        "id": "ss-transfer",
+        "layout": "device-bottom",
+        "label": {
+          "zh": "传输"
+        },
+        "headline": {
+          "zh": "像发消息一样\n传文件"
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/02-transfer.png"
+      },
+      {
+        "id": "ss-s3-relay",
+        "layout": "device-top",
+        "label": {
+          "zh": "S3 云端"
+        },
+        "headline": {
+          "zh": "跨网不稳？\n云端接力"
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/03-s3-relay.png",
+        "inverted": true
+      },
+      {
+        "id": "ss-files",
+        "layout": "device-bottom",
+        "label": {
+          "zh": "文件"
+        },
+        "headline": {
+          "zh": "每次传输，\n清晰归档"
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/04-files.png"
+      }
+    ],
+    "ipad": [
+      {
+        "id": "ss-connect",
+        "layout": "hero",
+        "label": {
+          "zh": "连接"
+        },
+        "headline": {
+          "zh": "所有设备，\n一眼即连"
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/01-connect.png"
+      },
+      {
+        "id": "ss-transfer",
+        "layout": "device-bottom",
+        "label": {
+          "zh": "传输"
+        },
+        "headline": {
+          "zh": "像发消息一样\n传文件"
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/02-transfer.png"
+      },
+      {
+        "id": "ss-s3-relay",
+        "layout": "device-top",
+        "label": {
+          "zh": "S3 云端"
+        },
+        "headline": {
+          "zh": "跨网不稳？\n云端接力"
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/03-s3-relay.png",
+        "inverted": true
+      },
+      {
+        "id": "ss-files",
+        "layout": "device-bottom",
+        "label": {
+          "zh": "文件"
+        },
+        "headline": {
+          "zh": "每次传输，\n清晰归档"
+        },
+        "screenshot": "/screenshots/apple/iphone/{locale}/04-files.png"
+      }
+    ],
+    "android-7": [
+      {
+        "id": "ss-connect",
+        "layout": "hero",
+        "label": {
+          "zh": "连接"
+        },
+        "headline": {
+          "zh": "所有设备，\n一眼即连"
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/01-connect.png"
+      },
+      {
+        "id": "ss-transfer",
+        "layout": "device-bottom",
+        "label": {
+          "zh": "传输"
+        },
+        "headline": {
+          "zh": "像发消息一样\n传文件"
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/02-transfer.png"
+      },
+      {
+        "id": "ss-s3-relay",
+        "layout": "device-top",
+        "label": {
+          "zh": "S3 云端"
+        },
+        "headline": {
+          "zh": "跨网不稳？\n云端接力"
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/03-s3-relay.png",
+        "inverted": true
+      },
+      {
+        "id": "ss-files",
+        "layout": "device-bottom",
+        "label": {
+          "zh": "文件"
+        },
+        "headline": {
+          "zh": "每次传输，\n清晰归档"
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/04-files.png"
+      }
+    ],
+    "android-10": [
+      {
+        "id": "ss-connect",
+        "layout": "hero",
+        "label": {
+          "zh": "连接"
+        },
+        "headline": {
+          "zh": "所有设备，\n一眼即连"
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/01-connect.png"
+      },
+      {
+        "id": "ss-transfer",
+        "layout": "device-bottom",
+        "label": {
+          "zh": "传输"
+        },
+        "headline": {
+          "zh": "像发消息一样\n传文件"
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/02-transfer.png"
+      },
+      {
+        "id": "ss-s3-relay",
+        "layout": "device-top",
+        "label": {
+          "zh": "S3 云端"
+        },
+        "headline": {
+          "zh": "跨网不稳？\n云端接力"
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/03-s3-relay.png",
+        "inverted": true
+      },
+      {
+        "id": "ss-files",
+        "layout": "device-bottom",
+        "label": {
+          "zh": "文件"
+        },
+        "headline": {
+          "zh": "每次传输，\n清晰归档"
+        },
+        "screenshot": "/screenshots/android/phone/{locale}/04-files.png"
+      }
+    ],
+    "feature-graphic": [
+      {
+        "id": "ss-feature-graphic",
+        "layout": "feature-graphic",
+        "label": {},
+        "headline": {
+          "zh": "跨设备传文件，\n直达你的设备。"
+        },
+        "screenshot": ""
+      }
+    ]
+  }
+}

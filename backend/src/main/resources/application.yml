@@ -1,0 +1,140 @@
+spring:
+  application:
+    name: ultrasend-backend
+  servlet:
+    multipart:
+      max-file-size: 512MB
+      max-request-size: 520MB
+  datasource:
+    url: jdbc:mysql://localhost:3306/ultrasend?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: "${SPRING_DATASOURCE_USERNAME:root}"
+    password: "${SPRING_DATASOURCE_PASSWORD:changeme}"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate.format_sql: true
+
+server:
+  port: 9000
+
+app:
+  admin:
+    # 逗号分隔；生产建议用环境变量覆盖
+    emails: "${APP_ADMIN_EMAILS:admin@example.com}"
+  # 次数据源配置（闪电藤数据库）
+  datasource:
+    sdt:
+      url: jdbc:mysql://localhost:3306/sdt?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: "${SPRING_DATASOURCE_USERNAME:root}"
+      password: "${SPRING_DATASOURCE_PASSWORD:changeme}"
+  latest:
+    version: "1.0.5"
+    build-number: 5
+    download-url: ""
+    release-notes: ""
+    ios-store-url: ""
+  # 公开 Web 站点根（用于拼 S3 配置文档绝对 URL；Flutter 外开浏览器）
+  public-web-base-url: "${APP_PUBLIC_WEB_BASE_URL:http://localhost:3000}"
+  s3-docs-path: "${APP_S3_DOCS_PATH:/zh/docs/s3/overview}"
+  messages:
+    encryption:
+      key-base64: "${APP_MESSAGES_ENCRYPTION_KEY_BASE64:}"
+      allow-dev-fallback-key: ${APP_MESSAGES_ENCRYPTION_ALLOW_DEV_FALLBACK:true}
+      migrate-on-startup: ${APP_MESSAGES_ENCRYPTION_MIGRATE_ON_STARTUP:false}
+  cors:
+    allowed-origins: "http://localhost:*,http://127.0.0.1:*,http://192.168.*.*:*,http://10.*.*.*:*"
+  jwt:
+    access-secret: ultrasend-access-secret-change-in-production
+    access-expiration-ms: 900000
+    refresh-secret: ultrasend-refresh-secret-change-in-production
+    refresh-expiration-ms: 31536000000  # 365 days
+  membership:
+    free-device-limit: 3
+    alipay:
+      # 国内本地默认回本地 Web；线上见 application-prod.yml（ops 仓）。海外集群见 application-*-overseas.yml
+      return-url: "${ALIPAY_RETURN_URL:http://localhost:3000/settings/membership}"
+      public-key: "${ALIPAY_PUBLIC_KEY:}"
+      mock-notify-enabled: true
+      app-id: "${ALIPAY_APP_ID:}"
+      private-key: "${ALIPAY_PRIVATE_KEY:}"
+      alipay-public-key: "${ALIPAY_ALIPAY_PUBLIC_KEY:}"
+      gateway: "https://openapi.alipay.com/gateway.do"
+      notify-url: "${ALIPAY_NOTIFY_URL:http://localhost:9000/api/membership/alipay/notify}"
+      local-notify-url: "${ALIPAY_LOCAL_NOTIFY_URL:http://localhost:9000/api/membership/alipay/notify}"
+    revenuecat:
+      webhook-auth: ""
+    rc-product-mini: "ultrasend_mini_lifetime"
+    rc-product-pro: "ultrasend_pro_lifetime"
+    rc-product-pro-upgrade: "ultrasend_mini_to_pro_upgrade"
+    rc-product-addon-5: "ultrasend_addon_5_devices"
+    addon-price-cent: 4500
+    addon-devices: 5
+    reconcile-delay-ms: 300000
+    overseas:
+      rc-plus-monthly: "${OVERSEAS_RC_PLUS_MONTHLY:shrimpsend_plus_monthly}"
+      rc-plus-yearly: "${OVERSEAS_RC_PLUS_YEARLY:shrimpsend_plus_yearly}"
+      rc-pro-monthly: "${OVERSEAS_RC_PRO_MONTHLY:shrimpsend_pro_monthly}"
+      rc-pro-yearly: "${OVERSEAS_RC_PRO_YEARLY:shrimpsend_pro_yearly}"
+      rc-ultra-monthly: "${OVERSEAS_RC_ULTRA_MONTHLY:shrimpsend_ultra_monthly}"
+      rc-ultra-yearly: "${OVERSEAS_RC_ULTRA_YEARLY:shrimpsend_ultra_yearly}"
+      stripe-price-plus-monthly: "${STRIPE_PRICE_PLUS_MONTHLY:price_xxx}"
+      stripe-price-plus-yearly: "${STRIPE_PRICE_PLUS_YEARLY:price_xxx}"
+      stripe-price-pro-monthly: "${STRIPE_PRICE_PRO_MONTHLY:price_xxx}"
+      stripe-price-pro-yearly: "${STRIPE_PRICE_PRO_YEARLY:price_xxx}"
+      stripe-price-ultra-monthly: "${STRIPE_PRICE_ULTRA_MONTHLY:price_xxx}"
+      stripe-price-ultra-yearly: "${STRIPE_PRICE_ULTRA_YEARLY:price_xxx}"
+      stripe-secret-key: "${STRIPE_SECRET_KEY:}"
+      stripe-webhook-secret: "${STRIPE_WEBHOOK_SECRET:}"
+      stripe-success-url: "${STRIPE_SUCCESS_URL:http://localhost:3000/settings/membership?checkout=success}"
+      stripe-cancel-url: "${STRIPE_CANCEL_URL:http://localhost:3000/settings/membership?checkout=cancel}"
+      stripe-billing-portal-return-url: "${STRIPE_BILLING_PORTAL_RETURN_URL:http://localhost:3000/settings/membership}"
+      expire-scan-ms: 60000
+  storage:
+    hosted-s3:
+      enabled: false
+      endpoint: "${HOSTED_S3_ENDPOINT:}"
+      region: "${HOSTED_S3_REGION:auto}"
+      access-key-id: "${HOSTED_S3_ACCESS_KEY_ID:}"
+      secret-access-key: "${HOSTED_S3_SECRET_ACCESS_KEY:}"
+      bucket: "${HOSTED_S3_BUCKET:}"
+      download-presign-expire-seconds: 259200
+
+sendcloud:
+  api-user: "${SENDCLOUD_API_USER:}"
+  api-key: "${SENDCLOUD_API_KEY:}"
+  from: "${SENDCLOUD_FROM:noreply@example.com}"
+  from-name: "${SENDCLOUD_FROM_NAME:Ultrasend}"
+
+tencent:
+  sms:
+    secret-id: "${TENCENT_SMS_SECRET_ID:}"
+    secret-key: "${TENCENT_SMS_SECRET_KEY:}"
+    sms-sdk-app-id: "${TENCENT_SMS_SDK_APP_ID:}"
+    template-id: "${TENCENT_SMS_TEMPLATE_ID:}"
+    sign-name: "${TENCENT_SMS_SIGN_NAME:}"
+
+# 发行包上传（Tencent COS，S3 兼容）；密钥请用环境变量注入，勿提交明文
+storage:
+  s3:
+    endpoint: "${STORAGE_S3_ENDPOINT:https://cos.ap-guangzhou.myqcloud.com}"
+    region: "${STORAGE_S3_REGION:ap-guangzhou}"
+    access-key-id: "${STORAGE_S3_ACCESS_KEY_ID:}"
+    secret-access-key: "${STORAGE_S3_SECRET_ACCESS_KEY:}"
+    bucket: "${STORAGE_S3_BUCKET:}"
+    public-host: "${STORAGE_S3_PUBLIC_HOST:}"
+    presign-expire-seconds: ${STORAGE_S3_PRESIGN_EXPIRE_SECONDS:600}
+    path-style-access-enabled: ${STORAGE_S3_PATH_STYLE:false}
+
+centrifugo:
+  url: http://localhost:8000
+  http-api-key: "${CENTRIFUGO_HTTP_API_KEY:dev-centrifugo-http-api-key}"
+  token-hmac-secret: "${CENTRIFUGO_TOKEN_HMAC_SECRET:dev-centrifugo-hmac-secret-change-me}"
+  connection-token-expiration-sec: 3600
+  subscription-token-expiration-sec: 3600
+  proxy:
+    connection-expire-sec: 60

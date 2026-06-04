@@ -1,0 +1,29 @@
+{
+  "client": {
+    "token": {
+      "hmac_secret_key": "CHANGE_ME_HMAC_SECRET"
+    },
+    "allowed_origins": ["http://example.com", "https://example.com", "http://www.example.com", "https://www.example.com"],
+    "proxy": {
+      "connect": {
+        "enabled": true,
+        "endpoint": "http://localhost:9000/api/centrifugo/proxy/connect",
+        "timeout": "5s",
+        "http_headers": ["Authorization", "Cookie"]
+      },
+      "refresh": {
+        "enabled": true,
+        "endpoint": "http://localhost:9000/api/centrifugo/proxy/refresh",
+        "timeout": "5s"
+      }
+    }
+  },
+  "admin": {
+    "enabled": true,
+    "password": "CHANGE_ME_ADMIN_PASSWORD",
+    "secret": "CHANGE_ME_ADMIN_SECRET"
+  },
+  "http_api": {
+    "key": "CHANGE_ME_HTTP_API_KEY"
+  }
+}

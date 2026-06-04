@@ -1,0 +1,84 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "page_background",
+      "value": "#FFE8EBF0"
+    },
+    {
+      "name": "card_surface",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "text_primary",
+      "value": "#E6000000"
+    },
+    {
+      "name": "text_secondary",
+      "value": "#99000000"
+    },
+    {
+      "name": "text_tertiary",
+      "value": "#66000000"
+    },
+    {
+      "name": "accent_primary",
+      "value": "#FF007DFF"
+    },
+    {
+      "name": "accent_primary_text",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "chat_page_background",
+      "value": "#FFE8EBF0"
+    },
+    {
+      "name": "chat_bubble_sent",
+      "value": "#FF007DFF"
+    },
+    {
+      "name": "chat_bubble_sent_text",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "chat_bubble_sent_subtext",
+      "value": "#CCFFFFFF"
+    },
+    {
+      "name": "chat_bubble_received",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "chat_bubble_received_text",
+      "value": "#E6000000"
+    },
+    {
+      "name": "chat_bubble_received_subtext",
+      "value": "#99000000"
+    },
+    {
+      "name": "chat_system_surface",
+      "value": "#FFECEFF3"
+    },
+    {
+      "name": "chat_system_text",
+      "value": "#CC000000"
+    },
+    {
+      "name": "chat_meta_text",
+      "value": "#66000000"
+    },
+    {
+      "name": "divider_line",
+      "value": "#14000000"
+    },
+    {
+      "name": "settings_row_pressed",
+      "value": "#0A000000"
+    }
+  ]
+}

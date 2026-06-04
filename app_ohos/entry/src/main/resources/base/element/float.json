@@ -1,0 +1,24 @@
+{
+  "float": [
+    {
+      "name": "page_text_font_size",
+      "value": "50fp"
+    },
+    {
+      "name": "auth_form_max_width",
+      "value": "440vp"
+    },
+    {
+      "name": "control_height",
+      "value": "48vp"
+    },
+    {
+      "name": "radius_card",
+      "value": "16vp"
+    },
+    {
+      "name": "spacing_page",
+      "value": "24vp"
+    }
+  ]
+}

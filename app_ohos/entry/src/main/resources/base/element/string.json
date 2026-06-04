@@ -1,0 +1,28 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "虾传"
+    },
+    {
+      "name": "perm_internet_reason",
+      "value": "访问后端 API、Centrifugo 与文件传输"
+    },
+    {
+      "name": "perm_wifi_reason",
+      "value": "局域网设备发现与传输"
+    },
+    {
+      "name": "perm_camera_reason",
+      "value": "扫码登录等功能"
+    }
+  ]
+}

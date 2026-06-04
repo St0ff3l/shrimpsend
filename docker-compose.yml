@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ultrasend
+      MYSQL_USER: ultrasend
+      MYSQL_PASSWORD: ultrasend
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  centrifugo:
+    image: centrifugo/centrifugo:v5
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./config.docker.json:/centrifugo/config.json:ro
+    command: ["centrifugo", "-c", "/centrifugo/config.json"]
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+    environment:
+      CENTRIFUGO_URL: http://centrifugo:8000
+      CENTRIFUGO_HTTP_API_KEY: ${CENTRIFUGO_HTTP_API_KEY:-dev-centrifugo-http-api-key}
+      CENTRIFUGO_TOKEN_HMAC_SECRET: ${CENTRIFUGO_TOKEN_HMAC_SECRET:-dev-centrifugo-hmac-secret-change-me}
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ultrasend?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: ultrasend
+      SPRING_DATASOURCE_PASSWORD: ultrasend
+    depends_on:
+      mysql:
+        condition: service_healthy
+      centrifugo:
+        condition: service_started
+volumes:
+  mysql_data:

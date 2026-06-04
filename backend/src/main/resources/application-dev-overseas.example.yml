@@ -1,0 +1,96 @@
+# 本地模拟 ShrimpSend 海外集群示例 - 复制为 application-dev-overseas.yml 或通过环境变量覆盖
+# 启动：SPRING_PROFILES_ACTIVE=dev-overseas
+
+spring:
+  datasource:
+    url: "${OVERSEAS_DEV_DATASOURCE_URL:jdbc:mysql://localhost:3306/ultrasend_overseas?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}"
+    username: "${OVERSEAS_DEV_DATASOURCE_USERNAME:root}"
+    password: "${OVERSEAS_DEV_DATASOURCE_PASSWORD:changeme}"
+
+app:
+  datasource:
+    sdt:
+      url: ""
+      username: ""
+      password: ""
+  cors:
+    allowed-origins: "${OVERSEAS_DEV_CORS:http://localhost:*,http://127.0.0.1:*,http://192.168.*.*:*,http://10.*.*.*:*}"
+  messages:
+    encryption:
+      key-base64: "${APP_MESSAGES_ENCRYPTION_KEY_BASE64:}"
+      allow-dev-fallback-key: ${APP_MESSAGES_ENCRYPTION_ALLOW_DEV_FALLBACK:true}
+      migrate-on-startup: ${APP_MESSAGES_ENCRYPTION_MIGRATE_ON_STARTUP:false}
+  jwt:
+    access-secret: "${OVERSEAS_DEV_JWT_ACCESS_SECRET:ultrasend-access-secret-change-in-production}"
+    refresh-secret: "${OVERSEAS_DEV_JWT_REFRESH_SECRET:ultrasend-refresh-secret-change-in-production}"
+  membership:
+    free-device-limit: 3
+    alipay:
+      return-url: "${OVERSEAS_DEV_ALIPAY_RETURN:http://localhost:3000/settings/membership}"
+      public-key: ""
+      mock-notify-enabled: false
+      app-id: ""
+      private-key: ""
+      alipay-public-key: ""
+      gateway: "https://openapi.alipay.com/gateway.do"
+      notify-url: "${OVERSEAS_DEV_ALIPAY_NOTIFY:http://localhost:9000/api/membership/alipay/notify}"
+    revenuecat:
+      webhook-auth: "${REVENUECAT_WEBHOOK_AUTH:local-dev-rc-secret}"
+    rc-product-mini: "ultrasend_mini_lifetime"
+    rc-product-pro: "ultrasend_pro_lifetime"
+    rc-product-addon-5: "ultrasend_addon_5_devices"
+    addon-price-cent: 4500
+    addon-devices: 5
+    reconcile-delay-ms: 300000
+    overseas:
+      rc-plus-monthly: "${OVERSEAS_RC_PLUS_MONTHLY:shrimpsend_plus_monthly}"
+      rc-plus-yearly: "${OVERSEAS_RC_PLUS_YEARLY:shrimpsend_plus_yearly}"
+      rc-pro-monthly: "${OVERSEAS_RC_PRO_MONTHLY:shrimpsend_pro_monthly}"
+      rc-pro-yearly: "${OVERSEAS_RC_PRO_YEARLY:shrimpsend_pro_yearly}"
+      rc-ultra-monthly: "${OVERSEAS_RC_ULTRA_MONTHLY:shrimpsend_ultra_monthly}"
+      rc-ultra-yearly: "${OVERSEAS_RC_ULTRA_YEARLY:shrimpsend_ultra_yearly}"
+      stripe-price-plus-monthly: "${STRIPE_PRICE_PLUS_MONTHLY:price_xxx}"
+      stripe-price-plus-yearly: "${STRIPE_PRICE_PLUS_YEARLY:price_xxx}"
+      stripe-price-pro-monthly: "${STRIPE_PRICE_PRO_MONTHLY:price_xxx}"
+      stripe-price-pro-yearly: "${STRIPE_PRICE_PRO_YEARLY:price_xxx}"
+      stripe-price-ultra-monthly: "${STRIPE_PRICE_ULTRA_MONTHLY:price_xxx}"
+      stripe-price-ultra-yearly: "${STRIPE_PRICE_ULTRA_YEARLY:price_xxx}"
+      stripe-secret-key: "${STRIPE_SECRET_KEY:sk_test_CHANGE_ME}"
+      stripe-webhook-secret: "${STRIPE_WEBHOOK_SECRET:whsec_CHANGE_ME}"
+      stripe-success-url: "${STRIPE_SUCCESS_URL:http://localhost:3000/settings/membership?checkout=success}"
+      stripe-cancel-url: "${STRIPE_CANCEL_URL:http://localhost:3000/settings/membership?checkout=cancel}"
+      stripe-billing-portal-return-url: "${STRIPE_BILLING_PORTAL_RETURN_URL:http://localhost:3000/settings/membership}"
+      expire-scan-ms: 60000
+  storage:
+    hosted-s3:
+      enabled: ${HOSTED_S3_ENABLED:false}
+      endpoint: "${HOSTED_S3_ENDPOINT:}"
+      region: "${HOSTED_S3_REGION:auto}"
+      access-key-id: "${HOSTED_S3_ACCESS_KEY_ID:}"
+      secret-access-key: "${HOSTED_S3_SECRET_ACCESS_KEY:}"
+      bucket: "${HOSTED_S3_BUCKET:}"
+      download-presign-expire-seconds: 259200
+
+tencent:
+  sms:
+    secret-id: ""
+    secret-key: ""
+    sms-sdk-app-id: ""
+    template-id: ""
+    sign-name: ""
+
+storage:
+  s3:
+    endpoint: "${STORAGE_S3_ENDPOINT:}"
+    region: "${STORAGE_S3_REGION:auto}"
+    access-key-id: "${STORAGE_S3_ACCESS_KEY_ID:}"
+    secret-access-key: "${STORAGE_S3_SECRET_ACCESS_KEY:}"
+    bucket: "${STORAGE_S3_BUCKET:}"
+    public-host: "${STORAGE_S3_PUBLIC_HOST:}"
+    presign-expire-seconds: ${STORAGE_S3_PRESIGN_EXPIRE_SECONDS:1800}
+    path-style-access-enabled: ${STORAGE_S3_PATH_STYLE:false}
+
+centrifugo:
+  url: http://localhost:8000
+  http-api-key: "${CENTRIFUGO_HTTP_API_KEY:dev-centrifugo-http-api-key}"
+  token-hmac-secret: "${CENTRIFUGO_TOKEN_HMAC_SECRET:dev-centrifugo-hmac-secret-change-me}"

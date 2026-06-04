@@ -1,0 +1,150 @@
+{
+  "/docs/s3/aliyun-oss/01-create-bucket.png": {
+    "width": 1280,
+    "height": 720
+  },
+  "/docs/s3/aliyun-oss/02-ram-user.png": {
+    "width": 1280,
+    "height": 720
+  },
+  "/docs/s3/aliyun-oss/03-cors-rule.png": {
+    "width": 1280,
+    "height": 720
+  },
+  "/docs/s3/aliyun-oss/04-endpoint-region.png": {
+    "width": 1280,
+    "height": 720
+  },
+  "/docs/s3/aws-s3/01-create-bucket.png": {
+    "width": 1280,
+    "height": 720
+  },
+  "/docs/s3/aws-s3/02-iam-user.png": {
+    "width": 1280,
+    "height": 720
+  },
+  "/docs/s3/aws-s3/03-cors-rule.png": {
+    "width": 1280,
+    "height": 720
+  },
+  "/docs/s3/aws-s3/04-endpoint-region.png": {
+    "width": 1280,
+    "height": 720
+  },
+  "/docs/s3/bitiful/01-create-bucket-1.png": {
+    "width": 1344,
+    "height": 287
+  },
+  "/docs/s3/bitiful/02-create-bucket-2.png": {
+    "width": 1130,
+    "height": 508
+  },
+  "/docs/s3/bitiful/03-endpoint-region.png": {
+    "width": 1344,
+    "height": 552
+  },
+  "/docs/s3/bitiful/04-sub-account.png": {
+    "width": 1344,
+    "height": 343
+  },
+  "/docs/s3/bitiful/05-grant-permissions.png": {
+    "width": 1128,
+    "height": 948
+  },
+  "/docs/s3/bitiful/06-add-key-1.png": {
+    "width": 1344,
+    "height": 226
+  },
+  "/docs/s3/bitiful/07-add-key-2.png": {
+    "width": 1260,
+    "height": 672
+  },
+  "/docs/s3/bitiful/08-shrimpsend-settings.png": {
+    "width": 751,
+    "height": 1024
+  },
+  "/docs/s3/built-in/01-hosted-mode.png": {
+    "width": 1280,
+    "height": 720
+  },
+  "/docs/s3/cloudflare-r2/01-nav-r2.png": {
+    "width": 401,
+    "height": 1024
+  },
+  "/docs/s3/cloudflare-r2/02-account-s3-api.png": {
+    "width": 882,
+    "height": 490
+  },
+  "/docs/s3/cloudflare-r2/03-create-api-token.png": {
+    "width": 1024,
+    "height": 477
+  },
+  "/docs/s3/cloudflare-r2/04-bucket-list.png": {
+    "width": 1024,
+    "height": 355
+  },
+  "/docs/s3/cloudflare-r2/05-create-bucket.png": {
+    "width": 1024,
+    "height": 686
+  },
+  "/docs/s3/cloudflare-r2/06-cors-settings.png": {
+    "width": 1024,
+    "height": 522
+  },
+  "/docs/s3/cloudflare-r2/07-cors-json.png": {
+    "width": 1024,
+    "height": 630
+  },
+  "/docs/s3/common/settings-form-en.png": {
+    "width": 1280,
+    "height": 720
+  },
+  "/docs/s3/common/settings-form-zh.png": {
+    "width": 1280,
+    "height": 720
+  },
+  "/docs/s3/rustfs/01-access-keys.png": {
+    "width": 1024,
+    "height": 313
+  },
+  "/docs/s3/rustfs/02-create-key.png": {
+    "width": 1024,
+    "height": 1000
+  },
+  "/docs/s3/rustfs/03-key-created.png": {
+    "width": 1024,
+    "height": 541
+  },
+  "/docs/s3/rustfs/04-create-bucket.png": {
+    "width": 1024,
+    "height": 625
+  },
+  "/docs/s3/rustfs/05-shrimpsend-settings.png": {
+    "width": 1024,
+    "height": 903
+  },
+  "/docs/s3/rustfs/06-cors-compose.png": {
+    "width": 1024,
+    "height": 771
+  },
+  "/docs/s3/tencent-cos/01-create-bucket-private.png": {
+    "width": 1024,
+    "height": 699
+  },
+  "/docs/s3/tencent-cos/02-select-region.png": {
+    "width": 1024,
+    "height": 929
+  },
+  "/docs/s3/tencent-cos/03-cam-api-key.png": {
+    "width": 1024,
+    "height": 200
+  },
+  "/docs/s3/tencent-cos/04-shrimpsend-settings.png": {
+    "width": 719,
+    "height": 1024
+  },
+  "/docs/s3/tencent-cos/05-cors-rule.png": {
+    "width": 1024,
+    "height": 823
+  }
+}

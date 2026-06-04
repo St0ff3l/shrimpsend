@@ -1,0 +1,7 @@
+/* Localized display name under home screen icon */
+"CFBundleDisplayName" = "ShrimpSend";
+
+"NSCameraUsageDescription" = "Camera access is required to scan QR codes for sign-in.";
+"NSLocalNetworkUsageDescription" = "Local network access is used to discover and connect to other devices on your LAN for file transfer.";
+"NSPhotoLibraryUsageDescription" = "Photo library access is used to save received images and videos to your gallery.";
+"NSPhotoLibraryAddUsageDescription" = "Photo library access is used to save received images and videos to your gallery.";

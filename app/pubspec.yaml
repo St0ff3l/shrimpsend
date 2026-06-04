@@ -1,0 +1,161 @@
+name: app
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.4.4+44
+
+environment:
+  sdk: ^3.9.2
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  lucide_icons_flutter: ^3.1.10
+  simple_icons: ^10.1.2
+  centrifuge: ^0.18.0
+  flutter_chat_core: ^2.0.0
+  flutter_chat_ui: ^2.0.0
+  http: ^1.2.0
+  shared_preferences: ^2.2.2
+  sqflite: ^2.3.0
+  uuid: ^4.2.2
+  path: ^1.9.0
+  path_provider: ^2.1.1
+  package_info_plus: ^9.0.0
+  file_picker: ^10.2.0
+  url_launcher: ^6.2.0
+  logging: ^1.2.0
+  network_info_plus: ^5.0.0
+  saver_gallery: ^4.1.0
+  mobile_device_identifier: ^0.0.3
+  device_info_plus: ^12.3.0
+  crypto: ^3.0.3
+  xml: ^6.3.0
+  flutter_webrtc: ^0.12.9
+  wechat_assets_picker: ^10.1.1
+  photo_manager: ^3.9.0
+  permission_handler: ^12.0.1
+  installed_apps: ^2.1.1
+  mobile_scanner: ^6.0.2
+  qr_flutter: ^4.1.0
+  share_plus: ^10.1.4
+  video_player: ^2.9.2
+  pdfrx: ^1.0.92
+  bonsoir: ^6.0.1
+  flutter_riverpod: ^2.6.1
+  connectivity_plus: ^7.0.0
+  oktoast: ^3.4.0
+  super_drag_and_drop: ^0.9.1
+  super_clipboard: ^0.9.1
+  super_native_extensions: ^0.9.1
+  pasteboard: ^0.5.0
+  flutter_sharing_intent: ^2.0.4
+  fl_shared_link: ^0.4.3
+  purchases_flutter: ^9.15.0
+  tobias: ^5.3.4
+  flutter_desktop_updater:
+    path: ../packages/flutter_desktop_updater
+  sqflite_common_ffi: ^2.3.7+1
+  desktop_updater: 1.4.0
+  window_manager: ^0.5.1
+  tray_manager: ^0.5.2
+  provider: ^6.1.5+1
+  liquid_glass_widgets: ^0.10.7
+  country_picker: ^2.0.27
+  ffi: ^2.1.4
+  # Windows VC runtime DLLs are vendored under windows/vc_redist/x64
+  # and copied into Release by app/scripts/package_windows.ps1.
+  win32: ^5.15.0
+  openpanel_flutter:
+    path: packages/openpanel_flutter
+  launch_at_startup: ^0.5.1
+  fast_gbk: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^5.0.0
+  msix: ^3.16.13
+  image: ^4.8.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+  generate: true
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/logo.png
+    - assets/tray_icon_mac.png
+    - assets/tray_icon_windows.ico
+
+  # BEGIN_WINDOWS_FONT
+  # END_WINDOWS_FONT
+
+# Tobias 支付宝插件：iOS 回调需配置 url_scheme（不可含下划线）
+tobias:
+  url_scheme: alipayultrasend
+
+# MSIX（dart run msix:create）。上架微软商店前请在 Partner Center 核对 identity、publisher，并与下方一致。
+# 商店包：dart run msix:create --store（或此处 store: true）。侧载自签：配置 certificate_path / certificate_password。
+msix_config:
+  # package_windows.ps1 已先 flutter build；避免 msix 再次构建触发 CMake 缓存冲突
+  build_windows: false
+  display_name: Shrimpsend
+  publisher_display_name: Ultrasend
+  identity_name: DevUltrasend.Shrimpsend
+  msix_version: 1.1.1.11
+  logo_path: assets/logo.png
+  # 在 %LocalAppData%\Microsoft\WindowsApps 注册 shrimpsend.exe 启动桩，便于 Win+R / 终端启动（MSIX 不可选安装目录）。
+  execution_alias: shrimpsend
+  capabilities: internetClient, privateNetworkClientServer
+  # Partner Center「产品管理 → 产品标识」中的 Publisher，上架必填；本地测试可临时注释并在命令行传入。
+  # publisher: CN=REPLACE_WITH_PARTNER_CENTER_PUBLISHER_ID
+  install_certificate: true
+
+dependency_overrides:
+  tray_manager:
+    path: packages/tray_manager
+  flutter_sharing_intent:
+    path: packages/flutter_sharing_intent
+  connectivity_plus: '>=7.0.0 <7.1.0'
+  # super_drag_and_drop / super_native_extensions caps device_info_plus <12
+  device_info_plus: ^11.5.0
+  # liquid_glass_widgets 0.10.x requires meta ^1.17.0; SDK flutter_test pins 1.16.0
+  meta: ^1.17.0

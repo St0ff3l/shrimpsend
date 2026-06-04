@@ -1,0 +1,419 @@
+package dev.ultrasend.backend.service;
+
+import dev.ultrasend.backend.dto.*;
+import dev.ultrasend.backend.entity.S3Config;
+import dev.ultrasend.backend.entity.User;
+import dev.ultrasend.backend.repository.S3ConfigRepository;
+import dev.ultrasend.backend.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
+import software.amazon.awssdk.core.exception.SdkClientException;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3Configuration;
+import software.amazon.awssdk.services.s3.model.*;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.*;
+
+import java.time.Duration;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class S3Service {
+
+    private final S3ConfigRepository s3ConfigRepository;
+    private final UserRepository userRepository;
+    private final HostedS3Service hostedS3Service;
+
+    @Value("${app.public-web-base-url:http://localhost:3000}")
+    private String publicWebBaseUrl;
+
+    @Value("${app.s3-docs-path:/zh/docs/s3/overview}")
+    private String s3DocsPath;
+
+    private String buildS3DocumentationUrl() {
+        String base = publicWebBaseUrl == null ? "" : publicWebBaseUrl.trim();
+        if (base.isEmpty()) {
+            return "";
+        }
+        String path = s3DocsPath == null ? "/zh/docs/s3/overview" : s3DocsPath.trim();
+        if (path.isEmpty()) {
+            path = "/zh/docs/s3/overview";
+        }
+        if (!path.startsWith("/")) {
+            path = "/" + path;
+        }
+        while (base.endsWith("/")) {
+            base = base.substring(0, base.length() - 1);
+        }
+        return base + path;
+    }
+
+    @Transactional
+    public void saveConfig(Long userId, S3ConfigRequest req) {
+        User user = userRepository.findById(userId).orElseThrow();
+        S3Config config = s3ConfigRepository.findByUserId(userId)
+                .orElse(S3Config.builder().user(user).build());
+        config.setEndpoint(req.getEndpoint());
+        config.setRegion(req.getRegion() != null ? req.getRegion() : "cn-east-1");
+        config.setBucket(req.getBucket());
+        config.setAccessKeyId(req.getAccessKeyId());
+        if (req.getSecretAccessKey() != null && !req.getSecretAccessKey().isBlank()) {
+            config.setSecretAccessKey(req.getSecretAccessKey());
+        }
+        config.setPathStyleAccessEnabled(
+                req.getPathStyleAccessEnabled() != null ? req.getPathStyleAccessEnabled() : true);
+        // 用户主动保存 BYO 即视为「使用自建 S3」
+        config.setPrefersHosted(false);
+        s3ConfigRepository.save(config);
+        log.info("s3 saveConfig saved userId={} bucket={}", userId, config.getBucket());
+    }
+
+    public boolean hasConfig(Long userId) {
+        return s3ConfigRepository.findByUserId(userId).isPresent();
+    }
+
+    public S3ConfigResponse getConfig(Long userId) {
+        boolean hostedAvailable = hostedS3Service.isActive();
+        S3ConfigResponse res = s3ConfigRepository.findByUserId(userId)
+                .map(c -> {
+                    boolean prefersHosted = Boolean.TRUE.equals(c.getPrefersHosted());
+                    boolean useHosted = prefersHosted && hostedAvailable;
+                    if (useHosted) {
+                        // BYO 已保存但用户当前偏好托管：返回 HOSTED，但保留 customSaved=true
+                        return S3ConfigResponse.builder()
+                                .mode(S3StorageMode.HOSTED)
+                                .configured(true)
+                                .hostedAvailable(true)
+                                .customSaved(true)
+                                .build();
+                    }
+                    return S3ConfigResponse.builder()
+                            .mode(S3StorageMode.CUSTOM)
+                            .configured(true)
+                            .hostedAvailable(hostedAvailable)
+                            .customSaved(true)
+                            .endpoint(c.getEndpoint())
+                            .region(c.getRegion())
+                            .bucket(c.getBucket())
+                            .accessKeyId(c.getAccessKeyId())
+                            .secretAccessKey(c.getSecretAccessKey())
+                            .pathStyleAccessEnabled(resolvePathStyle(c.getPathStyleAccessEnabled()))
+                            .build();
+                })
+                .orElseGet(() -> {
+                    S3StorageMode mode = hostedAvailable ? S3StorageMode.HOSTED : S3StorageMode.DISABLED;
+                    return S3ConfigResponse.builder()
+                            .mode(mode)
+                            .configured(mode != S3StorageMode.DISABLED)
+                            .hostedAvailable(hostedAvailable)
+                            .customSaved(false)
+                            .build();
+                });
+        res.setDocumentationUrl(buildS3DocumentationUrl());
+        log.debug("s3 getConfig userId={} mode={} hostedAvailable={} customSaved={}",
+                userId, res.getMode(), res.isHostedAvailable(), res.isCustomSaved());
+        return res;
+    }
+
+    @Transactional
+    public void deleteConfig(Long userId) {
+        s3ConfigRepository.findByUserId(userId).ifPresent(s3ConfigRepository::delete);
+        log.info("s3 deleteConfig userId={}", userId);
+    }
+
+    /**
+     * 切换到「使用平台内置 S3」但保留已保存的自建凭证。
+     * 仅当当前部署提供 hosted 桶时允许。
+     */
+    @Transactional
+    public void preferHosted(Long userId) {
+        if (!hostedS3Service.isActive()) {
+            throw new IllegalArgumentException("Hosted storage not available");
+        }
+        s3ConfigRepository.findByUserId(userId).ifPresentOrElse(c -> {
+            c.setPrefersHosted(true);
+            s3ConfigRepository.save(c);
+            log.info("s3 preferHosted userId={} (BYO retained)", userId);
+        }, () -> log.info("s3 preferHosted userId={} (no BYO present, no-op)", userId));
+    }
+
+    /**
+     * 切换到「使用已保存的自建 S3」。要求用户先前保存过 BYO 凭证。
+     */
+    @Transactional
+    public void preferCustom(Long userId) {
+        S3Config config = s3ConfigRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("No saved custom S3 config"));
+        config.setPrefersHosted(false);
+        s3ConfigRepository.save(config);
+        log.info("s3 preferCustom userId={} bucket={}", userId, config.getBucket());
+    }
+
+    /** Verifies the user's S3 config by performing HeadBucket. */
+    public void testConfig(Long userId) {
+        var byo = s3ConfigRepository.findByUserId(userId);
+        // 当前实际生效的存储模式决定测谁：BYO 不存在或用户偏好 HOSTED → 测托管；否则测 BYO
+        boolean useHosted = byo.map(c -> Boolean.TRUE.equals(c.getPrefersHosted()))
+                .orElse(true) && hostedS3Service.isActive();
+        if (useHosted) {
+            hostedS3Service.verifyConnectivity();
+            log.info("s3 testConfig hosted ok userId={}", userId);
+            return;
+        }
+        if (byo.isEmpty()) {
+            log.warn("s3 testConfig not configured userId={}", userId);
+            throw new IllegalArgumentException("S3 未配置");
+        }
+        S3Config config = byo.get();
+        String region = config.getRegion() != null ? config.getRegion() : "cn-east-1";
+        try (S3Client client = buildS3Client(config, ClientOverrideConfiguration.builder()
+                .apiCallTimeout(Duration.ofSeconds(15))
+                .apiCallAttemptTimeout(Duration.ofSeconds(15))
+                .build())) {
+            client.headBucket(HeadBucketRequest.builder().bucket(config.getBucket()).build());
+            log.info("s3 testConfig ok userId={} bucket={}", userId, config.getBucket());
+        } catch (S3Exception e) {
+            String detail = e.awsErrorDetails() != null && e.awsErrorDetails().errorMessage() != null
+                    ? e.awsErrorDetails().errorMessage()
+                    : (e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName());
+            log.warn("s3 testConfig failed userId={} httpStatus={} error={}", userId, e.statusCode(), detail);
+            throw new IllegalArgumentException("S3 连接失败: " + detail);
+        } catch (SdkClientException e) {
+            log.warn("s3 testConfig sdk client error userId={}", userId, e);
+            throw new IllegalArgumentException("S3 连接失败: "
+                    + (e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName()));
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            log.warn("s3 testConfig unexpected userId={}", userId, e);
+            throw new IllegalArgumentException("S3 连接失败: "
+                    + (e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName()));
+        }
+    }
+
+    public PresignUploadResponse presignUpload(Long userId, String fileName, String contentType, Long contentLength) {
+        if (hostedS3Service.useHostedForUser(userId)) {
+            long len = contentLength != null ? contentLength : 0L;
+            return hostedS3Service.presignUpload(userId, fileName, contentType, len);
+        }
+        S3Config config = s3ConfigRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("S3 not configured"));
+        String key = "ultrasend/" + userId + "/" + UUID.randomUUID() + "/" + fileName;
+        log.debug("s3 presignUpload userId={} key={}", userId, key);
+
+        S3Presigner presigner = S3Presigner.builder()
+                .region(Region.of(config.getRegion()))
+                .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(config.getAccessKeyId(), config.getSecretAccessKey())))
+                .endpointOverride(java.net.URI.create(config.getEndpoint()))
+                .build();
+
+        PutObjectRequest putRequest = PutObjectRequest.builder()
+                .bucket(config.getBucket())
+                .key(key)
+                .contentType(contentType != null ? contentType : "application/octet-stream")
+                .build();
+        PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofHours(1))
+                .putObjectRequest(putRequest)
+                .build();
+        PresignedPutObjectRequest presigned = presigner.presignPutObject(presignRequest);
+        presigner.close();
+
+        String uploadUrl = presigned.url().toString();
+        String downloadUrl = config.getEndpoint().replaceFirst("/$", "") + "/" + config.getBucket() + "/" + key;
+        return PresignUploadResponse.builder()
+                .uploadUrl(uploadUrl)
+                .key(key)
+                .build();
+    }
+
+    public String presignDownload(Long userId, String key) {
+        if (hostedS3Service.useHostedForUser(userId)) {
+            return hostedS3Service.presignDownload(userId, key);
+        }
+        S3Config config = s3ConfigRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("S3 not configured"));
+        if (!key.startsWith("ultrasend/" + userId + "/")) {
+            log.warn("s3 presignDownload invalid key userId={} key={}", userId, key);
+            throw new IllegalArgumentException("Invalid key");
+        }
+        log.debug("s3 presignDownload userId={} key={}", userId, key);
+        S3Presigner presigner = S3Presigner.builder()
+                .region(Region.of(config.getRegion()))
+                .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(config.getAccessKeyId(), config.getSecretAccessKey())))
+                .endpointOverride(java.net.URI.create(config.getEndpoint()))
+                .build();
+        GetObjectRequest getRequest = GetObjectRequest.builder()
+                .bucket(config.getBucket())
+                .key(key)
+                .build();
+        GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofHours(1))
+                .getObjectRequest(getRequest)
+                .build();
+        var presigned = presigner.presignGetObject(presignRequest);
+        String url = presigned.url().toString();
+        presigner.close();
+        return url;
+    }
+
+    // ── Multipart Upload ───────────────────────────────────────────────
+
+    public MultipartInitiateResponse initiateMultipartUpload(Long userId, String fileName, String contentType,
+                                                             Long totalSize) {
+        if (hostedS3Service.useHostedForUser(userId)) {
+            long sz = totalSize != null ? totalSize : 0L;
+            return hostedS3Service.initiateMultipart(userId, fileName, contentType, sz);
+        }
+        S3Config config = s3ConfigRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("S3 not configured"));
+        String key = "ultrasend/" + userId + "/" + UUID.randomUUID() + "/" + fileName;
+        log.info("s3 initiateMultipart userId={} key={}", userId, key);
+
+        try (S3Client client = buildS3Client(config)) {
+            CreateMultipartUploadRequest req = CreateMultipartUploadRequest.builder()
+                    .bucket(config.getBucket())
+                    .key(key)
+                    .contentType(contentType != null ? contentType : "application/octet-stream")
+                    .build();
+            CreateMultipartUploadResponse resp = client.createMultipartUpload(req);
+            return MultipartInitiateResponse.builder()
+                    .uploadId(resp.uploadId())
+                    .key(key)
+                    .build();
+        }
+    }
+
+    public String presignUploadPart(Long userId, String uploadId, String key, int partNumber) {
+        if (hostedS3Service.useHostedForUser(userId)) {
+            return hostedS3Service.presignUploadPart(userId, uploadId, key, partNumber);
+        }
+        S3Config config = s3ConfigRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("S3 not configured"));
+        validateKeyOwnership(userId, key);
+        log.debug("s3 presignPart userId={} part={} key={}", userId, partNumber, key);
+
+        S3Presigner presigner = buildPresigner(config);
+        try {
+            UploadPartRequest partReq = UploadPartRequest.builder()
+                    .bucket(config.getBucket())
+                    .key(key)
+                    .uploadId(uploadId)
+                    .partNumber(partNumber)
+                    .build();
+            UploadPartPresignRequest presignReq = UploadPartPresignRequest.builder()
+                    .signatureDuration(Duration.ofHours(1))
+                    .uploadPartRequest(partReq)
+                    .build();
+            PresignedUploadPartRequest presigned = presigner.presignUploadPart(presignReq);
+            return presigned.url().toString();
+        } finally {
+            presigner.close();
+        }
+    }
+
+    public void completeMultipartUpload(Long userId, String uploadId, String key,
+                                        java.util.List<MultipartCompleteRequest.PartInfo> parts) {
+        if (hostedS3Service.useHostedForUser(userId)) {
+            hostedS3Service.completeMultipart(userId, uploadId, key, parts);
+            return;
+        }
+        S3Config config = s3ConfigRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("S3 not configured"));
+        validateKeyOwnership(userId, key);
+        log.info("s3 completeMultipart userId={} key={} parts={}", userId, key, parts.size());
+
+        java.util.List<CompletedPart> completedParts = parts.stream()
+                .map(p -> CompletedPart.builder()
+                        .partNumber(p.getPartNumber())
+                        .eTag(p.getETag())
+                        .build())
+                .toList();
+
+        try (S3Client client = buildS3Client(config)) {
+            CompleteMultipartUploadRequest req = CompleteMultipartUploadRequest.builder()
+                    .bucket(config.getBucket())
+                    .key(key)
+                    .uploadId(uploadId)
+                    .multipartUpload(CompletedMultipartUpload.builder()
+                            .parts(completedParts)
+                            .build())
+                    .build();
+            client.completeMultipartUpload(req);
+        }
+    }
+
+    public void abortMultipartUpload(Long userId, String uploadId, String key) {
+        if (hostedS3Service.useHostedForUser(userId)) {
+            hostedS3Service.abortMultipart(userId, uploadId, key);
+            return;
+        }
+        S3Config config = s3ConfigRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("S3 not configured"));
+        validateKeyOwnership(userId, key);
+        log.info("s3 abortMultipart userId={} key={}", userId, key);
+
+        try (S3Client client = buildS3Client(config)) {
+            AbortMultipartUploadRequest req = AbortMultipartUploadRequest.builder()
+                    .bucket(config.getBucket())
+                    .key(key)
+                    .uploadId(uploadId)
+                    .build();
+            client.abortMultipartUpload(req);
+        }
+    }
+
+    // ── Helpers ────────────────────────────────────────────────────────
+
+    private void validateKeyOwnership(Long userId, String key) {
+        if (!key.startsWith("ultrasend/" + userId + "/")) {
+            throw new IllegalArgumentException("Invalid key");
+        }
+    }
+
+    private static boolean resolvePathStyle(Boolean pathStyleAccessEnabled) {
+        return pathStyleAccessEnabled == null || pathStyleAccessEnabled;
+    }
+
+    private S3Client buildS3Client(S3Config config) {
+        return buildS3Client(config, null);
+    }
+
+    private S3Client buildS3Client(S3Config config, ClientOverrideConfiguration overrideConfiguration) {
+        var builder = S3Client.builder()
+                .region(Region.of(config.getRegion() != null ? config.getRegion() : "cn-east-1"))
+                .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(config.getAccessKeyId(), config.getSecretAccessKey())))
+                .endpointOverride(java.net.URI.create(config.getEndpoint()))
+                .serviceConfiguration(S3Configuration.builder()
+                        .pathStyleAccessEnabled(resolvePathStyle(config.getPathStyleAccessEnabled()))
+                        .build());
+        if (overrideConfiguration != null) {
+            builder.overrideConfiguration(overrideConfiguration);
+        }
+        return builder.build();
+    }
+
+    private S3Presigner buildPresigner(S3Config config) {
+        return S3Presigner.builder()
+                .region(Region.of(config.getRegion() != null ? config.getRegion() : "cn-east-1"))
+                .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(config.getAccessKeyId(), config.getSecretAccessKey())))
+                .endpointOverride(java.net.URI.create(config.getEndpoint()))
+                .serviceConfiguration(S3Configuration.builder()
+                        .pathStyleAccessEnabled(resolvePathStyle(config.getPathStyleAccessEnabled()))
+                        .build())
+                .build();
+    }
+}

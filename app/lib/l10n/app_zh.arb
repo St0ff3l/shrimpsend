@@ -1,0 +1,1192 @@
+{
+  "@@locale": "zh",
+  "brandNameMainlandChina": "虾传",
+  "brandNameInternational": "ShrimpSend",
+  "localeRegionGateTitle": "语言",
+  "localeRegionGateSubtitle": "请选择界面显示语言。本安装包所连接的服务区域已固定。",
+  "localeRegionGateCountryHint": "点按选择；中国大陆对应虾传服务集群，其余对应 ShrimpSend。",
+  "fieldLanguage": "语言",
+  "sectionLanguage": "语言",
+  "fieldCountryRegion": "国家或地区",
+  "regionMainlandChina": "中国大陆",
+  "regionInternational": "中国大陆以外",
+  "continueAction": "继续",
+  "loginSessionExpired": "登录已失效，请重新登录",
+  "settingsTitle": "设置",
+  "sectionLanguageRegion": "语言与地区",
+  "serverClusterSwitchTitle": "即将退出登录",
+  "serverClusterSwitchMessage": "所选国家/地区对应的服务域名将与当前不同，访问集群将切换。继续后将立刻退出登录；你需要在新的服务域名下重新登录后才能继续使用。当前选择的国家/地区会先恢复为修改前的记录，可在重新登录后再选择目标区域。",
+  "cancel": "取消",
+  "confirm": "确定",
+  "signOutRequired": "需要退出登录",
+  "loginTitleSubtitleLogin": "登录后继续你的跨端传输",
+  "loginTitleSubtitleRegister": "创建账号后即可开始同步消息和文件",
+  "enterOfflineMode": "以离线模式进入",
+  "legalPrivacyPolicy": "隐私政策",
+  "legalTermsOfService": "用户服务协议",
+  "legalCouldNotOpenLink": "无法打开链接",
+  "envLabelDev": "测试",
+  "envLabelProd": "线上",
+  "applyingUpdate": "正在应用更新，完成后将自动启动（约数秒）",
+  "localeNameZhHans": "简体中文",
+  "localeNameEnglish": "English",
+  "loginTabLogin": "登录",
+  "loginTabRegister": "注册",
+  "loginMethodPassword": "密码",
+  "loginMethodCode": "验证码",
+  "fieldEmail": "邮箱",
+  "hintEmail": "you@example.com",
+  "fieldPassword": "密码",
+  "fieldVerificationCode": "验证码",
+  "hintVerificationCode6": "6位验证码",
+  "fieldNicknameOptional": "昵称（可选）",
+  "hintDisplayName": "显示名称",
+  "loginGetVerificationCode": "获取验证码",
+  "loginSendVerificationCode": "发送验证码",
+  "codeCooldownSeconds": "{seconds}秒",
+  "@codeCooldownSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "loginSubmitRegister": "注册",
+  "loginSubmitWithCode": "验证码登录",
+  "loginSubmitPassword": "登录",
+  "loginQrLogin": "扫码登录",
+  "loginPromptNoAccount": "没有账号？",
+  "loginPromptHasAccount": "已有账号？",
+  "loginLinkToRegister": "注册",
+  "loginLinkToLogin": "登录",
+  "loginErrorEmailRequired": "请先输入邮箱",
+  "loginErrorCodeSixDigits": "请输入6位验证码",
+  "snackbarAllowInstallUnknownApps": "请在设置中允许安装未知应用，返回后将自动继续安装",
+  "settingsSectionFeatures": "功能",
+  "settingsSectionPreferences": "偏好设置",
+  "settingsSectionAbout": "关于",
+  "settingsNavLogin": "登录账号",
+  "settingsNavLoginSubtitle": "登录后可使用云端同步和更多功能",
+  "settingsBadgeNotSignedIn": "未登录",
+  "settingsNavPersonalAccount": "个人账号",
+  "settingsNavAccountSubtitle": "查看和管理你的账号",
+  "settingsMembershipCenter": "会员中心",
+  "settingsMembershipSubtitleUpgrade": "买断会员，提升可绑定设备数",
+  "settingsMembershipTierName": "{tierName} 会员",
+  "settingsMembershipDevices": "{current}/{limit} 台设备",
+  "settingsNavMyDevices": "我的设备",
+  "settingsNavMyDevicesSubtitleOffline": "登录后管理已绑定设备",
+  "settingsNavMyDevicesSubtitleOnline": "已绑定的设备",
+  "settingsNavS3": "S3",
+  "settingsNavS3Subtitle": "广域网文件传输",
+  "settingsNavShortcuts": "快捷键",
+  "settingsNavShortcutsSubtitle": "发送消息等键盘操作",
+  "settingsNavFonts": "字体",
+  "settingsNavFontsSubtitle": "调整字号与粗细",
+  "settingsFontsPageTitle": "字体",
+  "settingsShortcutsPageTitle": "快捷键",
+  "settingsThemeLabel": "主题",
+  "settingsColorThemeLabel": "颜色主题",
+  "settingsColorThemeEmerald": "翡翠绿",
+  "settingsColorThemeOcean": "海洋蓝",
+  "settingsColorThemeSunset": "暖阳橙",
+  "settingsColorThemeLavender": "薰衣草紫",
+  "settingsColorThemeRose": "玫瑰粉",
+  "settingsColorThemeGraphite": "石墨灰",
+  "settingsFontLabel": "字体",
+  "settingsFontLatinLabel": "英文字体",
+  "settingsFontCjkLabel": "中文字体",
+  "settingsFontMonoLabel": "等宽字体",
+  "settingsFontSystem": "系统默认",
+  "settingsFontInter": "Inter",
+  "settingsFontSourceSans3": "Source Sans 3",
+  "settingsFontIbmPlexSans": "IBM Plex Sans",
+  "settingsFontNotoSansSc": "Noto Sans SC",
+  "settingsFontNotoSerifSc": "Noto Serif SC",
+  "settingsFontLxgwWenkai": "霞鹜文楷",
+  "settingsFontSmileySans": "得意黑",
+  "settingsFontIbmPlexMono": "IBM Plex Mono",
+  "settingsFontPreview": "ShrimpSend · 你好世界 · 123",
+  "settingsFontSizeLabel": "字体大小",
+  "settingsFontSizeSmaller": "更小",
+  "settingsFontSizeSmall": "小",
+  "settingsFontSizeStandard": "标准",
+  "settingsFontSizeLarge": "大",
+  "settingsFontSizeLarger": "更大",
+  "settingsFontWeightLabel": "字体粗细",
+  "settingsFontWeightLighter": "更细",
+  "settingsFontWeightLight": "细",
+  "settingsFontWeightNormal": "正常",
+  "settingsFontWeightMedium": "中等",
+  "settingsFontWeightSemibold": "较粗",
+  "settingsAboutFontLicenses": "Windows 版内置文源黑体 WenYuan Sans SC（SIL Open Font License 1.1）；其他平台使用系统字体。来源：https://github.com/takushun-wu/WenYuanFonts",
+  "settingsFileSavePath": "文件保存路径",
+  "settingsFileSavePathNotSet": "未设置",
+  "settingsSavePathBadgeDefault": "默认",
+  "settingsSavePathBadgeCustom": "自定义",
+  "settingsSavePathKindExternal": "外部存储",
+  "settingsSavePathKindAppDocuments": "应用文档",
+  "settingsSavePathKindAppCache": "应用缓存",
+  "settingsSavePathKindAppExternal": "应用专属存储",
+  "settingsSavePathKindHintAppDocuments": "文件保存在应用文档目录，可在「文件」应用中查看",
+  "settingsSavePathKindHintAppExternal": "文件保存在应用专属外部目录，清理应用数据后可能被系统删除",
+  "settingsSavePathFallbackDialogOk": "知道了",
+  "settingsSavePathFallbackDialogTitle": "无法使用外部保存路径",
+  "settingsSavePathFallbackDialogBody": "部分车机或定制系统不允许在外部存储创建文件夹，已改为应用缓存保存。\n\n预期路径：{intendedPath}\n当前路径：{currentPath}\n原因：{reason}",
+  "@settingsSavePathFallbackDialogBody": {
+    "placeholders": {
+      "intendedPath": { "type": "String" },
+      "currentPath": { "type": "String" },
+      "reason": { "type": "String" }
+    }
+  },
+  "settingsChooseFolder": "选择文件夹",
+  "settingsRestoreDefaultPath": "恢复默认",
+  "settingsGalleryPermissionToast": "需要相册权限才能自动保存到相册，请在系统设置中允许",
+  "settingsSaveToGalleryTitle": "图片/视频保存到相册",
+  "settingsSaveToGallerySubtitle": "接收的图片、视频自动写入系统相册",
+  "settingsSaveToGalleryHintBody": "开启后，图片和视频会写入系统相册，不会复制到你设置的「保存文件夹」。因此在文件管理中：「缓存」里能看到这些文件，「保存文件夹」里不会出现它们。",
+  "settingsWindowsLaunchAtStartupTitle": "开机自启动",
+  "settingsWindowsLaunchAtStartupSubtitle": "登录 Windows 后自动启动并隐藏到托盘",
+  "settingsWindowsLaunchAtStartupFailed": "更新开机自启动设置失败，请稍后重试",
+  "settingsDeleteCacheAfterSaveTitle": "保存后删除缓存",
+  "settingsDeleteCacheAfterSaveSubtitle": "导出到保存文件夹成功后，删除应用内缓存副本",
+  "settingsDeleteCacheAfterSaveHintBody": "接收的文件缓存会被删除，文件管理的缓存中不会出现",
+  "aboutTagline": "消息/文件中转，多端实时同步",
+  "settingsVersionWithBuild": "版本 {version} ({buildNumber})",
+  "settingsVersionLoading": "版本 ...",
+  "settingsVersionUnknown": "版本 -",
+  "settingsNavVersionHistory": "版本历史",
+  "settingsNavVersionHistorySubtitle": "查看已启用的版本列表",
+  "settingsNavAppLog": "应用日志",
+  "settingsNavAppLogSubtitleDesktop": "管理日志文件，可在文件夹中打开",
+  "settingsNavAppLogSubtitleMobile": "管理日志文件，可分享",
+  "settingsS3StatusConfigured": "已配置",
+  "settingsS3StatusNotConfigured": "未配置",
+  "settingsS3StatusHosted": "内置",
+  "settingsS3StatusCustom": "自建",
+  "settingsCheckUpdate": "检查更新",
+  "desktopUpdateTapCheck": "点击检查更新",
+  "desktopUpdateChecking": "正在检查…",
+  "desktopUpdateAvailableUseBanner": "新版本可用，请使用顶部横幅更新",
+  "desktopUpdateDownloadingPercent": "下载中 {percent}%",
+  "desktopUpdateReadyRestart": "更新已就绪，请重启应用",
+  "desktopUpdateRestarting": "正在重启…",
+  "desktopUpdateCheckFailed": "检查失败",
+  "desktopUpdateNotConfiguredHint": "桌面更新未配置（缺少 UpdateConfig）",
+  "desktopToastUpdateNotConfigured": "桌面更新未配置",
+  "desktopToastCheckFailed": "检查更新失败",
+  "desktopToastNewVersionUseBanner": "已发现新版本，请使用顶部横幅下载更新",
+  "desktopToastAlreadyLatest": "已是最新版本",
+  "mobileUpdateDownloadingPercent": "下载中 {percent}%",
+  "mobileUpdateDownloadedInstall": "新版本已下载，点击安装",
+  "appUpdateDownloadProgressTitle": "正在下载更新",
+  "appUpdateDownloadProgressBackground": "后台下载",
+  "appUpdateDownloadProgressBackgroundToast": "下载将在后台继续，可在「设置 - 检查更新」中查看进度。",
+  "appUpdateDownloadCompleteTitle": "下载完成",
+  "appUpdateDownloadedVersionLabel": "对应版本：{version}（build {build}）",
+  "appUpdateDownloadedFileLabel": "安装包：{fileName}",
+  "appUpdateDownloadRetry": "重试",
+  "mobileUpdateInstall": "安装",
+  "commonRetry": "重试",
+  "commonSave": "保存",
+  "updateStatusAlreadyLatest": "已是最新",
+  "updateStatusChecking": "正在检查…",
+  "updateStatusNewVersion": "发现新版本 {version}",
+  "updateStatusCheckAction": "检查更新",
+  "updateStatusDownloadingPercent": "下载中 {percent}%",
+  "updateStatusDownloadedReady": "已下载，可安装",
+  "updateStatusCheckFailed": "检查失败",
+  "updateStatusPlayManaged": "由 Google Play 商店管理",
+  "settingsInstallFailed": "安装失败: {message}",
+  "settingsStoragePermissionToast": "需要存储权限才能选择保存路径",
+  "settingsSavePathNotExistToast": "选择的路径不存在",
+  "settingsSavePathUpdatedToast": "保存路径已更新",
+  "settingsSavePathFailedToast": "设置保存路径失败",
+  "settingsSavePathRestoredToast": "已恢复默认保存路径",
+  "settingsSavePathRestoreFailedToast": "恢复默认路径失败",
+  "settingsSavePathSafSyncHint": "接收完成后自动保存到此文件夹",
+  "settingsSavePathSafMirrorLabel": "保存文件夹",
+  "settingsSavePathCacheHint": "应用缓存目录（临时副本，可安全清理）",
+  "settingsSavePathAppReceiveLabel": "应用内接收目录",
+  "themeModeFollowSystem": "跟随系统",
+  "themeModeLight": "浅色",
+  "themeModeDark": "深色",
+  "chatSelectedCount": "已选 {count}",
+  "chatSelectAll": "全选",
+  "chatDeselectAll": "取消全选",
+  "chatTooltipDelete": "删除",
+  "chatS3RelayTitle": "S3 云端中转",
+  "chatS3StatusChecking": "检测中…",
+  "chatS3StatusNotConfigured": "未配置",
+  "chatS3StatusOnlineSendAll": "在线 · 发送到所有设备",
+  "chatS3StatusUnavailableCheck": "不可用 · 请检查 S3 配置",
+  "chatDeviceOnline": "在线",
+  "chatDeviceChecking": "检测中…",
+  "chatDeviceOffline": "离线",
+  "chatHeaderDeviceNumberTooltip": "设备号：{code}",
+  "@chatHeaderDeviceNumberTooltip": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPickDeviceToStart": "选择一个设备开始对话",
+  "chatTooltipBackDeviceList": "返回设备列表",
+  "chatTooltipS3Settings": "S3 设置",
+  "chatTooltipFileManager": "文件管理",
+  "chatTooltipSessionSettings": "会话设置",
+  "chatDropReleaseToAdd": "松开以添加文件",
+  "chatMenuMultiSelect": "多选模式",
+  "chatMenuLocalFileUnavailable": "本地文件不可用",
+  "chatMenuLocalFileUnavailableSubtitle": "文件不存在，可能已被删除",
+  "chatMenuOpen": "打开",
+  "chatMenuAddToPending": "添加到待发",
+  "chatMenuShare": "分享",
+  "chatMenuSaveToGallery": "保存到相册",
+  "chatMenuDownloadFromCloud": "从云端下载",
+  "fileExportSaveToDownloads": "转存到下载目录",
+  "fileExportSaveToFiles": "保存到文件",
+  "fileExportSaveAs": "另存为",
+  "fileExportSavedAs": "已保存：{name}",
+  "@fileExportSavedAs": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "fileExportSaveAsDialogTitle": "选择保存位置",
+  "fileExportSavedToDownloads": "已转存到下载目录：{name}",
+  "@fileExportSavedToDownloads": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "fileExportOpenedShareSheet": "请选择保存位置",
+  "fileExportFailed": "转存失败",
+  "chatMenuCopyText": "复制文本",
+  "chatMenuSelectText": "选择文本",
+  "chatMenuDeleteMessage": "删除",
+  "chatGallerySaved": "已保存到相册",
+  "chatGallerySaveFailed": "保存失败",
+  "chatCopied": "已复制",
+  "chatSelectTextTitle": "选择文本",
+  "chatDeleteMessageTitle": "删除消息",
+  "chatDeleteMessageBody": "确定删除这条消息？将同时删除本地和云端记录。",
+  "chatDeleteMessageConfirm": "删除",
+  "chatFileMissingDeleted": "文件不存在，可能已被删除",
+  "chatFileNoLocalOpenPath": "未找到可打开的本地文件",
+  "devicesRemoveTitle": "移除设备",
+  "devicesRemoveBody": "移除后，该设备上的账号将退出登录；若正在使用会立即失效，若未启动则下次打开应用时需重新登录。",
+  "devicesRemoveConfirm": "移除",
+  "devicesRemovedToast": "已移除设备",
+  "devicesRemoveFailed": "移除失败: {error}",
+  "devicesRenameTitle": "修改设备名称",
+  "devicesNameHint": "设备名称",
+  "devicesRenameMenu": "改名",
+  "devicesRemoveMenu": "移除",
+  "devicesSavedToast": "已保存",
+  "devicesSaveFailed": "保存失败: {error}",
+  "devicesTitle": "我的设备",
+  "devicesOfflinePrompt": "请登录后查看与管理已绑定设备",
+  "devicesBoundCount": "已绑定 {count} 台",
+  "devicesSyncing": "正在同步…",
+  "devicesSubtitleLoadFailed": "加载失败",
+  "devicesTooltipRefresh": "刷新",
+  "devicesLoadFailedDetail": "加载失败：{error}",
+  "devicesEmptyList": "暂无已注册设备",
+  "devicesCurrentDeviceBadge": "当前设备",
+  "fmRefreshFailed": "刷新失败",
+  "fmListLoadFailed": "加载文件列表失败",
+  "fmLoadMoreFailed": "加载更多失败",
+  "fmSearchFailed": "搜索失败",
+  "fmDeleteTitle": "删除文件",
+  "fmDeleteConfirmOne": "确定删除 {name}？",
+  "fmDeleteConfirmMany": "确定删除 {count} 个文件？",
+  "fmDeleteConfirm": "删除",
+  "fmAndroidApkOnly": "仅 Android 设备支持安装 APK",
+  "fmPreviewUnavailableTitle": "无法预览",
+  "fmPreviewUnavailableBody": "当前文件没有有效的预览方式，是否以文本的方式打开？",
+  "fmPreviewOpenAsText": "以文本打开",
+  "fmPendingAddedOne": "已添加「{name}」到待发文件箱",
+  "fmPendingAddedMany": "已添加 {count} 个文件到待发文件箱",
+  "fmMultiSelectMode": "多选模式",
+  "fmToolbarTitle": "文件管理",
+  "fmHintTitle": "关于文件管理",
+  "fmHintTooltip": "说明",
+  "fmTabCache": "缓存",
+  "fmTabSaveFolder": "保存文件夹",
+  "fmSaveFolderEmpty": "保存文件夹为空",
+  "fmSaveFolderNotAccessible": "无法读取保存文件夹",
+  "fmSaveFolderPermissionDenied": "没有访问权限，请在设置中重新选择保存位置",
+  "fmSaveFolderNotConfigured": "尚未配置保存位置",
+  "fmSaveFolderPathLabel": "当前保存位置",
+  "fmSaveFolderGoSettings": "前往设置",
+  "fmSaveFolderHintTitle": "关于保存文件夹",
+  "fmSaveFolderHintBody": "展示你在设置中所选文件夹内、通过本应用接收的文件；非本应用接收的文件不会显示。",
+  "fmSaveFolderHintBodyDesktop": "展示你在设置中所选的保存文件夹中的所有文件。",
+  "fmSaveFolderHintOk": "知道了",
+  "fmSaveFolderErrorDetail": "{reason}",
+  "@fmSaveFolderErrorDetail": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "fmCacheHintTitle": "关于缓存",
+  "fmCacheHintOk": "知道了",
+  "fmCachePathLabel": "缓存目录",
+  "fmCacheSubtitle": "接收文件时，会先将内容写入应用缓存，再转存到「保存文件夹」。缓存只是本地副本，手动清理不会影响已保存的文件。\n\n若在设置中开启「保存后删除缓存」，转存成功后会立即删除对应的缓存副本。",
+  "fmExportStatusPending": "待保存",
+  "fmExportStatusExporting": "保存中",
+  "fmExportStatusDone": "已保存",
+  "fmExportStatusFailed": "保存失败",
+  "fmExportRetry": "重试保存",
+  "fmClearCache": "清理",
+  "fmClearCacheTitle": "清理缓存",
+  "fmClearCacheConfirm": "将删除应用缓存目录下的所有文件。已保存到保存文件夹的文件不受影响。",
+  "fmClearCacheDone": "缓存已清理",
+  "fmClearCacheFailed": "清理缓存失败",
+  "fmSearchCloseTooltip": "关闭搜索",
+  "fmSearchTooltip": "搜索",
+  "fmSortCategoryTooltip": "分类查看",
+  "fmSortTimeTooltip": "时间排序",
+  "fmSortMenuTooltip": "排序",
+  "fmSortByCreated": "按创建时间",
+  "fmSortByModified": "按更新时间",
+  "fmSearchHint": "搜索文件名...",
+  "fmEmptyNoMatch": "未找到匹配文件",
+  "fmEmptyNoReceived": "暂无接收文件",
+  "fmSelectedCount": "已选 {count}",
+  "fmTooltipShareSelection": "分享",
+  "fmTooltipAddPending": "添加到待发",
+  "fmRevealInFolder": "在文件夹中显示",
+  "fmFileInfoAction": "信息",
+  "fmFileInfoTitle": "文件信息",
+  "fmFileInfoName": "名称",
+  "fmFileInfoPath": "路径",
+  "fmFileInfoSize": "大小",
+  "fmFileInfoMd5": "MD5",
+  "fmFileInfoReceivedAt": "接收时间",
+  "fmFileInfoModifiedAt": "修改时间",
+  "fmFileInfoCategory": "类型",
+  "fmFileInfoProtocol": "传输协议",
+  "fmFileInfoMessageId": "消息 ID",
+  "fmFileInfoS3Key": "S3 Key",
+  "fmFileInfoFromDevice": "来源设备",
+  "fmFileInfoMd5Computing": "计算中…",
+  "fmFileInfoMd5Failed": "无法计算",
+  "fmFileInfoFileMissing": "本地文件不存在",
+  "fmCategoryImage": "图片",
+  "fmCategoryVideo": "视频",
+  "fmCategoryAudio": "音频",
+  "fmCategoryPdf": "PDF",
+  "fmCategoryArchive": "压缩包",
+  "fmCategoryDocument": "文档",
+  "fmCategoryCode": "代码",
+  "fmCategoryOther": "其他",
+  "fmTimeJustNow": "刚刚",
+  "fmTimeMinutesAgo": "{count} 分钟前",
+  "fmTimeHoursAgo": "{count} 小时前",
+  "fmTimeDaysAgo": "{count} 天前",
+  "fmTimeMonthDayClock": "{month}/{day} {hour}:{minute}",
+  "accountScreenTitle": "个人账号",
+  "accountLogoutDialogTitle": "退出登录",
+  "accountLogoutDialogBody": "退出后需要重新登录才能使用，确定退出吗？",
+  "accountLogoutConfirm": "退出",
+  "accountChangePassword": "修改密码",
+  "accountDeleteAccount": "删除账户",
+  "accountLogout": "退出登录",
+  "accountPasswordChangedToast": "密码修改成功",
+  "accountChangePasswordTitle": "修改密码",
+  "accountChangePasswordWarning": "验证码将发送到：",
+  "accountLabelNewPassword": "新密码",
+  "accountValidationEnterNewPassword": "请输入新密码",
+  "accountValidationNewPasswordMinLength": "新密码至少需要6个字符",
+  "accountLabelConfirmNewPassword": "确认新密码",
+  "accountValidationPasswordMismatch": "两次输入的密码不一致",
+  "accountDeleteTitle": "删除账户",
+  "accountDeleteWarning": "删除后所有数据将被永久清除且无法恢复。验证码将发送到：",
+  "accountLabelVerificationCode": "验证码",
+  "accountHintSixDigitCode": "6位验证码",
+  "accountSendingCode": "发送中...",
+  "accountSendVerificationCode": "发送验证码",
+  "accountDeleteForever": "永久删除",
+  "accountValidationEnterVerificationCode": "请输入验证码",
+  "versionHistoryTitle": "版本历史",
+  "versionHistoryEmpty": "暂无版本记录",
+  "appLogTitle": "应用日志",
+  "appLogTooltipOpenFolder": "打开日志所在文件夹",
+  "appLogTooltipRefresh": "刷新",
+  "appLogErrorDirUnavailable": "日志目录不可用",
+  "appLogEmptyHint": "（尚无日志输出，使用应用后此处会显示记录）",
+  "appLogReadFailed": "读取失败: {error}",
+  "appLogToastDirUnavailable": "日志目录不可用",
+  "appLogToastOpenFolderFailed": "无法打开文件夹",
+  "appLogFileMeta": "{size} · {modified}",
+  "@appLogFileMeta": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "modified": {
+        "type": "String"
+      }
+    }
+  },
+  "appLogTailHintKb": "日志文件较大，仅显示末尾约 {kb} KB",
+  "msgSearchFailed": "搜索失败: {error}",
+  "msgSearchFileFallback": "文件",
+  "msgSearchUnknownMessage": "[ 未知消息 ]",
+  "msgSearchYesterdayTime": "昨天 {time}",
+  "msgSearchDeviceSystem": "系统",
+  "msgSearchCopied": "已复制",
+  "msgSearchDeleteTitle": "删除消息",
+  "msgSearchDeleteBody": "确定删除这条消息？将同时删除云端记录。",
+  "msgSearchSelectTextTitle": "选择文本",
+  "msgSearchHint": "搜索消息…",
+  "msgSearchEmptyHint": "输入关键词搜索消息",
+  "msgSearchNoResults": "没有找到匹配的消息",
+  "apkPickerTitle": "选择 APK",
+  "apkPickerTooltipBrowseFiles": "从文件浏览",
+  "apkPickerConfirmCount": "确定 ({count})",
+  "apkPickerLoadingInstalled": "正在加载已安装应用…",
+  "apkPickerEmptyOrError": "未获取到已安装应用列表\n可能需要完全卸载后重新安装应用以授予权限",
+  "apkPickerSearchHint": "搜索应用…",
+  "apkPickerAppCount": "共 {count} 个应用",
+  "apkPickerSystemApp": "系统应用",
+  "apkPickerClearSelection": "清除选择",
+  "apkPickerConfirmSendMany": "确定发送 {count} 个 APK",
+  "apkPickerFromFiles": "从文件中选择 APK",
+  "apkPickerReloadApps": "重新加载应用列表",
+  "apkPickerLoadFailed": "加载应用列表失败: {error}",
+  "s3SettingsSaved": "保存成功",
+  "s3SettingsTestOk": "连接成功",
+  "s3SettingsClearTitle": "清空配置",
+  "s3SettingsClearBody": "确定要清空所有配置项吗？将删除服务端与本地缓存中的 S3 配置。",
+  "s3SettingsClearConfirm": "清空",
+  "s3SettingsCleared": "已清空配置",
+  "s3SettingsLoginExpired": "登录已失效，请重新登录",
+  "s3SettingsClearing": "清空中…",
+  "s3SettingsIntro": "配置 S3 兼容的对象存储服务，用于广域网文件传输。支持 AWS S3、MinIO、阿里云 OSS 等。",
+  "s3SettingsConfiguredHint": "已配置。重新填写并提交可覆盖现有配置。",
+  "s3SettingsSectionStorage": "存储配置",
+  "s3SettingsRequired": "必填",
+  "s3SettingsSecretHintIfConfigured": "留空则不修改",
+  "s3SettingsSaving": "保存中…",
+  "s3SettingsSave": "保存配置",
+  "s3SettingsTesting": "测试中…",
+  "s3SettingsTestConnection": "测试连接",
+  "s3SettingsPageTitle": "S3 设置",
+  "s3SettingsSectionConnection": "连接与存储",
+  "s3SettingsSectionCredentials": "访问密钥",
+  "s3SettingsFieldEndpoint": "Endpoint",
+  "s3SettingsFieldRegion": "Region",
+  "s3SettingsFieldBucket": "Bucket",
+  "s3SettingsFieldPathStyle": "Path-style 访问",
+  "s3SettingsPathStyleHint": "MinIO 及多数自建网关通常需开启；AWS S3 等区域 Endpoint 可关闭以使用虚拟托管。",
+  "s3SettingsFieldAccessKeyId": "Access Key ID",
+  "s3SettingsFieldSecretAccessKey": "Secret Access Key",
+  "s3SettingsPlaceholderEndpoint": "https://s3.amazonaws.com",
+  "s3SettingsPlaceholderRegion": "cn-east-1",
+  "s3SettingsPlaceholderBucket": "my-bucket",
+  "s3SettingsPlaceholderAccessKeyId": "AKIAIOSFODNN7EXAMPLE",
+  "s3SettingsConfiguredSummary": "{endpoint} · {bucket}",
+  "s3SettingsHostedTitle": "正在使用内置 S3",
+  "s3SettingsHostedBody": "由平台托管的对象存储，无需任何配置即可使用，可直接进行广域网传输。",
+  "s3SettingsHostedUsageLabel": "本月已用",
+  "s3SettingsHostedUsageMonthly": "{used} / {quota}",
+  "s3SettingsHostedUsageMonthlyUnlimited": "{used}（不限）",
+  "s3SettingsHostedUsageHint": "用量按 UTC 自然月统计，每月 1 日重置；升级会员可获得更高额度。",
+  "s3SettingsCustomConfiguredHint": "已切换为自建 S3，所有上传/下载将使用您自己的 Bucket。",
+  "s3SettingsDisabledHint": "尚未启用 S3。请填入您的 S3 配置以启用广域网传输。",
+  "s3SettingsSwitchToCustom": "切换为自建 S3",
+  "s3SettingsCollapseCustomForm": "取消并保留内置 S3",
+  "s3SettingsSwitchBackToHosted": "切换回内置 S3",
+  "s3SettingsSwitchBackTitle": "切换回内置 S3？",
+  "s3SettingsSwitchBackBody": "切换回平台内置存储后，所有上传/下载将走内置 S3。已保存的自建 S3 配置仍会保留，方便随时一键切回。",
+  "s3SettingsUseSavedCustom": "使用已保存的自建 S3",
+  "s3SettingsSwitchedToCustomOk": "已切换为自建 S3",
+  "s3SettingsSwitchBackConfirm": "切换回内置",
+  "s3SettingsSwitchedBackOk": "已切换回内置 S3",
+  "s3SettingsSwitching": "切换中…",
+  "s3SettingsDocsTooltip": "配置说明（含 CORS）",
+  "s3SettingsDocsUnavailable": "暂无可打开的文档链接",
+  "sendModeNearby": "附近",
+  "linkRoutesTitleRetest": "重新检测连接",
+  "linkRoutesTitleSwitch": "切换连接线路",
+  "linkRoutesPeerSession": "当前会话设备：{label}",
+  "linkRoutesBodyRetest": "将对当前线路重新发起检测，以下是双方可用线路及预计速度。",
+  "linkRoutesBodySwitch": "将切换到 {mode}，并立即发起检测。以下是双方可用线路及预计速度。",
+  "linkRoutesTagAvailable": "可用",
+  "linkRoutesTagUnavailable": "不可用",
+  "linkRoutesTagCurrent": "当前",
+  "linkRoutesTagTarget": "目标",
+  "linkRoutesSpeedLine": "预计速度：{tier} · {desc}",
+  "linkRoutesWaitingResult": "等待检测结果",
+  "linkRoutesRetest": "重新检测",
+  "linkRoutesSwitchAndDetect": "切换并检测",
+  "linkRoutesPickerTitle": "选择连接线路",
+  "linkRoutesPickerHint": "选择目标线路后将立即切换并检测。",
+  "linkSpeedNearbyTier": "中高",
+  "linkSpeedNearbyDesc": "同网段直连，速度受局域网质量影响",
+  "linkSpeedLanTier": "高",
+  "linkSpeedLanDesc": "HTTP 直连，通常是局域网最快路径",
+  "linkSpeedWebrtcTier": "中",
+  "linkSpeedWebrtcDesc": "穿透能力强，速度受 NAT 与网络波动影响",
+  "linkSpeedS3Tier": "中低",
+  "linkSpeedS3Desc": "经云中转，带宽受公网与节点影响",
+  "membershipCenterTitle": "会员中心",
+  "membershipLoadFailed": "加载会员信息失败: {error}",
+  "membershipBuyMiniOrProFirst": "请先开通 Pro 会员",
+  "membershipPurchaseSuccessSync": "购买成功，权益将由服务器同步，请稍候刷新",
+  "membershipPurchaseFailed": "购买失败: {error}",
+  "membershipPaymentCancelled": "已取消支付",
+  "membershipPaymentPending": "支付结果确认中，请稍候查看",
+  "membershipNetworkError": "网络异常，请重试",
+  "membershipOrderPayFailed": "订单支付失败，请重试",
+  "membershipCompletePaymentInApp": "请完成支付后返回本应用，支付结果将自动更新",
+  "membershipAlipayAppNotConfigured": "当前未配置 APP 支付。请使用电脑浏览器打开网页端完成支付，或联系管理员配置支付宝 APP 应用。",
+  "membershipOrderCreatedAlipay": "订单已创建，请在支付宝完成支付",
+  "membershipPurchaseSuccessActive": "支付成功，会员权益已生效",
+  "membershipCurrentTier": "当前会员",
+  "membershipTierSummary": "{tier} · 可绑定 {limit} 台设备",
+  "membershipBoundDevices": "当前已绑定 {count} 台",
+  "membershipAddonLine": "已增购 {packs} 包（+{devices} 台）",
+  "membershipSubscriptionRenewsAt": "下次续费时间：{date}",
+  "@membershipSubscriptionRenewsAt": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "membershipSubscriptionEndsAfterCancel": "已关闭自动续费，会员权益至 {date} 结束",
+  "@membershipSubscriptionEndsAfterCancel": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "membershipSubscriptionValidUntil": "当前订阅周期至 {date}",
+  "@membershipSubscriptionValidUntil": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "membershipMigrationCardTitle": "闪电藤会员迁移",
+  "membershipMigrationCardSubtitle": "如果您是闪电藤会员，可迁移到虾传",
+  "membershipDeviceBadgeDevices": "{count} 台设备",
+  "membershipDeviceBadgeAddon": "+{count} 台",
+  "membershipTierSubtitleAddon": "每包 +5 台设备，可多次购买",
+  "membershipTierSubtitleBuyout": "买断会员（永久）",
+  "membershipCannotBuyLowerTier": "当前档位或更低档位不可购买",
+  "membershipUpgradeDue": "升级应付：¥{amount}",
+  "membershipNeedMiniProFirst": "需先开通 Pro 会员",
+  "membershipPurchasing": "购买中…",
+  "membershipWaitingPayment": "等待支付结果…",
+  "membershipPleaseSubscribeFirst": "请先开通 Pro 会员",
+  "membershipBuyApple": "Apple 购买",
+  "membershipBuyAlipay": "支付宝购买",
+  "membershipBillingMonthly": "按月",
+  "membershipBillingYearly": "按年",
+  "membershipPlanYearlySave": "年付省约 {pct}%",
+  "@membershipPlanYearlySave": {
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipSavingsVsMonthlyYear": "相较连续按月付满一年，最高省约 {pct}%",
+  "@membershipSavingsVsMonthlyYear": {
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipPricePerMonthEquiv": "约合 {price}/月",
+  "@membershipPricePerMonthEquiv": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "membershipPricePerYear": "{price}/年",
+  "@membershipPricePerYear": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "membershipPricePerMonth": "{price}/月",
+  "@membershipPricePerMonth": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "membershipFeatureDevices": "最高 {count} 台设备绑定",
+  "@membershipFeatureDevices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipFeatureUploadHosted": "内置云传输 {gib} GiB / 月（上传计量）",
+  "@membershipFeatureUploadHosted": {
+    "placeholders": {
+      "gib": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipPlanPopular": "推荐",
+  "membershipOverseasNoAlipay": "海外版不支持支付宝，请使用应用内订阅完成支付。",
+  "membershipSubscribeInApp": "应用内订阅",
+  "membershipRcUnavailable": "应用内购买暂不可用，请检查网络或稍后再试。",
+  "membershipTierSubtitleSubscription": "自动续订，可在商店订阅管理中随时取消。",
+  "membershipOverseasSubscribeHint": "通过 App Store 或 Google Play 订阅，自动续订。",
+  "membershipOverseasSubscribeHintIos": "通过 App Store 订阅，自动续订。",
+  "membershipChannelLockedOtherPlatform": "你的订阅在其他平台购买，请在购买设备上管理。",
+  "membershipChannelLockedStripe": "你的会员通过网页 Stripe 订阅。请在网页升级或管理，避免重复扣款。",
+  "membershipChannelLockedAppStore": "你的会员通过 App Store 订阅。请在 iPhone/iPad 的设置 → Apple ID → 订阅 中管理或升级。",
+  "membershipChannelLockedPlayStore": "你的会员通过 Google Play 订阅。请在 Play 商店账户 → 订阅 中管理或升级。",
+  "membershipChannelLifetime": "你已是终身会员，无需再升级订阅。",
+  "membershipManageStripe": "管理订阅（网页）",
+  "membershipManageStripeFailed": "打开订阅管理失败，请稍后重试。",
+  "membershipRestorePurchases": "恢复购买",
+  "membershipRestoreSuccess": "已恢复购买，权益将由服务器同步，请稍候刷新",
+  "membershipRestoreFailed": "恢复购买失败: {error}",
+  "membershipOpenAppStoreSubs": "前往 App Store 订阅",
+  "membershipOpenPlayStoreSubs": "前往 Play 商店订阅",
+  "membershipStripePriceMissing": "未配置 Stripe Price，请联系管理员或使用其他端订阅。",
+  "membershipStripeCheckoutFailed": "创建 Stripe 订阅会话失败，请稍后重试。",
+  "membershipOpenBrowserToPay": "即将打开浏览器完成支付，付款后回到本应用即可。",
+  "membershipUpgradeStripeSuccess": "升级成功，会员权益已生效。",
+  "membershipSubscribeStripe": "用 Stripe 订阅",
+  "membershipUpgradeStripe": "用 Stripe 升级",
+  "membershipOpeningStripe": "正在打开 Stripe…",
+  "membershipMigrationTitle": "闪电藤会员迁移",
+  "membershipMigrationConfirmTitle": "确认迁移",
+  "membershipMigrationConfirmBody": "验证成功！\n\n您将获得 {tier} 会员，可绑定 {limit} 台设备。\n\n确认要迁移会员资格吗？",
+  "membershipMigrationConfirmAction": "确认迁移",
+  "membershipMigrationEnterPhone": "请先输入手机号",
+  "membershipMigrationInvalidPhone": "手机号格式不正确",
+  "membershipMigrationCodeSent": "验证码已发送",
+  "membershipMigrationEnterCode": "请输入6位验证码",
+  "membershipMigrationSuccess": "会员迁移成功！",
+  "membershipMigrationIntroTitle": "会员迁移说明",
+  "membershipMigrationIntroBody": "如果您是闪电藤的会员用户，可以通过手机号验证将您的会员资格迁移到虾传。\n\n迁移后，您将获得虾传 Pro 会员（12台设备）。",
+  "membershipMigrationPhoneLabel": "手机号",
+  "membershipMigrationPhoneHint": "请输入手机号",
+  "membershipMigrationCodeLabel": "验证码",
+  "membershipMigrationVerifyAndMigrate": "验证并迁移",
+  "membershipMigrationSending": "发送中...",
+  "membershipMigrationSendCode": "发送验证码",
+  "connectionBarGoToS3Setup": "去配置 S3",
+  "connectionBarManualPrefix": "手动·",
+  "chatProbeDetecting": "{mode}检测中",
+  "chatProbeAvailable": "{mode}可用",
+  "chatProbeUnavailable": "{mode}暂不可用",
+  "chatProbeTriggered": "{mode}检测已触发",
+  "connectionOrchestratorManualOk": "手动·{mode}",
+  "connectionOrchestratorManualUnavailable": "手动·{mode}不可用",
+  "connectionOrchestratorLinkUnavailable": "当前链路不可用",
+  "connectionOrchestratorAutoS3": "自动·S3",
+  "connectionOrchestratorS3FallbackSubtitle": "直连失败，已降级到云中转",
+  "connectionOrchestratorAutoMode": "自动·{mode}",
+  "connectionOrchestratorNoDirect": "无可用直连",
+  "connectionOrchestratorLoginPromptSubtitle": "登录后可使用 HTTP、WebRTC、S3",
+  "connectionOrchestratorNoDirectS3Fallback": "无可用直连，已降级",
+  "connectionOrchestratorS3Unavailable": "S3 不可用",
+  "connectionOrchestratorS3NotConfigured": "S3 未配置",
+  "membershipMigrationCooldownSeconds": "{seconds}秒后重试",
+  "mobileHomeTabConnect": "连接",
+  "mobileHomeTabFiles": "文件",
+  "chatReceivedExportingToast": "已接收 {name}，正在保存到文件夹…",
+  "@chatReceivedExportingToast": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "mobileHomeTabSettings": "设置",
+  "mobileHomePendingOutbox": "待发文件箱",
+  "pendingFilesSend": "发送",
+  "pendingFilesManage": "管理",
+  "pendingFilesManageWithCount": "管理（共{count}个）",
+  "pendingFilesSelectedCount": "已选择 {count} 个文件",
+  "pendingFilesClearAll": "清空全部",
+  "fileSendTitleSingle": "发送：{name}",
+  "@fileSendTitleSingle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "fileSendTitleMany": "发送：{firstName} 等{count}个文件",
+  "@fileSendTitleMany": {
+    "placeholders": {
+      "firstName": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fileSendS3Intro": "通过 S3 云端中转发送到所有已登录设备，适用于跨网络传输。",
+  "fileSendS3ConfigurePrompt": "请先配置 S3 以使用云端发送。",
+  "fileSendResumeSupported": "支持断点续传",
+  "fileSendResumeNotSupported": "不支持断点续传",
+  "fileSendStatusChecking": "检测中",
+  "fileSendLanStatusOnlineDirect": "在线 · 可直连",
+  "fileSendLanStatusPullAvailable": "可反向拉取",
+  "fileSendLanStatusUnreachable": "无法连通",
+  "fileSendLanStatusOfflineDirect": "离线",
+  "fileSendWebRtcStatusOnline": "在线",
+  "fileSendWebRtcStatusConnectable": "可尝试",
+  "fileSendWebRtcStatusOffline": "离线",
+  "fileSendWebRtcIntro": "通过 WebRTC 传输，数据不经服务器。连接失败时自动降级到 S3。",
+  "fileSendWebRtcEmptyNoDevices": "暂无发现其他设备。",
+  "fileSendEmptyNearbyOffline": "暂无发现其他设备，请确保设备在同一局域网内。",
+  "fileSendEmptyMyDevicesOnLan": "暂无我的设备在局域网内。",
+  "fileSendSendToSelected": "发送到已选设备",
+  "fileSendViaWebRtc": "通过 WebRTC 发送",
+  "fileSendConfigureS3First": "请先配置 S3",
+  "fileSendToAllDevices": "发送到全部设备",
+  "fileSendTabMyDevices": "我的设备",
+  "fileSendTabWebRtc": "WebRTC",
+  "devicePanelStatusServerUnreachable": "服务器不可达",
+  "devicePanelStatusConnected": "已连接",
+  "devicePanelStatusConnecting": "连接中…",
+  "devicePanelEmptyNoOtherDevices": "暂无其他设备",
+  "devicePanelEmptyHintOfflineLan": "确保其他设备在同一局域网内即可开始传输",
+  "devicePanelEmptyHintOnlineAccount": "在其他设备上登录同一账号即可开始传输",
+  "devicePanelDevicesOnlineCount": "{count} 台在线",
+  "@devicePanelDevicesOnlineCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectionBarDefaultTitle": "连接状态",
+  "connectionBarManualShort": "手动",
+  "connectionBarAutoShort": "自动",
+  "connectionBarResumeAuto": "恢复自动",
+  "connectionBarSwitchMode": "切换",
+  "connectionBarRefreshOnlineStatus": "刷新在线状态",
+  "transportModeLabel": "传输方式",
+  "transportModeHttpLan": "HTTP 局域网直连",
+  "transportModeWebrtcLan": "WebRTC 局域网直连",
+  "composerPickAttachmentTitle": "选择附件",
+  "composerAttachImageVideo": "图片/视频",
+  "composerAttachImageVideoDesc": "从相册中选择图片或视频",
+  "chatGalleryReadPermissionTitle": "访问相册",
+  "chatGalleryReadPermissionBody": "选择图片或视频需要访问您的相册。建议允许访问「全部照片和视频」。",
+  "chatGalleryReadPermissionConfirm": "继续",
+  "chatGalleryReadPermissionDenied": "未获得相册访问权限，无法选择图片或视频",
+  "chatGalleryReadPermissionLimited": "当前仅可访问部分照片，建议前往系统设置允许访问全部资源",
+  "chatGalleryReadPermissionContinuePartial": "继续访问部分资源",
+  "composerAttachFile": "系统文件",
+  "composerAttachFileDesc": "通过系统文件选择器选取",
+  "composerAttachFolder": "选择文件夹",
+  "composerAttachFolderDesc": "选择整个文件夹中的所有文件",
+  "composerAttachApk": "选择 APK",
+  "composerAttachApkDesc": "从设备中选择 APK 安装包",
+  "composerMessageHint": "输入消息…",
+  "composerClearInputTooltip": "清空",
+  "shortcutsSendTitle": "发送消息",
+  "shortcutsSendDescription": "选择用哪个按键在输入框中发送消息",
+  "shortcutsSendEnter": "按 Enter 键发送",
+  "shortcutsSendModifier": "按 Ctrl+Enter 键发送",
+  "shortcutsSendModifierMac": "按 ⌘+Enter 键发送",
+  "shortcutsSendButtonHint": "发送按钮始终可用，不受此设置影响。",
+  "composerSendTooltipEnter": "发送 (Enter)",
+  "composerSendTooltipModifier": "发送 (Ctrl+Enter)",
+  "composerSendTooltipModifierMac": "发送 (⌘+Enter)",
+  "chatTransferSendingPct": "{fileName} 发送中 {pct}%",
+  "@chatTransferSendingPct": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      },
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "chatTransferReceivingPct": "{fileName} 接收中 {pct}%",
+  "@chatTransferReceivingPct": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      },
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "chatTransferWaitingPeerLine": "{fileName} 等待接收方连接…",
+  "@chatTransferWaitingPeerLine": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferWaitingPeerShort": "等待接收方连接…",
+  "chatTransferCancelledBare": "已取消",
+  "chatTransferCancelledNamed": "{fileName} 已取消",
+  "@chatTransferCancelledNamed": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferSendFailedNamed": "{fileName} 发送失败",
+  "@chatTransferSendFailedNamed": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferReceiveFailedNamed": "{fileName} 接收失败",
+  "@chatTransferReceiveFailedNamed": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferProgressSending": "发送中",
+  "chatTransferProgressReceiving": "接收中",
+  "chatTransferEtaSecondsRemaining": "剩余 {seconds} 秒",
+  "@chatTransferEtaSecondsRemaining": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "chatTransferEtaMinutesSecondsRemaining": "剩余 {minutes}分{seconds}秒",
+  "@chatTransferEtaMinutesSecondsRemaining": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "chatWebRtcSentParen": "{fileName} (WebRTC 已发送)",
+  "@chatWebRtcSentParen": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatScreenGenericFile": "文件",
+  "chatScreenDeleteThisDeviceTitle": "删除本设备",
+  "chatScreenDeleteThisDeviceBody": "将从账号下移除本设备并退出登录。移除后需重新登录才可继续使用云端功能。",
+  "chatScreenRemovePeerTitle": "移除设备",
+  "chatScreenRemovePeerBody": "移除后，该设备上的账号将退出登录；若正在使用会立即失效，若未启动则下次打开应用时需重新登录。",
+  "chatScreenConfirmRemoveLabel": "移除",
+  "chatScreenConfirmDeleteLabel": "删除",
+  "chatScreenToastDeletedThisDevice": "已删除本设备",
+  "chatScreenToastDeleteDeviceFailed": "删除失败：{error}",
+  "@chatScreenToastDeleteDeviceFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatScreenToastRemovedPeer": "已移除设备",
+  "chatScreenToastRemovePeerFailed": "移除失败：{error}",
+  "@chatScreenToastRemovePeerFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatScreenSessionSettingsTitle": "会话设置",
+  "chatScreenTileRenameDevice": "修改设备名称",
+  "chatScreenTileClearMessages": "清空消息",
+  "chatScreenSubtitleClearMessages": "删除本会话全部聊天记录",
+  "chatScreenClearMessagesTitle": "清空消息",
+  "chatScreenClearMessagesConfirm": "将删除本会话的全部聊天记录。已保存到保存文件夹的文件不会删除。",
+  "chatScreenClearMessagesDeleteCache": "同时删除缓存文件",
+  "chatScreenClearMessagesDone": "消息已清空",
+  "chatScreenClearMessagesFailed": "清空消息失败",
+  "chatScreenTileRemoveThisDevice": "删除本设备",
+  "chatScreenTileRemovePeer": "移除设备",
+  "chatScreenSubtitleRemoveThisDevice": "从账号移除本机并退出登录",
+  "chatScreenSubtitleRemovePeer": "从账号移除当前会话中的设备",
+  "chatScreenPendingFilesMissing": "部分待发文件已不存在，已自动移除",
+  "chatScreenConnNotLoggedInHttp": "当前未登录，仅支持 HTTP 传输",
+  "chatScreenConnOffline": "无法连接服务器，当前为离线模式",
+  "chatScreenConnServerOk": "服务器连接成功",
+  "chatScreenSelectTargetFirst": "请先选择目标设备",
+  "chatScreenFolderNeedsPermission": "需要存储权限才能访问文件夹",
+  "chatScreenFolderEmpty": "该文件夹为空或无法读取",
+  "chatScreenFolderSafTryFiles": "无法读取所选文件夹，请改用「选择文件」发送",
+  "chatScreenRetryCloudOffline": "离线模式下无法重试云传输",
+  "chatScreenNoDeviceFound": "未发现目标设备，请确认设备在线后重试",
+  "chatScreenOfflineNoS3": "离线模式下无法使用S3传输",
+  "chatScreenS3NotConfiguredTitle": "S3 未配置",
+  "chatScreenS3NotConfiguredBody": "当前尚未配置 S3，是否前往设置？",
+  "chatScreenS3GoConfigure": "去配置",
+  "chatScreenS3UnavailableTitle": "S3 不可用",
+  "chatScreenS3UnavailableBody": "S3 连接测试未通过，请检查配置或网络后重试。是否前往 S3 设置？",
+  "chatScreenS3GoSettings": "去设置",
+  "chatScreenNoNearbyDevice": "附近没有可用设备，请重新选择",
+  "chatScreenDeviceUnavailable": "所选设备不可用，请重新选择",
+  "chatScreenWebRtcUnsupportedSource": "当前文件来源不支持 WebRTC，请切换到 HTTP 发送",
+  "chatScreenWebRtcFailedTryHttp": "WebRTC 发送失败，请切换到 HTTP 模式重试",
+  "chatScreenConfigureS3FirstToast": "请先在设置中配置 S3",
+  "chatScreenS3UnavailableToast": "S3 当前不可用，请在设置中检查配置或重新测试连接",
+  "chatScreenSendFailedWithError": "发送失败: {error}",
+  "@chatScreenSendFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatScreenFileMissing": "文件不存在，可能已被删除",
+  "chatScreenCannotOpenFile": "无法打开此文件",
+  "chatScreenSavedToGallery": "已保存到相册",
+  "chatScreenReceivedAtPath": "已接收: {path}",
+  "@chatScreenReceivedAtPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "chatScreenReceiveFailedWithError": "接收失败: {error}",
+  "@chatScreenReceiveFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatScreenCopied": "已复制",
+  "chatScreenDeleteMessagesTitle": "删除消息",
+  "chatScreenDeleteMessagesBody": "确定删除 {count} 条消息？将同时删除本地和云端记录。",
+  "@chatScreenDeleteMessagesBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatHttpReceivedSavedGallery": "已通过 HTTP 收到并保存到相册",
+  "chatHttpReceivedWithName": "已通过 HTTP 收到: {fileName}",
+  "@chatHttpReceivedWithName": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatHttpPullReceivedSavedGallery": "已通过反向拉取收到并保存到相册",
+  "chatHttpPullReceivedWithName": "已通过反向拉取收到: {fileName}",
+  "@chatHttpPullReceivedWithName": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatHttpReceivedBracket": "{fileName} (已通过 HTTP 接收)",
+  "@chatHttpReceivedBracket": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "appGallerySubfolder": "虾传",
+  "appUpdateTitleNewVersion": "发现新版本",
+  "appUpdateCurrentVersion": "当前版本：{version} ({build})",
+  "@appUpdateCurrentVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateNewVersion": "新版本：{version} ({build})",
+  "@appUpdateNewVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateLater": "稍后",
+  "appUpdateDontShowAgainVersion": "不再提示此版本",
+  "appUpdateDownload": "下载",
+  "appUpdateOpenDownloadPage": "在浏览器中打开",
+  "appUpdateGoAppStore": "前往 App Store",
+  "appUpdateInstallTitle": "安装更新",
+  "appUpdateInstallBody": "当前版本：{version} ({build})\n待安装包版本：{pending}\n\n新版本已下载，是否立即安装？",
+  "@appUpdateInstallBody": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      },
+      "pending": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateUnknownVersion": "未知",
+  "appUpdateDontShowAgain": "不再提示",
+  "appUpdateInstall": "安装",
+  "desktopUpdateSizeUnknown": "大小未知",
+  "desktopUpdateSizeMb": "约 {mb} MB",
+  "@desktopUpdateSizeMb": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "desktopUpdateSizeKb": "约 {kb} KB",
+  "@desktopUpdateSizeKb": {
+    "placeholders": {
+      "kb": {
+        "type": "String"
+      }
+    }
+  },
+  "desktopUpdateBannerTitle": "发现新版本",
+  "desktopUpdateBannerSubtitle": "版本 {version} · {sizeLine}",
+  "@desktopUpdateBannerSubtitle": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "sizeLine": {
+        "type": "String"
+      }
+    }
+  },
+  "desktopUpdateLater": "稍后",
+  "desktopUpdateNow": "立即更新",
+  "desktopUpdateDownloading": "正在下载更新…",
+  "desktopUpdateApplying": "正在关闭并应用更新，请稍候…",
+  "desktopUpdateReadyTitle": "更新已就绪",
+  "desktopUpdateReadyBody": "点击下方按钮后将自动关闭并重启，安装约需数秒",
+  "desktopUpdateQuitRestart": "退出并重启",
+  "desktopUpdateErrorUnknown": "未知错误",
+  "desktopUpdateCheckFailedTitle": "更新检查失败",
+  "desktopUpdateClose": "关闭",
+  "desktopUpdateRetry": "重试",
+  "desktopUpdateReleaseNotesAction": "查看更新内容",
+  "desktopUpdateReleaseNotesTitle": "更新内容（{version}）",
+  "@desktopUpdateReleaseNotesTitle": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "desktopUpdateReleaseNotesEmpty": "该版本暂无更新说明。",
+  "qrGenerating": "正在生成二维码...",
+  "qrHintScanWithPhone": "请用已登录的手机扫描二维码",
+  "qrHintConfirmOnPhone": "已扫码，请在手机上确认登录",
+  "qrHintLoginSuccess": "登录成功，正在跳转...",
+  "qrHintExpired": "二维码已过期，请刷新后重试",
+  "qrHintGenericError": "出错了",
+  "qrLoginTitle": "扫码登录",
+  "qrLoginTagline": "消息/文件中转，多端实时同步",
+  "qrLoginSteps": "打开手机 App → 扫码 → 在手机上确认",
+  "qrStatusScanned": "已扫码",
+  "qrStatusConfirmPhone": "请在手机上确认登录",
+  "qrRefreshButton": "刷新二维码",
+  "qrUsePasswordLogin": "使用账号密码登录",
+  "qrScannerFailed": "扫码失败: {error}",
+  "@qrScannerFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrConfirmLoginTitle": "确认登录",
+  "qrConfirmLoginBody": "是否确认在其他设备上登录？",
+  "qrConfirmLoginConfirm": "确认登录",
+  "qrConfirmLoginSuccess": "已确认登录",
+  "qrConfirmLoginFailed": "确认失败: {error}",
+  "@qrConfirmLoginFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrScannerNeedCamera": "需要相机权限才能扫描二维码",
+  "qrScannerOpenSettings": "前往设置",
+  "qrScannerPermissionAgain": "重新请求权限",
+  "qrScannerProcessing": "处理中...",
+  "qrScannerAlignQr": "将二维码对准框内扫描",
+  "qrScannerUnrecognized": "请扫描虾传登录二维码",
+  "qrScannerTorchOn": "打开闪光灯",
+  "qrScannerTorchOff": "关闭闪光灯",
+  "filePreviewTooltipShare": "分享",
+  "filePreviewTooltipOpenWith": "用其他应用打开",
+  "filePreviewImageLoadError": "无法加载图片",
+  "filePreviewVideoError": "无法播放此视频",
+  "filePreviewTextTruncated": "{text}\n\n… 文件过大，仅显示前 2 MB",
+  "@filePreviewTextTruncated": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "filePreviewReadError": "无法读取文件内容",
+  "filePreviewCopyAll": "复制全部",
+  "filePreviewCopied": "已复制到剪贴板",
+  "fileClipboardCopy": "复制",
+  "fileClipboardCopied": "已复制 {count} 个文件，可在资源管理器中粘贴",
+  "@fileClipboardCopied": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fileClipboardCopyFailed": "复制失败",
+  "fileClipboardPasteAdded": "已加入待发文件箱，前往聊天发送",
+  "fileClipboardNothingToCopy": "请先选择要复制的文件",
+  "chatMenuCopyFile": "复制文件"
+}

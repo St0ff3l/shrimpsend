@@ -1,0 +1,28 @@
+name: flutter_desktop_updater
+description: Cross-platform auto-update system for Flutter desktop apps (Ultrasend fork — configurable exe name, richer errors).
+version: 0.0.8+ultrasend.1
+publish_to: none
+
+environment:
+  sdk: ^3.9.2
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  archive: ^4.0.7
+  path: ^1.9.1
+  http: ^1.6.0
+  package_info_plus: ^9.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+platforms:
+  macos:
+  windows:
+  linux:
+
+flutter:

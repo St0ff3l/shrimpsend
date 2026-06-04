@@ -1,0 +1,1631 @@
+{
+  "@@locale": "en",
+  "brandNameMainlandChina": "ShrimpSend",
+  "@brandNameMainlandChina": {
+    "description": "Product display name when service region is Mainland China (English UI uses Latin script)"
+  },
+  "brandNameInternational": "ShrimpSend",
+  "localeRegionGateTitle": "Language",
+  "localeRegionGateSubtitle": "Choose the display language. The service region for this app build is fixed.",
+  "localeRegionGateCountryHint": "Tap to choose. Mainland China (CN) uses the Xiachuan cluster; others use ShrimpSend.",
+  "fieldLanguage": "Language",
+  "sectionLanguage": "Language",
+  "fieldCountryRegion": "Country or region",
+  "regionMainlandChina": "Mainland China",
+  "regionInternational": "Outside Mainland China",
+  "continueAction": "Continue",
+  "loginSessionExpired": "Session expired, please sign in again",
+  "settingsTitle": "Settings",
+  "sectionLanguageRegion": "Language and region",
+  "serverClusterSwitchTitle": "You will be signed out",
+  "serverClusterSwitchMessage": "The selected country or region uses a different service domain and cluster. To protect your account, you will be signed out now and must sign in again on the new domain to continue. Your country selection will revert to the previous value for now; you can choose again after signing in.",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "signOutRequired": "Sign out required",
+  "loginTitleSubtitleLogin": "Sign in to continue your cross-device transfer",
+  "loginTitleSubtitleRegister": "Create an account to sync messages and files",
+  "enterOfflineMode": "Continue in offline mode",
+  "legalPrivacyPolicy": "Privacy Policy",
+  "legalTermsOfService": "Terms of Service",
+  "legalCouldNotOpenLink": "Could not open the link",
+  "envLabelDev": "Test",
+  "envLabelProd": "Online",
+  "applyingUpdate": "Applying update, the app will restart (a few seconds)…",
+  "localeNameZhHans": "Simplified Chinese",
+  "localeNameEnglish": "English",
+  "loginTabLogin": "Log in",
+  "loginTabRegister": "Sign up",
+  "loginMethodPassword": "Password",
+  "loginMethodCode": "Code",
+  "fieldEmail": "Email",
+  "hintEmail": "you@example.com",
+  "fieldPassword": "Password",
+  "fieldVerificationCode": "Verification code",
+  "hintVerificationCode6": "6-digit code",
+  "fieldNicknameOptional": "Nickname (optional)",
+  "hintDisplayName": "Display name",
+  "loginGetVerificationCode": "Get code",
+  "loginSendVerificationCode": "Send code",
+  "codeCooldownSeconds": "{seconds}s",
+  "@codeCooldownSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "loginSubmitRegister": "Sign up",
+  "loginSubmitWithCode": "Log in with code",
+  "loginSubmitPassword": "Log in",
+  "loginQrLogin": "Scan to sign in",
+  "loginPromptNoAccount": "No account?",
+  "loginPromptHasAccount": "Already have an account?",
+  "loginLinkToRegister": "Sign up",
+  "loginLinkToLogin": "Log in",
+  "loginErrorEmailRequired": "Enter your email first",
+  "loginErrorCodeSixDigits": "Enter the 6-digit code",
+  "snackbarAllowInstallUnknownApps": "Allow installing unknown apps in Settings; installation will continue when you return",
+  "settingsSectionFeatures": "Features",
+  "settingsSectionPreferences": "Preferences",
+  "settingsSectionAbout": "About",
+  "settingsNavLogin": "Sign in",
+  "settingsNavLoginSubtitle": "Cloud sync and more after you sign in",
+  "settingsBadgeNotSignedIn": "Not signed in",
+  "settingsNavPersonalAccount": "Account",
+  "settingsNavAccountSubtitle": "View and manage your account",
+  "settingsMembershipCenter": "Membership",
+  "settingsMembershipSubtitleUpgrade": "Lifetime plans and more devices",
+  "settingsMembershipTierName": "{tierName} membership",
+  "@settingsMembershipTierName": {
+    "placeholders": {
+      "tierName": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsMembershipDevices": "{current} of {limit} devices",
+  "@settingsMembershipDevices": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsNavMyDevices": "My devices",
+  "settingsNavMyDevicesSubtitleOffline": "Manage devices after you sign in",
+  "settingsNavMyDevicesSubtitleOnline": "Bound devices",
+  "settingsNavS3": "S3",
+  "settingsNavS3Subtitle": "Wide-area file transfer",
+  "settingsNavShortcuts": "Shortcuts",
+  "settingsNavShortcutsSubtitle": "Keyboard actions such as sending messages",
+  "settingsNavFonts": "Fonts",
+  "settingsNavFontsSubtitle": "Adjust text size and weight",
+  "settingsFontsPageTitle": "Fonts",
+  "settingsShortcutsPageTitle": "Shortcuts",
+  "settingsThemeLabel": "Theme",
+  "settingsColorThemeLabel": "Color theme",
+  "settingsColorThemeEmerald": "Emerald",
+  "settingsColorThemeOcean": "Ocean",
+  "settingsColorThemeSunset": "Sunset",
+  "settingsColorThemeLavender": "Lavender",
+  "settingsColorThemeRose": "Rose",
+  "settingsColorThemeGraphite": "Graphite",
+  "settingsFontLabel": "Fonts",
+  "settingsFontLatinLabel": "English font",
+  "settingsFontCjkLabel": "Chinese font",
+  "settingsFontMonoLabel": "Monospace font",
+  "settingsFontSystem": "System default",
+  "settingsFontInter": "Inter",
+  "settingsFontSourceSans3": "Source Sans 3",
+  "settingsFontIbmPlexSans": "IBM Plex Sans",
+  "settingsFontNotoSansSc": "Noto Sans SC",
+  "settingsFontNotoSerifSc": "Noto Serif SC",
+  "settingsFontLxgwWenkai": "LXGW WenKai",
+  "settingsFontSmileySans": "Smiley Sans",
+  "settingsFontIbmPlexMono": "IBM Plex Mono",
+  "settingsFontPreview": "ShrimpSend · Hello world · 123",
+  "settingsFontSizeLabel": "Text size",
+  "settingsFontSizeSmaller": "Smaller",
+  "settingsFontSizeSmall": "Small",
+  "settingsFontSizeStandard": "Standard",
+  "settingsFontSizeLarge": "Large",
+  "settingsFontSizeLarger": "Larger",
+  "settingsFontWeightLabel": "Text weight",
+  "settingsFontWeightLighter": "Lighter",
+  "settingsFontWeightLight": "Light",
+  "settingsFontWeightNormal": "Normal",
+  "settingsFontWeightMedium": "Medium",
+  "settingsFontWeightSemibold": "Semibold",
+  "settingsAboutFontLicenses": "Windows builds bundle WenYuan Sans SC / 文源黑体 (SIL Open Font License 1.1). Other platforms use system fonts. Source: https://github.com/takushun-wu/WenYuanFonts",
+  "settingsFileSavePath": "File save location",
+  "settingsFileSavePathNotSet": "Not set",
+  "settingsSavePathBadgeDefault": "Default",
+  "settingsSavePathBadgeCustom": "Custom",
+  "settingsSavePathKindExternal": "External storage",
+  "settingsSavePathKindAppDocuments": "App documents",
+  "settingsSavePathKindAppCache": "App cache",
+  "settingsSavePathKindAppExternal": "App-specific storage",
+  "settingsSavePathKindHintAppDocuments": "Files are saved in the app documents folder and visible in the Files app",
+  "settingsSavePathKindHintAppExternal": "Files are saved in app-specific external storage and may be removed when app data is cleared",
+  "settingsSavePathFallbackDialogOk": "OK",
+  "settingsSavePathFallbackDialogTitle": "External save location unavailable",
+  "settingsSavePathFallbackDialogBody": "Some in-car or custom systems block creating folders on external storage. Files are saved to app cache instead.\n\nExpected: {intendedPath}\nCurrent: {currentPath}\nReason: {reason}",
+  "@settingsSavePathFallbackDialogBody": {
+    "placeholders": {
+      "intendedPath": { "type": "String" },
+      "currentPath": { "type": "String" },
+      "reason": { "type": "String" }
+    }
+  },
+  "settingsChooseFolder": "Choose folder",
+  "settingsRestoreDefaultPath": "Reset to default",
+  "settingsGalleryPermissionToast": "Photo library access is required to save to your gallery. Allow it in system Settings.",
+  "settingsSaveToGalleryTitle": "Save images and videos to gallery",
+  "settingsSaveToGallerySubtitle": "Incoming images and videos are saved to the system gallery automatically",
+  "settingsSaveToGalleryHintBody": "When enabled, images and videos are saved to the system gallery only — they are not copied to your save folder. In File Manager, these files appear under Cache but not under Save folder.",
+  "settingsWindowsLaunchAtStartupTitle": "Launch at startup",
+  "settingsWindowsLaunchAtStartupSubtitle": "Start automatically after Windows sign-in and stay hidden in the tray",
+  "settingsWindowsLaunchAtStartupFailed": "Failed to update launch at startup. Try again later.",
+  "settingsDeleteCacheAfterSaveTitle": "Delete cache after saving",
+  "settingsDeleteCacheAfterSaveSubtitle": "Remove the in-app cache copy after the file is saved to your folder",
+  "settingsDeleteCacheAfterSaveHintBody": "Received file cache copies will be deleted and will not appear in File Manager's Cache tab.",
+  "aboutTagline": "Relay messages and files across devices in real time",
+  "settingsVersionWithBuild": "Version {version} ({buildNumber})",
+  "@settingsVersionWithBuild": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsVersionLoading": "Version …",
+  "settingsVersionUnknown": "Version —",
+  "settingsNavVersionHistory": "Version history",
+  "settingsNavVersionHistorySubtitle": "View enabled releases",
+  "settingsNavAppLog": "App logs",
+  "settingsNavAppLogSubtitleDesktop": "Manage log files or open the log folder",
+  "settingsNavAppLogSubtitleMobile": "Manage log files and share",
+  "settingsS3StatusConfigured": "Configured",
+  "settingsS3StatusNotConfigured": "Not configured",
+  "settingsS3StatusHosted": "Built-in",
+  "settingsS3StatusCustom": "Custom",
+  "settingsCheckUpdate": "Check for updates",
+  "desktopUpdateTapCheck": "Tap to check for updates",
+  "desktopUpdateChecking": "Checking…",
+  "desktopUpdateAvailableUseBanner": "Update available — use the banner at the top",
+  "desktopUpdateDownloadingPercent": "Downloading {percent}%",
+  "@desktopUpdateDownloadingPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "desktopUpdateReadyRestart": "Update ready — restart the app",
+  "desktopUpdateRestarting": "Restarting…",
+  "desktopUpdateCheckFailed": "Check failed",
+  "desktopUpdateNotConfiguredHint": "Desktop updates not configured (missing UpdateConfig)",
+  "desktopToastUpdateNotConfigured": "Desktop updates not configured",
+  "desktopToastCheckFailed": "Update check failed",
+  "desktopToastNewVersionUseBanner": "New version available — use the top banner to download",
+  "desktopToastAlreadyLatest": "You're on the latest version",
+  "mobileUpdateDownloadingPercent": "Downloading {percent}%",
+  "@mobileUpdateDownloadingPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "mobileUpdateDownloadedInstall": "New version downloaded — tap Install",
+  "appUpdateDownloadProgressTitle": "Downloading update",
+  "appUpdateDownloadProgressBackground": "Background download",
+  "appUpdateDownloadProgressBackgroundToast": "Download continues in the background. Open Settings — Check for updates to view progress.",
+  "appUpdateDownloadCompleteTitle": "Download complete",
+  "appUpdateDownloadedVersionLabel": "Target version: {version} (build {build})",
+  "@appUpdateDownloadedVersionLabel": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateDownloadedFileLabel": "Package file: {fileName}",
+  "@appUpdateDownloadedFileLabel": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateDownloadRetry": "Retry",
+  "mobileUpdateInstall": "Install",
+  "commonRetry": "Retry",
+  "commonSave": "Save",
+  "updateStatusAlreadyLatest": "Up to date",
+  "updateStatusChecking": "Checking…",
+  "updateStatusNewVersion": "New version {version}",
+  "@updateStatusNewVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateStatusCheckAction": "Check for updates",
+  "updateStatusDownloadingPercent": "Downloading {percent}%",
+  "@updateStatusDownloadingPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "updateStatusDownloadedReady": "Downloaded — ready to install",
+  "updateStatusCheckFailed": "Check failed",
+  "updateStatusPlayManaged": "Managed by Google Play Store",
+  "settingsInstallFailed": "Install failed: {message}",
+  "@settingsInstallFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsStoragePermissionToast": "Storage permission is required to choose a save location",
+  "settingsSavePathNotExistToast": "The selected path does not exist",
+  "settingsSavePathUpdatedToast": "Save location updated",
+  "settingsSavePathFailedToast": "Couldn't set save location",
+  "settingsSavePathRestoredToast": "Save location reset to default",
+  "settingsSavePathRestoreFailedToast": "Couldn't reset save location",
+  "settingsSavePathSafSyncHint": "Files are saved here automatically after each transfer",
+  "settingsSavePathSafMirrorLabel": "Save folder",
+  "settingsSavePathCacheHint": "App cache (temporary copies; safe to clear)",
+  "settingsSavePathAppReceiveLabel": "In-app receive folder",
+  "themeModeFollowSystem": "System",
+  "themeModeLight": "Light",
+  "themeModeDark": "Dark",
+  "chatSelectedCount": "{count} selected",
+  "@chatSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatSelectAll": "Select all",
+  "chatDeselectAll": "Deselect all",
+  "chatTooltipDelete": "Delete",
+  "chatS3RelayTitle": "S3 cloud relay",
+  "chatS3StatusChecking": "Checking…",
+  "chatS3StatusNotConfigured": "Not configured",
+  "chatS3StatusOnlineSendAll": "Online · send to all devices",
+  "chatS3StatusUnavailableCheck": "Unavailable · check S3 settings",
+  "chatDeviceOnline": "Online",
+  "chatDeviceChecking": "Checking…",
+  "chatDeviceOffline": "Offline",
+  "chatHeaderDeviceNumberTooltip": "Device no.: {code}",
+  "@chatHeaderDeviceNumberTooltip": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "chatPickDeviceToStart": "Choose a device to start chatting",
+  "chatTooltipBackDeviceList": "Back to device list",
+  "chatTooltipS3Settings": "S3 settings",
+  "chatTooltipFileManager": "File manager",
+  "chatTooltipSessionSettings": "Session settings",
+  "chatDropReleaseToAdd": "Release to add files",
+  "chatMenuMultiSelect": "Multi-select",
+  "chatMenuLocalFileUnavailable": "Local file unavailable",
+  "chatMenuLocalFileUnavailableSubtitle": "The file may have been deleted",
+  "chatMenuOpen": "Open",
+  "chatMenuAddToPending": "Add to outbox",
+  "chatMenuShare": "Share",
+  "chatMenuSaveToGallery": "Save to gallery",
+  "chatMenuDownloadFromCloud": "Download from cloud",
+  "fileExportSaveToDownloads": "Save to Downloads",
+  "fileExportSaveToFiles": "Save to Files",
+  "fileExportSaveAs": "Save As…",
+  "fileExportSavedAs": "Saved as {name}",
+  "@fileExportSavedAs": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "fileExportSaveAsDialogTitle": "Choose where to save",
+  "fileExportSavedToDownloads": "Saved to Downloads: {name}",
+  "@fileExportSavedToDownloads": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "fileExportOpenedShareSheet": "Choose where to save the file",
+  "fileExportFailed": "Couldn't save the file",
+  "chatMenuCopyText": "Copy text",
+  "chatMenuSelectText": "Select text",
+  "chatMenuDeleteMessage": "Delete",
+  "chatGallerySaved": "Saved to gallery",
+  "chatGallerySaveFailed": "Save failed",
+  "chatCopied": "Copied",
+  "chatSelectTextTitle": "Select text",
+  "chatDeleteMessageTitle": "Delete message",
+  "chatDeleteMessageBody": "Delete this message? Local and cloud copies will be removed.",
+  "chatDeleteMessageConfirm": "Delete",
+  "chatFileMissingDeleted": "File missing; it may have been deleted",
+  "chatFileNoLocalOpenPath": "No local file available to open",
+  "devicesRemoveTitle": "Remove device",
+  "devicesRemoveBody": "The account on this device will be signed out. Active sessions end immediately; offline devices will require sign-in next launch.",
+  "devicesRemoveConfirm": "Remove",
+  "devicesRemovedToast": "Device removed",
+  "devicesRemoveFailed": "Couldn't remove device: {error}",
+  "@devicesRemoveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "devicesRenameTitle": "Rename device",
+  "devicesNameHint": "Device name",
+  "devicesRenameMenu": "Rename",
+  "devicesRemoveMenu": "Remove",
+  "devicesSavedToast": "Saved",
+  "devicesSaveFailed": "Couldn't save: {error}",
+  "@devicesSaveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "devicesTitle": "My devices",
+  "devicesOfflinePrompt": "Sign in to view and manage bound devices",
+  "devicesBoundCount": "{count} bound",
+  "@devicesBoundCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "devicesSyncing": "Syncing…",
+  "devicesSubtitleLoadFailed": "Couldn't load",
+  "devicesTooltipRefresh": "Refresh",
+  "devicesLoadFailedDetail": "Couldn't load: {error}",
+  "@devicesLoadFailedDetail": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "devicesEmptyList": "No registered devices yet",
+  "devicesCurrentDeviceBadge": "This device",
+  "fmRefreshFailed": "Refresh failed",
+  "fmListLoadFailed": "Couldn't load files",
+  "fmLoadMoreFailed": "Couldn't load more",
+  "fmSearchFailed": "Search failed",
+  "fmDeleteTitle": "Delete file",
+  "fmDeleteConfirmOne": "Delete {name}?",
+  "@fmDeleteConfirmOne": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "fmDeleteConfirmMany": "Delete {count} files?",
+  "@fmDeleteConfirmMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fmDeleteConfirm": "Delete",
+  "fmAndroidApkOnly": "APK install is only supported on Android",
+  "fmPreviewUnavailableTitle": "Can't preview",
+  "fmPreviewUnavailableBody": "No preview is available for this file. Open as plain text?",
+  "fmPreviewOpenAsText": "Open as text",
+  "fmPendingAddedOne": "Added \"{name}\" to outbox",
+  "@fmPendingAddedOne": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "fmPendingAddedMany": "Added {count} files to outbox",
+  "@fmPendingAddedMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fmMultiSelectMode": "Multi-select mode",
+  "fmToolbarTitle": "File Manager",
+  "fmHintTitle": "About file manager",
+  "fmHintTooltip": "Help",
+  "fmTabCache": "Cache",
+  "fmTabSaveFolder": "Save folder",
+  "fmSaveFolderEmpty": "Save folder is empty",
+  "fmSaveFolderNotAccessible": "Cannot read save folder",
+  "fmSaveFolderPermissionDenied": "Access denied — re-select save location in Settings",
+  "fmSaveFolderNotConfigured": "Save location not configured",
+  "fmSaveFolderPathLabel": "Current save location",
+  "fmSaveFolderGoSettings": "Go to Settings",
+  "fmSaveFolderHintTitle": "About save folder",
+  "fmSaveFolderHintBody": "Shows files received through this app in your selected save folder. Files not received through this app are not listed.",
+  "fmSaveFolderHintBodyDesktop": "Shows all files in your selected save folder.",
+  "fmSaveFolderHintOk": "Got it",
+  "fmSaveFolderErrorDetail": "{reason}",
+  "@fmSaveFolderErrorDetail": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "fmCacheHintTitle": "About cache",
+  "fmCacheHintOk": "Got it",
+  "fmCachePathLabel": "Cache folder",
+  "fmCacheSubtitle": "When receiving files, content is saved to the app cache first, then exported to your save folder. The cache is only a local copy — clearing it manually will not affect files already saved.\n\nIf \"Delete cache after saving\" is enabled in Settings, each cache copy is removed immediately after a successful export.",
+  "fmExportStatusPending": "Pending",
+  "fmExportStatusExporting": "Saving",
+  "fmExportStatusDone": "Saved",
+  "fmExportStatusFailed": "Save failed",
+  "fmExportRetry": "Retry save",
+  "fmClearCache": "Clear",
+  "fmClearCacheTitle": "Clear cache",
+  "fmClearCacheConfirm": "All files in the app cache will be deleted. Files already saved to your save folder are not affected.",
+  "fmClearCacheDone": "Cache cleared",
+  "fmClearCacheFailed": "Could not clear cache",
+  "fmSearchCloseTooltip": "Close search",
+  "fmSearchTooltip": "Search",
+  "fmSortCategoryTooltip": "Category view",
+  "fmSortTimeTooltip": "Sort by time",
+  "fmSortMenuTooltip": "Sort",
+  "fmSortByCreated": "By date created",
+  "fmSortByModified": "By date modified",
+  "fmSearchHint": "Search file name…",
+  "fmEmptyNoMatch": "No matching files",
+  "fmEmptyNoReceived": "No received files yet",
+  "fmSelectedCount": "{count} selected",
+  "@fmSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fmTooltipShareSelection": "Share",
+  "fmTooltipAddPending": "Add to outbox",
+  "fmRevealInFolder": "Show in folder",
+  "fmFileInfoAction": "Info",
+  "fmFileInfoTitle": "File info",
+  "fmFileInfoName": "Name",
+  "fmFileInfoPath": "Path",
+  "fmFileInfoSize": "Size",
+  "fmFileInfoMd5": "MD5",
+  "fmFileInfoReceivedAt": "Received",
+  "fmFileInfoModifiedAt": "Modified",
+  "fmFileInfoCategory": "Type",
+  "fmFileInfoProtocol": "Protocol",
+  "fmFileInfoMessageId": "Message ID",
+  "fmFileInfoS3Key": "S3 key",
+  "fmFileInfoFromDevice": "From device",
+  "fmFileInfoMd5Computing": "Computing…",
+  "fmFileInfoMd5Failed": "Could not compute",
+  "fmFileInfoFileMissing": "File not found on disk",
+  "fmCategoryImage": "Images",
+  "fmCategoryVideo": "Videos",
+  "fmCategoryAudio": "Audio",
+  "fmCategoryPdf": "PDF",
+  "fmCategoryArchive": "Archives",
+  "fmCategoryDocument": "Documents",
+  "fmCategoryCode": "Code",
+  "fmCategoryOther": "Other",
+  "fmTimeJustNow": "Just now",
+  "fmTimeMinutesAgo": "{count} min ago",
+  "@fmTimeMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fmTimeHoursAgo": "{count} h ago",
+  "@fmTimeHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fmTimeDaysAgo": "{count} d ago",
+  "@fmTimeDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fmTimeMonthDayClock": "{month}/{day} {hour}:{minute}",
+  "@fmTimeMonthDayClock": {
+    "placeholders": {
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "String"
+      },
+      "minute": {
+        "type": "String"
+      }
+    }
+  },
+  "accountScreenTitle": "Account",
+  "accountLogoutDialogTitle": "Sign out",
+  "accountLogoutDialogBody": "You'll need to sign in again to use the app. Sign out?",
+  "accountLogoutConfirm": "Sign out",
+  "accountChangePassword": "Change password",
+  "accountDeleteAccount": "Delete account",
+  "accountLogout": "Sign out",
+  "accountPasswordChangedToast": "Password updated",
+  "accountChangePasswordTitle": "Change password",
+  "accountChangePasswordWarning": "A verification code will be sent to:",
+  "accountLabelNewPassword": "New password",
+  "accountValidationEnterNewPassword": "Enter a new password",
+  "accountValidationNewPasswordMinLength": "Password must be at least 6 characters",
+  "accountLabelConfirmNewPassword": "Confirm new password",
+  "accountValidationPasswordMismatch": "Passwords don't match",
+  "accountDeleteTitle": "Delete account",
+  "accountDeleteWarning": "This permanently deletes all data and cannot be undone. A verification code will be sent to:",
+  "accountLabelVerificationCode": "Verification code",
+  "accountHintSixDigitCode": "6-digit code",
+  "accountSendingCode": "Sending…",
+  "accountSendVerificationCode": "Send code",
+  "accountDeleteForever": "Delete permanently",
+  "accountValidationEnterVerificationCode": "Enter the verification code",
+  "versionHistoryTitle": "Version history",
+  "versionHistoryEmpty": "No releases yet",
+  "appLogTitle": "App logs",
+  "appLogTooltipOpenFolder": "Open log folder",
+  "appLogTooltipRefresh": "Refresh",
+  "appLogErrorDirUnavailable": "Log folder unavailable",
+  "appLogEmptyHint": "No log output yet — use the app and logs will appear here.",
+  "appLogReadFailed": "Couldn't read logs: {error}",
+  "@appLogReadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appLogToastDirUnavailable": "Log folder unavailable",
+  "appLogToastOpenFolderFailed": "Couldn't open folder",
+  "appLogFileMeta": "{size} · {modified}",
+  "@appLogFileMeta": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "modified": {
+        "type": "String"
+      }
+    }
+  },
+  "appLogTailHintKb": "Large log file — showing only the last ~{kb} KB",
+  "@appLogTailHintKb": {
+    "placeholders": {
+      "kb": {
+        "type": "int"
+      }
+    }
+  },
+  "msgSearchFailed": "Search failed: {error}",
+  "@msgSearchFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "msgSearchFileFallback": "File",
+  "msgSearchUnknownMessage": "[ Unknown message ]",
+  "msgSearchYesterdayTime": "Yesterday {time}",
+  "@msgSearchYesterdayTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "msgSearchDeviceSystem": "System",
+  "msgSearchCopied": "Copied",
+  "msgSearchDeleteTitle": "Delete message",
+  "msgSearchDeleteBody": "Delete this message? Cloud copies will be removed too.",
+  "msgSearchSelectTextTitle": "Select text",
+  "msgSearchHint": "Search messages…",
+  "msgSearchEmptyHint": "Enter keywords to search messages",
+  "msgSearchNoResults": "No matching messages",
+  "apkPickerTitle": "Choose APK",
+  "apkPickerTooltipBrowseFiles": "Browse files",
+  "apkPickerConfirmCount": "Confirm ({count})",
+  "@apkPickerConfirmCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "apkPickerLoadingInstalled": "Loading installed apps…",
+  "apkPickerEmptyOrError": "Couldn't load installed apps.\nYou may need to reinstall the app to grant permission.",
+  "apkPickerSearchHint": "Search apps…",
+  "apkPickerAppCount": "{count} apps",
+  "@apkPickerAppCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "apkPickerSystemApp": "System app",
+  "apkPickerClearSelection": "Clear selection",
+  "apkPickerConfirmSendMany": "Send {count} APK files?",
+  "@apkPickerConfirmSendMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "apkPickerFromFiles": "Pick APK from files",
+  "apkPickerReloadApps": "Reload app list",
+  "apkPickerLoadFailed": "Couldn't load apps: {error}",
+  "@apkPickerLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "s3SettingsSaved": "Saved",
+  "s3SettingsTestOk": "Connection OK",
+  "s3SettingsClearTitle": "Clear configuration",
+  "s3SettingsClearBody": "Clear all fields? This removes S3 settings from the server and local cache.",
+  "s3SettingsClearConfirm": "Clear",
+  "s3SettingsCleared": "Configuration cleared",
+  "s3SettingsLoginExpired": "Session expired — please sign in again",
+  "s3SettingsClearing": "Clearing…",
+  "s3SettingsIntro": "Configure S3-compatible object storage for wide-area file transfer (AWS S3, MinIO, Alibaba OSS, etc.).",
+  "s3SettingsConfiguredHint": "Configured. Submit again to overwrite.",
+  "s3SettingsSectionStorage": "Storage settings",
+  "s3SettingsRequired": "Required",
+  "s3SettingsSecretHintIfConfigured": "Leave blank to keep unchanged",
+  "s3SettingsSaving": "Saving…",
+  "s3SettingsSave": "Save",
+  "s3SettingsTesting": "Testing…",
+  "s3SettingsTestConnection": "Test connection",
+  "s3SettingsPageTitle": "S3 settings",
+  "s3SettingsSectionConnection": "Connection & storage",
+  "s3SettingsSectionCredentials": "Credentials",
+  "s3SettingsFieldEndpoint": "Endpoint",
+  "s3SettingsFieldRegion": "Region",
+  "s3SettingsFieldBucket": "Bucket",
+  "s3SettingsFieldPathStyle": "Path-style access",
+  "s3SettingsPathStyleHint": "Usually required for MinIO and self-hosted gateways. Turn off for AWS regional endpoints to use virtual-hosted URLs.",
+  "s3SettingsFieldAccessKeyId": "Access Key ID",
+  "s3SettingsFieldSecretAccessKey": "Secret Access Key",
+  "s3SettingsPlaceholderEndpoint": "https://s3.amazonaws.com",
+  "s3SettingsPlaceholderRegion": "cn-east-1",
+  "s3SettingsPlaceholderBucket": "my-bucket",
+  "s3SettingsPlaceholderAccessKeyId": "AKIAIOSFODNN7EXAMPLE",
+  "s3SettingsConfiguredSummary": "{endpoint} · {bucket}",
+  "@s3SettingsConfiguredSummary": {
+    "placeholders": {
+      "endpoint": {
+        "type": "String"
+      },
+      "bucket": {
+        "type": "String"
+      }
+    }
+  },
+  "s3SettingsHostedTitle": "Using built-in S3",
+  "s3SettingsHostedBody": "Platform-managed object storage. No configuration required — wide-area transfers are ready out of the box.",
+  "s3SettingsHostedUsageLabel": "Used this month",
+  "s3SettingsHostedUsageMonthly": "{used} / {quota}",
+  "@s3SettingsHostedUsageMonthly": {
+    "placeholders": {
+      "used": { "type": "String" },
+      "quota": { "type": "String" }
+    }
+  },
+  "s3SettingsHostedUsageMonthlyUnlimited": "{used} (unlimited)",
+  "@s3SettingsHostedUsageMonthlyUnlimited": {
+    "placeholders": {
+      "used": { "type": "String" }
+    }
+  },
+  "s3SettingsHostedUsageHint": "Counted in UTC calendar months and reset on the 1st. Upgrade your membership for a larger quota.",
+  "s3SettingsCustomConfiguredHint": "Switched to custom S3. All uploads/downloads will go through your own bucket.",
+  "s3SettingsDisabledHint": "S3 is not enabled yet. Fill in your S3 configuration to enable wide-area transfers.",
+  "s3SettingsSwitchToCustom": "Switch to custom S3",
+  "s3SettingsCollapseCustomForm": "Cancel and keep built-in S3",
+  "s3SettingsSwitchBackToHosted": "Switch back to built-in S3",
+  "s3SettingsSwitchBackTitle": "Switch back to built-in S3?",
+  "s3SettingsSwitchBackBody": "After switching back, all uploads/downloads will use the built-in S3. Your saved custom S3 configuration will be kept on file so you can switch back to it any time.",
+  "s3SettingsUseSavedCustom": "Use saved custom S3",
+  "s3SettingsSwitchedToCustomOk": "Switched to custom S3",
+  "s3SettingsSwitchBackConfirm": "Switch back",
+  "s3SettingsSwitchedBackOk": "Switched back to built-in S3",
+  "s3SettingsSwitching": "Switching…",
+  "s3SettingsDocsTooltip": "Setup guide (incl. CORS)",
+  "s3SettingsDocsUnavailable": "No documentation link available",
+  "sendModeNearby": "Nearby",
+  "linkRoutesTitleRetest": "Retest connection",
+  "linkRoutesTitleSwitch": "Switch route",
+  "linkRoutesPeerSession": "Session device: {label}",
+  "@linkRoutesPeerSession": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "linkRoutesBodyRetest": "We'll retest the current route. Available routes and estimated speeds are shown below.",
+  "linkRoutesBodySwitch": "Switching to {mode} and starting detection. Available routes and estimated speeds are shown below.",
+  "@linkRoutesBodySwitch": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "linkRoutesTagAvailable": "Available",
+  "linkRoutesTagUnavailable": "Unavailable",
+  "linkRoutesTagCurrent": "Current",
+  "linkRoutesTagTarget": "Target",
+  "linkRoutesSpeedLine": "Estimated speed: {tier} · {desc}",
+  "@linkRoutesSpeedLine": {
+    "placeholders": {
+      "tier": {
+        "type": "String"
+      },
+      "desc": {
+        "type": "String"
+      }
+    }
+  },
+  "linkRoutesWaitingResult": "Waiting for detection…",
+  "linkRoutesRetest": "Retest",
+  "linkRoutesSwitchAndDetect": "Switch & detect",
+  "linkRoutesPickerTitle": "Choose route",
+  "linkRoutesPickerHint": "Selecting a route switches immediately and starts detection.",
+  "linkSpeedNearbyTier": "Medium–high",
+  "linkSpeedNearbyDesc": "Same-subnet direct link; speed depends on LAN quality.",
+  "linkSpeedLanTier": "High",
+  "linkSpeedLanDesc": "HTTP direct — usually the fastest path on LAN.",
+  "linkSpeedWebrtcTier": "Medium",
+  "linkSpeedWebrtcDesc": "Good NAT traversal; speed varies with NAT and network conditions.",
+  "linkSpeedS3Tier": "Medium–low",
+  "linkSpeedS3Desc": "Relayed via cloud; throughput depends on public network and nodes.",
+  "membershipCenterTitle": "Membership",
+  "membershipLoadFailed": "Couldn't load membership: {error}",
+  "@membershipLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "membershipBuyMiniOrProFirst": "Subscribe to Pro first",
+  "membershipPurchaseSuccessSync": "Purchase successful — benefits will sync shortly",
+  "membershipPurchaseFailed": "Purchase failed: {error}",
+  "@membershipPurchaseFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "membershipPaymentCancelled": "Payment cancelled",
+  "membershipPaymentPending": "Confirming payment…",
+  "membershipNetworkError": "Network error — try again",
+  "membershipOrderPayFailed": "Payment failed — try again",
+  "membershipCompletePaymentInApp": "Complete payment and return here — status updates automatically.",
+  "membershipAlipayAppNotConfigured": "In-app Alipay isn't configured. Pay on desktop or contact an admin to enable the Alipay app.",
+  "membershipOrderCreatedAlipay": "Order created — complete payment in Alipay",
+  "membershipPurchaseSuccessActive": "Payment successful — membership is active",
+  "membershipCurrentTier": "Current plan",
+  "membershipTierSummary": "{tier} · up to {limit} devices",
+  "@membershipTierSummary": {
+    "placeholders": {
+      "tier": {
+        "type": "String"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipBoundDevices": "{count} devices bound",
+  "@membershipBoundDevices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipAddonLine": "{packs} add-on pack(s) (+{devices} devices)",
+  "@membershipAddonLine": {
+    "placeholders": {
+      "packs": {
+        "type": "int"
+      },
+      "devices": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipSubscriptionRenewsAt": "Next billing: {date}",
+  "@membershipSubscriptionRenewsAt": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "membershipSubscriptionEndsAfterCancel": "Auto-renew is off. Access remains until {date}.",
+  "@membershipSubscriptionEndsAfterCancel": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "membershipSubscriptionValidUntil": "Current period ends {date}",
+  "@membershipSubscriptionValidUntil": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "membershipMigrationCardTitle": "Lightning Vine migration",
+  "membershipMigrationCardSubtitle": "Lightning Vine members can migrate to ShrimpSend",
+  "membershipDeviceBadgeDevices": "{count} devices",
+  "@membershipDeviceBadgeDevices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipDeviceBadgeAddon": "+{count} devices",
+  "@membershipDeviceBadgeAddon": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipTierSubtitleAddon": "+5 devices per pack — buy multiple",
+  "membershipTierSubtitleBuyout": "Lifetime membership",
+  "membershipCannotBuyLowerTier": "Can't purchase this tier or lower",
+  "membershipUpgradeDue": "Amount due: ¥{amount}",
+  "@membershipUpgradeDue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "membershipNeedMiniProFirst": "Pro membership required first",
+  "membershipPurchasing": "Purchasing…",
+  "membershipWaitingPayment": "Waiting for payment…",
+  "membershipPleaseSubscribeFirst": "Subscribe to Pro first",
+  "membershipBuyApple": "Buy with Apple",
+  "membershipBuyAlipay": "Pay with Alipay",
+  "membershipBillingMonthly": "Monthly",
+  "membershipBillingYearly": "Yearly",
+  "membershipPlanYearlySave": "~{pct}% off vs monthly",
+  "@membershipPlanYearlySave": {
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipSavingsVsMonthlyYear": "Save up to {pct}% vs paying monthly for a year",
+  "@membershipSavingsVsMonthlyYear": {
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipPricePerMonthEquiv": "~{price}/mo billed yearly",
+  "@membershipPricePerMonthEquiv": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "membershipPricePerYear": "{price}/yr",
+  "@membershipPricePerYear": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "membershipPricePerMonth": "{price}/mo",
+  "@membershipPricePerMonth": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "membershipFeatureDevices": "Up to {count} linked devices",
+  "@membershipFeatureDevices": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipFeatureUploadHosted": "{gib} GiB / month hosted upload quota",
+  "@membershipFeatureUploadHosted": {
+    "placeholders": {
+      "gib": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipPlanPopular": "Popular",
+  "membershipOverseasNoAlipay": "Overseas builds don’t support Alipay — subscribe in the app.",
+  "membershipSubscribeInApp": "Subscribe in app",
+  "membershipRcUnavailable": "In-app purchase isn’t available. Check your connection and try again.",
+  "membershipTierSubtitleSubscription": "Renews automatically — cancel anytime in the store.",
+  "membershipOverseasSubscribeHint": "Subscribe via the App Store or Google Play. Secure checkout.",
+  "membershipOverseasSubscribeHintIos": "Subscribe via the App Store. Secure checkout.",
+  "membershipChannelLockedOtherPlatform": "Your subscription was purchased on another platform. Manage it on the device where you subscribed.",
+  "membershipChannelLockedStripe": "Your membership is billed via Stripe on the web. Please upgrade or manage it from the web to avoid duplicate charges.",
+  "membershipChannelLockedAppStore": "Your membership is billed via the App Store. Manage or upgrade it on your iPhone/iPad in Settings → Apple ID → Subscriptions.",
+  "membershipChannelLockedPlayStore": "Your membership is billed via Google Play. Manage or upgrade it in the Play Store under Account → Subscriptions.",
+  "membershipChannelLifetime": "You already have a lifetime membership — no further subscription upgrade is needed.",
+  "membershipManageStripe": "Manage subscription (web)",
+  "membershipManageStripeFailed": "Failed to open subscription management. Please try again.",
+  "membershipRestorePurchases": "Restore purchases",
+  "membershipRestoreSuccess": "Purchases restored — benefits will sync shortly",
+  "membershipRestoreFailed": "Restore failed: {error}",
+  "@membershipRestoreFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "membershipOpenAppStoreSubs": "Open App Store subscriptions",
+  "membershipOpenPlayStoreSubs": "Open Play Store subscriptions",
+  "membershipStripePriceMissing": "Stripe Price not configured. Please contact admin or subscribe on another platform.",
+  "membershipStripeCheckoutFailed": "Failed to create Stripe checkout session. Please try again.",
+  "membershipOpenBrowserToPay": "Opening your browser to complete payment. Return to the app once you're done.",
+  "membershipUpgradeStripeSuccess": "Upgrade successful. Your membership has been updated.",
+  "membershipSubscribeStripe": "Subscribe with Stripe",
+  "membershipUpgradeStripe": "Upgrade with Stripe",
+  "membershipOpeningStripe": "Opening Stripe…",
+  "membershipMigrationTitle": "Lightning Vine migration",
+  "membershipMigrationConfirmTitle": "Confirm migration",
+  "membershipMigrationConfirmBody": "Verification succeeded.\n\nYou'll receive {tier} membership with up to {limit} devices.\n\nConfirm migration?",
+  "@membershipMigrationConfirmBody": {
+    "placeholders": {
+      "tier": {
+        "type": "String"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "membershipMigrationConfirmAction": "Confirm migration",
+  "membershipMigrationEnterPhone": "Enter your phone number first",
+  "membershipMigrationInvalidPhone": "Invalid phone number",
+  "membershipMigrationCodeSent": "Verification code sent",
+  "membershipMigrationEnterCode": "Enter the 6-digit code",
+  "membershipMigrationSuccess": "Migration successful!",
+  "membershipMigrationIntroTitle": "Migration guide",
+  "membershipMigrationIntroBody": "If you're a Lightning Vine member, verify your phone to migrate membership to ShrimpSend.\n\nAfter migration you'll get ShrimpSend Pro (12 devices).",
+  "membershipMigrationPhoneLabel": "Phone number",
+  "membershipMigrationPhoneHint": "Enter phone number",
+  "membershipMigrationCodeLabel": "Verification code",
+  "membershipMigrationVerifyAndMigrate": "Verify & migrate",
+  "membershipMigrationSending": "Sending…",
+  "membershipMigrationSendCode": "Send code",
+  "connectionBarGoToS3Setup": "Configure S3",
+  "connectionBarManualPrefix": "Manual · ",
+  "chatProbeDetecting": "{mode} · detecting…",
+  "@chatProbeDetecting": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "chatProbeAvailable": "{mode} · available",
+  "@chatProbeAvailable": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "chatProbeUnavailable": "{mode} · unavailable",
+  "@chatProbeUnavailable": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "chatProbeTriggered": "{mode} · probe requested",
+  "@chatProbeTriggered": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionOrchestratorManualOk": "Manual · {mode}",
+  "@connectionOrchestratorManualOk": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionOrchestratorManualUnavailable": "Manual · {mode} unavailable",
+  "@connectionOrchestratorManualUnavailable": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionOrchestratorLinkUnavailable": "Current route unavailable",
+  "connectionOrchestratorAutoS3": "Auto · S3",
+  "connectionOrchestratorS3FallbackSubtitle": "Direct connection failed — using cloud relay",
+  "connectionOrchestratorAutoMode": "Auto · {mode}",
+  "@connectionOrchestratorAutoMode": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionOrchestratorNoDirect": "No direct connection",
+  "connectionOrchestratorLoginPromptSubtitle": "Sign in to use HTTP, WebRTC, or S3",
+  "connectionOrchestratorNoDirectS3Fallback": "No direct connection — fallback active",
+  "connectionOrchestratorS3Unavailable": "S3 unavailable",
+  "connectionOrchestratorS3NotConfigured": "S3 not configured",
+  "membershipMigrationCooldownSeconds": "Retry in {seconds}s",
+  "@membershipMigrationCooldownSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "mobileHomeTabConnect": "Connect",
+  "mobileHomeTabFiles": "Files",
+  "chatReceivedExportingToast": "Received {name} — saving to folder…",
+  "@chatReceivedExportingToast": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "mobileHomeTabSettings": "Settings",
+  "mobileHomePendingOutbox": "Outbox",
+  "pendingFilesSend": "Send",
+  "pendingFilesManage": "Manage",
+  "pendingFilesManageWithCount": "Manage ({count})",
+  "@pendingFilesManageWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pendingFilesSelectedCount": "{count} files selected",
+  "@pendingFilesSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pendingFilesClearAll": "Clear all",
+  "fileSendTitleSingle": "Send: {name}",
+  "@fileSendTitleSingle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "fileSendTitleMany": "Send: {firstName} ({count} files)",
+  "@fileSendTitleMany": {
+    "placeholders": {
+      "firstName": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fileSendS3Intro": "Send via S3 cloud relay to all signed-in devices. Works across networks.",
+  "fileSendS3ConfigurePrompt": "Configure S3 first to use cloud send.",
+  "fileSendResumeSupported": "Resume supported",
+  "fileSendResumeNotSupported": "Resume not supported",
+  "fileSendStatusChecking": "Checking…",
+  "fileSendLanStatusOnlineDirect": "Online · direct",
+  "fileSendLanStatusPullAvailable": "Reverse pull available",
+  "fileSendLanStatusUnreachable": "Unreachable",
+  "fileSendLanStatusOfflineDirect": "Offline",
+  "fileSendWebRtcStatusOnline": "Online",
+  "fileSendWebRtcStatusConnectable": "Can connect",
+  "fileSendWebRtcStatusOffline": "Offline",
+  "fileSendWebRtcIntro": "WebRTC sends peer-to-peer without routing through servers. Falls back to S3 if the connection fails.",
+  "fileSendWebRtcEmptyNoDevices": "No other devices found.",
+  "fileSendEmptyNearbyOffline": "No other devices found. Make sure devices are on the same LAN.",
+  "fileSendEmptyMyDevicesOnLan": "No \"My devices\" on the LAN.",
+  "fileSendSendToSelected": "Send to selected devices",
+  "fileSendViaWebRtc": "Send via WebRTC",
+  "fileSendConfigureS3First": "Configure S3 first",
+  "fileSendToAllDevices": "Send to all devices",
+  "fileSendTabMyDevices": "My devices",
+  "fileSendTabWebRtc": "WebRTC",
+  "devicePanelStatusServerUnreachable": "Server unreachable",
+  "devicePanelStatusConnected": "Connected",
+  "devicePanelStatusConnecting": "Connecting…",
+  "devicePanelEmptyNoOtherDevices": "No other devices yet",
+  "devicePanelEmptyHintOfflineLan": "Make sure other devices are on the same LAN to transfer.",
+  "devicePanelEmptyHintOnlineAccount": "Sign in on your other devices with the same account to start transferring.",
+  "devicePanelDevicesOnlineCount": "{count} online",
+  "@devicePanelDevicesOnlineCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "connectionBarDefaultTitle": "Connection status",
+  "connectionBarManualShort": "Manual",
+  "connectionBarAutoShort": "Auto",
+  "connectionBarResumeAuto": "Resume auto",
+  "connectionBarSwitchMode": "Switch",
+  "connectionBarRefreshOnlineStatus": "Refresh online status",
+  "transportModeLabel": "Transport",
+  "transportModeHttpLan": "HTTP LAN direct",
+  "transportModeWebrtcLan": "WebRTC LAN direct",
+  "composerPickAttachmentTitle": "Choose attachment",
+  "composerAttachImageVideo": "Photos & videos",
+  "composerAttachImageVideoDesc": "Pick photos or videos from your gallery",
+  "chatGalleryReadPermissionTitle": "Access Photo Library",
+  "chatGalleryReadPermissionBody": "To pick images or videos, the app needs access to your photo library. We recommend allowing access to all photos and videos.",
+  "chatGalleryReadPermissionConfirm": "Continue",
+  "chatGalleryReadPermissionDenied": "Photo library access was not granted. Cannot pick images or videos.",
+  "chatGalleryReadPermissionLimited": "Only partial photo access is granted. Open Settings to allow access to all photos.",
+  "chatGalleryReadPermissionContinuePartial": "Continue with limited access",
+  "composerAttachFile": "Files",
+  "composerAttachFileDesc": "Choose with the system file picker",
+  "composerAttachFolder": "Folder",
+  "composerAttachFolderDesc": "All files in the selected folder",
+  "composerAttachApk": "APK",
+  "composerAttachApkDesc": "Pick an APK package from this device",
+  "composerMessageHint": "Type a message…",
+  "composerClearInputTooltip": "Clear",
+  "shortcutsSendTitle": "Send message",
+  "shortcutsSendDescription": "Choose which key sends a message from the input field",
+  "shortcutsSendEnter": "Press Enter to send",
+  "shortcutsSendModifier": "Press Ctrl+Enter to send",
+  "shortcutsSendModifierMac": "Press ⌘+Enter to send",
+  "shortcutsSendButtonHint": "The send button always works regardless of this setting.",
+  "composerSendTooltipEnter": "Send (Enter)",
+  "composerSendTooltipModifier": "Send (Ctrl+Enter)",
+  "composerSendTooltipModifierMac": "Send (⌘+Enter)",
+  "chatTransferSendingPct": "{fileName} Sending {pct}%",
+  "@chatTransferSendingPct": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      },
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "chatTransferReceivingPct": "{fileName} Receiving {pct}%",
+  "@chatTransferReceivingPct": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      },
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "chatTransferWaitingPeerLine": "{fileName} Waiting for peer…",
+  "@chatTransferWaitingPeerLine": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferWaitingPeerShort": "Waiting for peer…",
+  "chatTransferCancelledBare": "Cancelled",
+  "chatTransferCancelledNamed": "{fileName} cancelled",
+  "@chatTransferCancelledNamed": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferSendFailedNamed": "{fileName} send failed",
+  "@chatTransferSendFailedNamed": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferReceiveFailedNamed": "{fileName} receive failed",
+  "@chatTransferReceiveFailedNamed": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTransferProgressSending": "Sending",
+  "chatTransferProgressReceiving": "Receiving",
+  "chatTransferEtaSecondsRemaining": "{seconds}s left",
+  "@chatTransferEtaSecondsRemaining": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "chatTransferEtaMinutesSecondsRemaining": "{minutes}m {seconds}s left",
+  "@chatTransferEtaMinutesSecondsRemaining": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "chatWebRtcSentParen": "{fileName} (sent via WebRTC)",
+  "@chatWebRtcSentParen": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatScreenGenericFile": "File",
+  "chatScreenDeleteThisDeviceTitle": "Remove this device",
+  "chatScreenDeleteThisDeviceBody": "This removes this device from your account and signs you out. Sign in again to use cloud features.",
+  "chatScreenRemovePeerTitle": "Remove device",
+  "chatScreenRemovePeerBody": "The account on that device will be signed out. If it is in use, access ends immediately; otherwise the next launch will require signing in again.",
+  "chatScreenConfirmRemoveLabel": "Remove",
+  "chatScreenConfirmDeleteLabel": "Delete",
+  "chatScreenToastDeletedThisDevice": "This device was removed",
+  "chatScreenToastDeleteDeviceFailed": "Could not remove this device: {error}",
+  "@chatScreenToastDeleteDeviceFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatScreenToastRemovedPeer": "Device removed",
+  "chatScreenToastRemovePeerFailed": "Could not remove device: {error}",
+  "@chatScreenToastRemovePeerFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatScreenSessionSettingsTitle": "Conversation settings",
+  "chatScreenTileRenameDevice": "Rename device",
+  "chatScreenTileClearMessages": "Clear messages",
+  "chatScreenSubtitleClearMessages": "Delete all chat history in this conversation",
+  "chatScreenClearMessagesTitle": "Clear messages",
+  "chatScreenClearMessagesConfirm": "This will delete all chat history in this conversation. Files saved to your save folder will not be removed.",
+  "chatScreenClearMessagesDeleteCache": "Also delete cached files",
+  "chatScreenClearMessagesDone": "Messages cleared",
+  "chatScreenClearMessagesFailed": "Failed to clear messages",
+  "chatScreenTileRemoveThisDevice": "Remove this device",
+  "chatScreenTileRemovePeer": "Remove device",
+  "chatScreenSubtitleRemoveThisDevice": "Remove this device from your account and sign out",
+  "chatScreenSubtitleRemovePeer": "Remove the device in this conversation from your account",
+  "chatScreenPendingFilesMissing": "Some queued files were missing and were removed",
+  "chatScreenConnNotLoggedInHttp": "Not signed in — HTTP transfer only",
+  "chatScreenConnOffline": "Cannot reach server — offline mode",
+  "chatScreenConnServerOk": "Connected to server",
+  "chatScreenSelectTargetFirst": "Choose a destination device first",
+  "chatScreenFolderNeedsPermission": "Storage permission is required to open folders",
+  "chatScreenFolderEmpty": "This folder is empty or cannot be read",
+  "chatScreenFolderSafTryFiles": "Couldn't read the selected folder. Try choosing files instead.",
+  "chatScreenRetryCloudOffline": "Cannot retry cloud transfer in offline mode",
+  "chatScreenNoDeviceFound": "Target device not found — check that it is online",
+  "chatScreenOfflineNoS3": "S3 transfer is unavailable in offline mode",
+  "chatScreenS3NotConfiguredTitle": "S3 not configured",
+  "chatScreenS3NotConfiguredBody": "S3 is not set up yet. Open settings to configure it?",
+  "chatScreenS3GoConfigure": "Configure",
+  "chatScreenS3UnavailableTitle": "S3 unavailable",
+  "chatScreenS3UnavailableBody": "The S3 connection test failed. Check settings or your network. Open S3 settings?",
+  "chatScreenS3GoSettings": "Open settings",
+  "chatScreenNoNearbyDevice": "No nearby device available — choose again",
+  "chatScreenDeviceUnavailable": "Selected device is unavailable — choose again",
+  "chatScreenWebRtcUnsupportedSource": "This file cannot be sent via WebRTC — use HTTP",
+  "chatScreenWebRtcFailedTryHttp": "WebRTC send failed — try HTTP mode",
+  "chatScreenConfigureS3FirstToast": "Configure S3 in settings first",
+  "chatScreenS3UnavailableToast": "S3 is unavailable — check settings or run the connection test",
+  "chatScreenSendFailedWithError": "Send failed: {error}",
+  "@chatScreenSendFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatScreenFileMissing": "File no longer exists — it may have been deleted",
+  "chatScreenCannotOpenFile": "Cannot open this file",
+  "chatScreenSavedToGallery": "Saved to Photos",
+  "chatScreenReceivedAtPath": "Received: {path}",
+  "@chatScreenReceivedAtPath": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "chatScreenReceiveFailedWithError": "Receive failed: {error}",
+  "@chatScreenReceiveFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatScreenCopied": "Copied",
+  "chatScreenDeleteMessagesTitle": "Delete messages",
+  "chatScreenDeleteMessagesBody": "Delete {count} messages? This removes them locally and from the cloud.",
+  "@chatScreenDeleteMessagesBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatHttpReceivedSavedGallery": "Received via HTTP and saved to Photos",
+  "chatHttpReceivedWithName": "Received via HTTP: {fileName}",
+  "@chatHttpReceivedWithName": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatHttpPullReceivedSavedGallery": "Received via reverse pull and saved to Photos",
+  "chatHttpPullReceivedWithName": "Received via reverse pull: {fileName}",
+  "@chatHttpPullReceivedWithName": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "chatHttpReceivedBracket": "{fileName} (received via HTTP)",
+  "@chatHttpReceivedBracket": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "appGallerySubfolder": "ShrimpSend",
+  "appUpdateTitleNewVersion": "Update available",
+  "appUpdateCurrentVersion": "Current: {version} ({build})",
+  "@appUpdateCurrentVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateNewVersion": "New: {version} ({build})",
+  "@appUpdateNewVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateLater": "Later",
+  "appUpdateDontShowAgainVersion": "Don't show again for this version",
+  "appUpdateDownload": "Download",
+  "appUpdateOpenDownloadPage": "Open in browser",
+  "appUpdateGoAppStore": "Go to App Store",
+  "appUpdateInstallTitle": "Install update",
+  "appUpdateInstallBody": "Current: {version} ({build})\nPending package: {pending}\n\nThe update is downloaded. Install now?",
+  "@appUpdateInstallBody": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      },
+      "pending": {
+        "type": "String"
+      }
+    }
+  },
+  "appUpdateUnknownVersion": "Unknown",
+  "appUpdateDontShowAgain": "Don't show again",
+  "appUpdateInstall": "Install",
+  "desktopUpdateSizeUnknown": "Size unknown",
+  "desktopUpdateSizeMb": "~{mb} MB",
+  "@desktopUpdateSizeMb": {
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "desktopUpdateSizeKb": "~{kb} KB",
+  "@desktopUpdateSizeKb": {
+    "placeholders": {
+      "kb": {
+        "type": "String"
+      }
+    }
+  },
+  "desktopUpdateBannerTitle": "Update available",
+  "desktopUpdateBannerSubtitle": "Version {version} · {sizeLine}",
+  "@desktopUpdateBannerSubtitle": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "sizeLine": {
+        "type": "String"
+      }
+    }
+  },
+  "desktopUpdateLater": "Later",
+  "desktopUpdateNow": "Update now",
+  "desktopUpdateDownloading": "Downloading update…",
+  "desktopUpdateApplying": "Closing and applying update, please wait…",
+  "desktopUpdateReadyTitle": "Update ready",
+  "desktopUpdateReadyBody": "The app will restart automatically; installation takes a few seconds.",
+  "desktopUpdateQuitRestart": "Quit and restart",
+  "desktopUpdateErrorUnknown": "Unknown error",
+  "desktopUpdateCheckFailedTitle": "Update check failed",
+  "desktopUpdateClose": "Close",
+  "desktopUpdateRetry": "Retry",
+  "desktopUpdateReleaseNotesAction": "Release notes",
+  "desktopUpdateReleaseNotesTitle": "What’s new in {version}",
+  "@desktopUpdateReleaseNotesTitle": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "desktopUpdateReleaseNotesEmpty": "No release notes provided for this version.",
+  "qrGenerating": "Generating QR code…",
+  "qrHintScanWithPhone": "Scan with your signed-in phone",
+  "qrHintConfirmOnPhone": "Scanned — confirm on your phone",
+  "qrHintLoginSuccess": "Signed in, redirecting…",
+  "qrHintExpired": "QR code expired — refresh and try again",
+  "qrHintGenericError": "Something went wrong",
+  "qrLoginTitle": "Scan to sign in",
+  "qrLoginTagline": "Messages & files in sync across devices",
+  "qrLoginSteps": "Open the mobile app → Scan → Confirm on your phone",
+  "qrStatusScanned": "Scanned",
+  "qrStatusConfirmPhone": "Confirm sign-in on your phone",
+  "qrRefreshButton": "Refresh QR code",
+  "qrUsePasswordLogin": "Sign in with email & password",
+  "qrScannerFailed": "Scan failed: {error}",
+  "@qrScannerFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrConfirmLoginTitle": "Confirm sign-in",
+  "qrConfirmLoginBody": "Allow sign-in on the other device?",
+  "qrConfirmLoginConfirm": "Confirm sign-in",
+  "qrConfirmLoginSuccess": "Sign-in confirmed",
+  "qrConfirmLoginFailed": "Confirmation failed: {error}",
+  "@qrConfirmLoginFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrScannerNeedCamera": "Camera permission is required to scan QR codes",
+  "qrScannerOpenSettings": "Open Settings",
+  "qrScannerPermissionAgain": "Request permission again",
+  "qrScannerProcessing": "Processing…",
+  "qrScannerAlignQr": "Align the QR code inside the frame",
+  "qrScannerUnrecognized": "Scan a ShrimpSend login QR code",
+  "qrScannerTorchOn": "Turn on flashlight",
+  "qrScannerTorchOff": "Turn off flashlight",
+  "filePreviewTooltipShare": "Share",
+  "filePreviewTooltipOpenWith": "Open with…",
+  "filePreviewImageLoadError": "Could not load image",
+  "filePreviewVideoError": "Could not play this video",
+  "filePreviewTextTruncated": "{text}\n\n… File too large — showing first 2 MB only",
+  "@filePreviewTextTruncated": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "filePreviewReadError": "Could not read file contents",
+  "filePreviewCopyAll": "Copy all",
+  "filePreviewCopied": "Copied to clipboard",
+  "fileClipboardCopy": "Copy",
+  "fileClipboardCopied": "Copied {count} file(s) — paste in Finder or Explorer",
+  "@fileClipboardCopied": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fileClipboardCopyFailed": "Copy failed",
+  "fileClipboardPasteAdded": "Added to outbox — open chat to send",
+  "fileClipboardNothingToCopy": "Select files to copy first",
+  "chatMenuCopyFile": "Copy file"
+}
