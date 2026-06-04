@@ -87,7 +87,7 @@ echo ""
 echo "下一步:"
 if [ -d "${ULTRASEND_OPS_DIR:-$ROOT/ops}/local" ]; then
   echo "  检测到 ops/local，正在同步团队本地配置..."
-  "$ROOT/ops/scripts/sync-to-local.sh"
+  "$ROOT/scripts/sync-to-local.sh"
 else
   echo "  1. 准备 MySQL（见 README.md）"
   echo "  2. ./scripts/start-dev.sh"

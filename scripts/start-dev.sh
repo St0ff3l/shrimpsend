@@ -5,21 +5,26 @@
 #   ./scripts/start-dev.sh --overseas   # 海外 ShrimpSend 逻辑（dev-overseas）
 # 停止：./scripts/stop-dev.sh
 
-set -e
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/dev-common.sh
+source "$ROOT/scripts/lib/dev-common.sh"
+
 cd "$ROOT"
 export PATH="$ROOT/scripts/bin:$PATH"
 PID_FILE="$ROOT/scripts/.dev-pids"
 LOG_DIR="$ROOT/scripts/logs"
 mkdir -p "$LOG_DIR"
 
+CFGO_LOG="$LOG_DIR/centrifugo.log"
+BACKEND_LOG="$LOG_DIR/backend.log"
+WEB_LOG="$LOG_DIR/web.log"
+
 OVERSEAS=false
 for arg in "$@"; do
   case "$arg" in
     --overseas) OVERSEAS=true ;;
     *)
-      echo "未知参数: $arg（支持: --overseas）" >&2
-      exit 1
+      die "未知参数: $arg（支持: --overseas）"
       ;;
   esac
 done
@@ -63,9 +68,34 @@ else
   echo "模式: 国内本地 (默认 Spring profile, DB ultrasend)"
 fi
 
+echo "==> 启动前检查"
+require_file "$ROOT/config.json" \
+  "缺少 config.json。请运行: ./scripts/setup-local-config.sh 或 ./scripts/deploy-local.sh"
+
+CFGO_BIN=""
+if ! CFGO_BIN="$(resolve_centrifugo_bin)"; then
+  die "未找到 Centrifugo 可执行文件。请将 v5 二进制放到 bin/centrifugo 或 scripts/bin/centrifugo（见 README 环境要求）"
+fi
+
+if [ ! -x "$ROOT/backend/gradlew" ]; then
+  die "backend/gradlew 不可执行。请运行: chmod +x backend/gradlew"
+fi
+
+if [ ! -x "$ROOT/web/node_modules/.bin/next" ]; then
+  die "未找到 web 依赖（next）。请先执行: cd web && npm ci"
+fi
+
+echo "  config.json、Centrifugo、Gradle、Web 依赖: OK"
+
 echo "启动 Centrifugo (config.json)..."
-centrifugo -c "$ROOT/config.json" >> "$LOG_DIR/centrifugo.log" 2>&1 &
-echo $! >> "$PID_FILE"
+"$CFGO_BIN" -c "$ROOT/config.json" >> "$CFGO_LOG" 2>&1 &
+pid_c=$!
+echo "$pid_c" >> "$PID_FILE"
+
+if ! wait_service "Centrifugo" "$pid_c" 10 "$CFGO_LOG" port_8000; then
+  reason="$(service_fail_reason "$pid_c" "端口 8000 在 10 秒内未就绪")"
+  fail_and_cleanup "Centrifugo 启动失败：${reason}（请检查 $CFGO_BIN 与 config.json）" "$CFGO_LOG"
+fi
 
 echo "启动后端 (Spring Boot)..."
 if [ "$OVERSEAS" = true ]; then
@@ -73,23 +103,27 @@ if [ "$OVERSEAS" = true ]; then
     cd "$ROOT/backend"
     export SPRING_PROFILES_ACTIVE=dev-overseas
     exec ./gradlew bootRun
-  ) >> "$LOG_DIR/backend.log" 2>&1 &
+  ) >> "$BACKEND_LOG" 2>&1 &
 else
-  (cd "$ROOT/backend" && exec ./gradlew bootRun) >> "$LOG_DIR/backend.log" 2>&1 &
+  (cd "$ROOT/backend" && exec ./gradlew bootRun) >> "$BACKEND_LOG" 2>&1 &
 fi
-echo $! >> "$PID_FILE"
+pid_b=$!
+echo "$pid_b" >> "$PID_FILE"
 
-echo "等待后端 9000 端口..."
-for i in {1..60}; do
-  if curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/api/auth/refresh 2>/dev/null | grep -q '401\|200'; then
-    break
-  fi
-  sleep 1
-done
+if ! wait_service "后端 API" "$pid_b" 60 "$BACKEND_LOG" backend_refresh; then
+  reason="$(service_fail_reason "$pid_b" "http://localhost:9000 在 60 秒内未就绪")"
+  fail_and_cleanup "后端启动失败：${reason}（请检查 MySQL 与 backend/.env）" "$BACKEND_LOG"
+fi
 
 echo "启动 Web (Next.js)..."
-(cd "$ROOT/web" && exec npm run dev) >> "$LOG_DIR/web.log" 2>&1 &
-echo $! >> "$PID_FILE"
+(cd "$ROOT/web" && exec npm run dev) >> "$WEB_LOG" 2>&1 &
+pid_w=$!
+echo "$pid_w" >> "$PID_FILE"
+
+if ! wait_service "Web" "$pid_w" 20 "$WEB_LOG" port_3000; then
+  reason="$(service_fail_reason "$pid_w" "端口 3000 在 20 秒内未就绪")"
+  fail_and_cleanup "Web 启动失败：${reason}（若日志含 next: command not found，请执行 cd web && npm ci）" "$WEB_LOG"
+fi
 
 echo ""
 echo "本地服务已启动："

@@ -7,7 +7,20 @@ git clone git@github.com:shrimpsend/ops.git /path/to/shrimpsend-ops
 export ULTRASEND_OPS_DIR=/path/to/shrimpsend-ops
 ```
 
-## 目录结构
+## 脚本位置（重要）
+
+**本地启动 / 停止** 与 **从 ops 同步到业务仓** 的脚本在**公开业务仓** [`scripts/`](../scripts/)（以业务仓为 `ROOT`，才能正确访问 `web/`、`backend/` 等路径）：
+
+| 用途 | 命令（在业务仓根目录） |
+|------|------------------------|
+| 同步本地配置 + 建库 | `./scripts/deploy-local.sh` 或 `./scripts/sync-to-local.sh` |
+| 启动 Centrifugo + 后端 + Web | `./scripts/start-dev.sh` / `./start-dev.sh` |
+| 停止 | `./scripts/stop-dev.sh` / `./stop-dev.sh` |
+| 同步生产配置 | `./scripts/sync-to-build-machine.sh` |
+
+私有 **shrimpsend-ops** 仓只存放配置载荷（`cn/`、`local/`、`flutter/` 等）。`ops/scripts/` 下仅为兼容旧路径的转发，请始终在 clone 的 **shrimpsend** 业务仓中执行上述命令。
+
+## 目录结构（ops 仓内仅配置）
 
 ```
 ops/
@@ -30,18 +43,16 @@ ops/
 │   └── .env.local               # Stripe Price + OpenPanel Web
 ├── harmonyos/
 │   └── build-profile.json5
-└── scripts/
-    ├── sync-to-build-machine.sh
-    └── sync-to-local.sh
+└── scripts/                     # 兼容转发 → 业务仓 scripts/sync-*.sh
 ```
 
 ## 本地调试（一键同步 + 建库）
 
-维护者 clone 业务仓后，从 `ops/local/` 同步团队本地配置并初始化 MySQL：
+维护者 clone **业务仓** 后，从 `ops/local/`（或 `ULTRASEND_OPS_DIR` 指向的私有 ops 仓）同步配置并初始化 MySQL：
 
 ```bash
+export ULTRASEND_OPS_DIR=/path/to/shrimpsend-ops   # 若 ops 在业务仓外
 ./scripts/deploy-local.sh
-# 等价于 ./ops/scripts/sync-to-local.sh
 # 仅同步配置、跳过建库：./scripts/deploy-local.sh --skip-db
 ```
 
@@ -55,18 +66,18 @@ ops/
 | `docker.env` | `.env`（Docker Compose） |
 | `web/.env.local` 或 `ops/web/.env.local` | `web/.env.local` |
 
-启动（Centrifugo + 后端 + Web 一键）：
+启动 / 停止（在**业务仓**根目录，勿在仅 clone 的 ops 仓内执行）：
 
-- 国内：`./scripts/start-dev.sh`（默认 profile，`ultrasend` 库）
-- 海外：`./scripts/start-dev.sh --overseas`（`dev-overseas`，`ultrasend_overseas` 库）
-- 停止：`./scripts/stop-dev.sh`
+- 国内：`./scripts/start-dev.sh` 或 `./start-dev.sh`
+- 海外：`./scripts/start-dev.sh --overseas`
+- 停止：`./scripts/stop-dev.sh` 或 `./stop-dev.sh`
 
 仅调试后端（不启 Centrifugo/Web）：`backend/scripts/run-dev-overseas.sh`
 
 ## 同步到业务仓（部署 / 打包前）
 
 ```bash
-./ops/scripts/sync-to-build-machine.sh
+./scripts/sync-to-build-machine.sh
 # 或从独立 ops 仓：
 ULTRASEND_OPS_DIR=../shrimpsend-ops ./scripts/deploy.sh
 ```

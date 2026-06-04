@@ -3,4 +3,4 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-exec "$ROOT/ops/scripts/sync-to-local.sh" "$@"
+exec "$ROOT/scripts/sync-to-local.sh" "$@"

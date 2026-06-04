@@ -80,7 +80,7 @@ The script may:
 - Build backend JAR and Next.js standalone Web
 - Restart Centrifugo (8000), backend (9000), Web (3000)
 
-You can run `ops/scripts/sync-to-build-machine.sh` before `deploy.sh`; the deploy script can sync again when prompted.
+You can run `scripts/sync-to-build-machine.sh` before `deploy.sh`; the deploy script can sync again when prompted.
 
 ### Deploy (non-interactive)
 

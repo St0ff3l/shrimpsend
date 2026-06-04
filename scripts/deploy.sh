@@ -35,7 +35,7 @@ ULTRASEND_OPS_DIR="${ULTRASEND_OPS_DIR:-$ROOT/ops}"
 
 # 从 ops 仓同步生产配置到业务仓（gitignored 的 prod 文件）
 sync_ops_config() {
-  local sync_script="$ROOT/ops/scripts/sync-to-build-machine.sh"
+  local sync_script="$ROOT/scripts/sync-to-build-machine.sh"
   if [ ! -x "$sync_script" ]; then
     chmod +x "$sync_script" 2>/dev/null || true
   fi
@@ -51,7 +51,7 @@ assert_prod_config_present() {
   if [ "$SPRING_PROFILE" = "prod-overseas" ]; then
     if [ ! -f "$ROOT/backend/src/main/resources/application-prod-overseas.yml" ]; then
       echo "  [错误] 缺少 application-prod-overseas.yml"
-      echo "  请设置 ULTRASEND_OPS_DIR 并运行 ops/scripts/sync-to-build-machine.sh"
+      echo "  请设置 ULTRASEND_OPS_DIR 并运行 scripts/sync-to-build-machine.sh"
       exit 1
     fi
     if [ ! -f "$ROOT/config.prod-overseas.bare.json" ]; then
@@ -61,7 +61,7 @@ assert_prod_config_present() {
   else
     if [ ! -f "$ROOT/backend/src/main/resources/application-prod.yml" ]; then
       echo "  [错误] 缺少 application-prod.yml"
-      echo "  请设置 ULTRASEND_OPS_DIR 并运行 ops/scripts/sync-to-build-machine.sh"
+      echo "  请设置 ULTRASEND_OPS_DIR 并运行 scripts/sync-to-build-machine.sh"
       exit 1
     fi
     if [ ! -f "$ROOT/config.prod.bare.json" ]; then

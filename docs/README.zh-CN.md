@@ -87,9 +87,11 @@ flowchart LR
 |------|-------------|
 | Java | 17+ |
 | Node.js | 20+（`web/`） |
-| [Centrifugo](https://centrifugal.dev/) | v5（或把 `scripts/bin/centrifugo` 加入 PATH） |
+| [Centrifugo](https://centrifugal.dev/) | v5 二进制放在 `bin/centrifugo` 或 `scripts/bin/centrifugo`（不入库） |
 | MySQL | 8 |
 | Flutter | 仅构建 `app/` 时需要 |
+
+**首次运行 `./scripts/start-dev.sh` 前：** 执行 `cd web && npm ci` 安装 Web 依赖，并自备 Centrifugo v5 可执行文件（见上表）。缺少任一项时启动脚本会报错退出，不会误报「已启动」。
 
 ### 本地开发（国内逻辑）
 
@@ -114,7 +116,7 @@ CREATE DATABASE ultrasend CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 日志：`scripts/logs/` · 进程 PID：`scripts/.dev-pids`
 
-`setup-local-config.sh` 会从 `*.example` 生成 `config.json`、`web/.env.local`、`backend/.env` 等（不覆盖已有文件）。若存在 `ops/local/`，会自动调用 `ops/scripts/sync-to-local.sh`（与 `deploy-local.sh` 等价）。
+`setup-local-config.sh` 会从 `*.example` 生成 `config.json`、`web/.env.local`、`backend/.env` 等（不覆盖已有文件）。若存在 `ops/local/`，会自动调用 `scripts/sync-to-local.sh`（与 `deploy-local.sh` 等价）。
 
 ### 本地开发（海外 / ShrimpSend 逻辑）
 
@@ -152,7 +154,7 @@ export ULTRASEND_OPS_DIR=/path/to/shrimpsend-ops
 SPRING_PROFILE=prod-overseas CLUSTER_LABEL='海外 (ShrimpSend)' ./scripts/deploy.sh
 ```
 
-`deploy.sh` 内可再次确认是否从 ops 同步；也可事先单独运行 `ops/scripts/sync-to-build-machine.sh`。
+`deploy.sh` 内可再次确认是否从 ops 同步；也可事先单独运行 `scripts/sync-to-build-machine.sh`。
 
 | 集群 | Spring profile | Centrifugo 配置 |
 |------|----------------|-----------------|

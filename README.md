@@ -86,15 +86,17 @@ flowchart LR
 |------|-----------------|
 | Java | 17+ |
 | Node.js | 20+ (for `web/`) |
-| [Centrifugo](https://centrifugal.dev/) | v5 (or use `scripts/bin/centrifugo` on PATH) |
+| [Centrifugo](https://centrifugal.dev/) | v5 binary at `bin/centrifugo` or `scripts/bin/centrifugo` (not in git) |
 | MySQL | 8 |
 | Flutter | Only when building `app/` |
+
+**Before first `./scripts/start-dev.sh`:** install Web deps (`cd web && npm ci`) and place the Centrifugo v5 binary (see table above). The start script exits with an error if either is missing.
 
 ### Local development (China logic)
 
 | Role | Setup | Start / stop |
 |------|--------|--------------|
-| **Maintainers** (private `ops/local/`) | `./scripts/deploy-local.sh` — syncs team config + creates `ultrasend` / `ultrasend_overseas` DBs | `./scripts/start-dev.sh` · stop: `./scripts/stop-dev.sh` |
+| **Maintainers** (private `ops/local/`) | `./scripts/deploy-local.sh` — syncs team config + creates `ultrasend` / `ultrasend_overseas` DBs | `./start-dev.sh` or `./scripts/start-dev.sh` · stop: `./stop-dev.sh` |
 | **Contributors** (examples only) | `./scripts/setup-local-config.sh` — copies `*.example` templates | Same start/stop |
 
 **Contributors only:** create the MySQL database before first start:
@@ -112,6 +114,8 @@ Default JDBC: `jdbc:mysql://localhost:3306/ultrasend`, user `root`, password `ch
 | Web UI | http://localhost:3000 |
 
 Logs: `scripts/logs/` · PID file: `scripts/.dev-pids`
+
+Dev scripts live under **`scripts/`** in this repo (not in the private ops repo), so paths to `web/`, `backend/`, and `config.json` resolve correctly. Root `./start-dev.sh` / `./stop-dev.sh` are shortcuts to `scripts/`.
 
 ### Local development (Overseas / ShrimpSend logic)
 
