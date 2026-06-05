@@ -7,6 +7,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../api/api.dart';
 import '../color_theme.dart';
 import '../l10n/generated/app_localizations.dart';
+import '../network/connection_orchestrator.dart';
 import '../network/connection_resolution.dart';
 import '../providers/app_mode_provider.dart';
 import '../providers/device_provider.dart';
@@ -274,9 +275,9 @@ class _DevicePanelState extends ConsumerState<DevicePanel>
       );
       if (!mounted) return;
       final String status;
-      if (!result.success) {
-        status = 'offline';
-      } else if (result.lanHttpUrl != null) {
+      if (result.senderReachable) {
+        status = 'pull_online';
+      } else if (result.success && result.lanHttpUrl != null) {
         status = 'online';
         final allDevices = [
           ...ref.read(myDevicesProvider),
@@ -299,14 +300,22 @@ class _DevicePanelState extends ConsumerState<DevicePanel>
                 displayCode: device?.displayCode,
               ),
             );
-      } else if (result.senderReachable) {
-        status = 'pull_online';
-      } else {
+      } else if (result.success) {
         status = 'unreachable';
+      } else {
+        if (widget.lanReceiverUrl != null && widget.onProbePull != null) {
+          await _probeReversePull(deviceId);
+          return;
+        }
+        status = 'offline';
       }
       setState(() => _setLanReach(deviceId, status));
     } catch (_) {
       if (!mounted) return;
+      if (widget.lanReceiverUrl != null && widget.onProbePull != null) {
+        await _probeReversePull(deviceId);
+        return;
+      }
       setState(() => _setLanReach(deviceId, 'offline'));
     }
   }
@@ -347,6 +356,9 @@ class _DevicePanelState extends ConsumerState<DevicePanel>
     final currentDeviceId = deviceInfo?.id ?? '';
     final selectedTargets = ref.watch(selectedLanTargetsProvider);
     final sendMode = ref.watch(selectedSendModeProvider);
+    final manualHttpLocked =
+        ref.watch(connectionManualOverrideProvider) &&
+        ref.watch(connectionManualModeProvider) == SendMode.lan;
     final tabController = _ensureTabController(isOffline, sendMode);
 
     final allDevices = isOffline
@@ -390,13 +402,15 @@ class _DevicePanelState extends ConsumerState<DevicePanel>
 
     final reachableIds = <String>{};
     for (final d in sortedDevices) {
-      if (_isDeviceReachable(d.deviceId, sendMode)) {
+      if (_isDeviceReachable(d.deviceId, sendMode) ||
+          (manualHttpLocked &&
+              (sendMode == SendMode.lan || sendMode == SendMode.nearby))) {
         reachableIds.add(d.deviceId);
       }
     }
 
     // Auto-deselect devices confirmed offline by probes (schedule at most once).
-    if (!_offlineCleanupScheduled) {
+    if (!_offlineCleanupScheduled && !manualHttpLocked) {
       final offlineSelected = <String>{};
       for (final d in sortedDevices) {
         if (!selectedTargets.contains(d.deviceId)) continue;

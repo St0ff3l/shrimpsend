@@ -466,6 +466,8 @@ export function Chat({
 
   const sendLanHttpProbe = useCallback(async (targetDeviceId: string): Promise<{ success: boolean; lanHttpUrl?: string; senderReachable?: boolean }> => {
     const probeId = generateUUID();
+    const myId = getOrCreateDeviceId();
+    const selfLanUrl = devices.find((d) => d.deviceId === myId)?.lanHttpUrl ?? null;
     logger.info(TAG, 'sendLanHttpProbe probeId=', probeId, 'target=', targetDeviceId);
     return new Promise((resolve) => {
       const timer = setTimeout(() => {
@@ -480,8 +482,8 @@ export function Chat({
       });
       sendMessage({
         type: 'lan_http_probe',
-        payload: { probeId, targetDeviceId, senderLanHttpUrl: null },
-        fromDeviceId: getOrCreateDeviceId(),
+        payload: { probeId, targetDeviceId, senderLanHttpUrl: selfLanUrl },
+        fromDeviceId: myId,
         ts: Date.now(),
       }).catch((e) => {
         logger.warn(TAG, 'sendLanHttpProbe sendMessage failed:', e);
@@ -490,7 +492,7 @@ export function Chat({
         resolve({ success: false });
       });
     });
-  }, []);
+  }, [devices]);
 
   const handleWebRTCSignal = useCallback((data: MessageEnvelope) => {
     const signal = data.payload as WebRTCSignal;

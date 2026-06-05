@@ -697,6 +697,8 @@
   "chatProbeAvailable": "{mode}可用",
   "chatProbeUnavailable": "{mode}暂不可用",
   "chatProbeTriggered": "{mode}检测已触发",
+  "chatProbeUnverifiedAttemptable": "{mode}未验证，仍可尝试传输",
+  "connectionOrchestratorHttpUnverifiedSubtitle": "连接未验证，将尝试直连/反向拉取",
   "connectionOrchestratorManualOk": "手动·{mode}",
   "connectionOrchestratorManualUnavailable": "手动·{mode}不可用",
   "connectionOrchestratorLinkUnavailable": "当前链路不可用",

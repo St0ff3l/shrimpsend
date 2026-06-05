@@ -1094,6 +1094,15 @@
       }
     }
   },
+  "chatProbeUnverifiedAttemptable": "{mode} unverified — you can still try",
+  "@chatProbeUnverifiedAttemptable": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionOrchestratorHttpUnverifiedSubtitle": "Link unverified — will try direct or reverse pull",
   "connectionOrchestratorManualOk": "Manual · {mode}",
   "@connectionOrchestratorManualOk": {
     "placeholders": {

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../api/api.dart';
+import '../../color_theme.dart';
 import '../../ui/app_ui.dart';
 import '../../ui/platform_performance.dart';
 import '../../ui/platform_icon.dart';
 import 'device_id_chip.dart';
 
-enum DeviceReachStatus { online, checking, offline }
+enum DeviceReachStatus { online, pullOnline, checking, offline }
 
 class DeviceConversationItem extends StatelessWidget {
   final DeviceDto device;
@@ -87,6 +88,7 @@ class DeviceConversationItem extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: switch (reachStatus) {
                             DeviceReachStatus.online => colors.success,
+                            DeviceReachStatus.pullOnline => AppColorTheme.s3Color,
                             DeviceReachStatus.checking => colors.warning,
                             DeviceReachStatus.offline =>
                               colors.textTertiary.withValues(alpha: 0.4),
@@ -178,6 +180,7 @@ class DeviceConversationItem extends StatelessWidget {
                         lastMessage ??
                             switch (reachStatus) {
                               DeviceReachStatus.online => '在线',
+                              DeviceReachStatus.pullOnline => '可拉取',
                               DeviceReachStatus.checking => '检测中…',
                               DeviceReachStatus.offline => '离线',
                             },

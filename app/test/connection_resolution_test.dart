@@ -15,18 +15,21 @@ void main() {
           mode: SendMode.lan,
           kind: SmartLinkKind.sameLan,
           available: lan,
+          attemptable: true,
           reason: '',
         ),
         ConnectionCandidate(
           mode: SendMode.webrtc,
           kind: SmartLinkKind.sameLan,
           available: webrtc,
+          attemptable: true,
           reason: '',
         ),
         ConnectionCandidate(
           mode: SendMode.s3,
           kind: SmartLinkKind.internetRelay,
           available: s3,
+          attemptable: true,
           reason: '',
         ),
       ];

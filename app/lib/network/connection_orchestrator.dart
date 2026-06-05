@@ -66,18 +66,25 @@ final connectionOrchestratorProvider = Provider<ConnectionOrchestratorState>((
         break;
       }
     }
-    final ok =
+    final verifiedOk =
         c?.available ??
         (manualMode == SendMode.s3
             ? context.s3Online && allowsAccountTransferModes(context)
             : false);
+    final attemptable = c?.attemptable ?? false;
+    final manualHttpUnverified =
+        manualMode == SendMode.lan && attemptable && !verifiedOk;
+    final ok = verifiedOk || manualHttpUnverified;
     final modeLabel =
         connectionModeLabel(manualMode, localOs: context.localOs, l10n: l10n);
     statusTitle = ok
         ? l10n.connectionOrchestratorManualOk(modeLabel)
         : l10n.connectionOrchestratorManualUnavailable(modeLabel);
-    statusSubtitle =
-        ok ? '' : (c?.reason ?? l10n.connectionOrchestratorLinkUnavailable);
+    statusSubtitle = manualHttpUnverified
+        ? l10n.connectionOrchestratorHttpUnverifiedSubtitle
+        : ok
+        ? ''
+        : (c?.reason ?? l10n.connectionOrchestratorLinkUnavailable);
   } else {
     ConnectionCandidate? best;
     for (final c in candidates) {

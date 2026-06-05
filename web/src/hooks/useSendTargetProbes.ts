@@ -11,8 +11,13 @@ export type ReachStatus = 'checking' | 'online' | 'offline';
 
 export type DeviceReachDetail = {
   directHttp: boolean;
-  lanSignaling: boolean;
+  /** Peer HTTP self-check via signaling. */
+  peerHttpHealthy: boolean;
+  /** Reverse pull direction (peer can reach this device). */
+  pullReachable: boolean;
   webrtc: boolean;
+  /** @deprecated use peerHttpHealthy */
+  lanSignaling: boolean;
 };
 
 export type DeviceReachEntry = {
@@ -20,12 +25,29 @@ export type DeviceReachEntry = {
   probing: boolean;
 };
 
-const offlineMethods: DeviceReachDetail = { directHttp: false, lanSignaling: false, webrtc: false };
+const offlineMethods: DeviceReachDetail = {
+  directHttp: false,
+  peerHttpHealthy: false,
+  pullReachable: false,
+  webrtc: false,
+  lanSignaling: false,
+};
 const offlineEntry: DeviceReachEntry = { methods: offlineMethods, probing: false };
 
 export function isReachOnline(entry?: DeviceReachEntry): boolean {
   const m = entry?.methods;
-  return !!(m?.directHttp || m?.lanSignaling || m?.webrtc);
+  return !!(
+    m?.directHttp ||
+    m?.pullReachable ||
+    m?.peerHttpHealthy ||
+    m?.lanSignaling ||
+    m?.webrtc
+  );
+}
+
+export function isPullOnlyReach(entry?: DeviceReachEntry): boolean {
+  const m = entry?.methods;
+  return !!(m?.pullReachable && !m?.directHttp);
 }
 
 export function getReachDisplayStatus(entry?: DeviceReachEntry): ReachStatus {
@@ -92,23 +114,33 @@ async function probeDeviceAllMethods(
     // LAN signaling probe
     (async () => {
       const result = await onLanHttpProbe(device.deviceId);
-      return { ok: result.success, url: result.lanHttpUrl };
+      return {
+        peerOk: result.success,
+        pullOk: result.senderReachable === true,
+        url: result.lanHttpUrl,
+      };
     })(),
     // WebRTC probe
     onWebRTCProbe(device.deviceId),
   ]);
 
   const directResult = results[0].status === 'fulfilled' ? results[0].value : { ok: false, url: undefined };
-  const lanResult = results[1].status === 'fulfilled' ? results[1].value : { ok: false, url: undefined };
+  const lanResult = results[1].status === 'fulfilled'
+    ? results[1].value
+    : { peerOk: false, pullOk: false, url: undefined };
   const webrtcOk = results[2].status === 'fulfilled' ? results[2].value : false;
 
   const freshLanUrl = directResult.url ?? lanResult.url;
+  const peerHttpHealthy = lanResult.peerOk;
+  const pullReachable = lanResult.pullOk;
 
   return {
     methods: {
       directHttp: directResult.ok,
-      lanSignaling: lanResult.ok,
+      peerHttpHealthy,
+      pullReachable,
       webrtc: webrtcOk,
+      lanSignaling: peerHttpHealthy,
     },
     freshLanUrl,
   };

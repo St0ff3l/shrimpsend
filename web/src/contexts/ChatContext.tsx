@@ -516,6 +516,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const sendLanHttpProbe = useCallback(async (targetDeviceId: string): Promise<{ success: boolean; lanHttpUrl?: string; senderReachable?: boolean }> => {
     const probeId = generateUUID();
+    const myId = getOrCreateDeviceId();
+    const selfLanUrl = devices.find((d) => d.deviceId === myId)?.lanHttpUrl ?? null;
     return new Promise((resolve) => {
       const timer = setTimeout(() => {
         pendingLanHttpProbesRef.current.delete(probeId);
@@ -526,13 +528,13 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         pendingLanHttpProbesRef.current.delete(probeId);
         resolve(result);
       });
-      sendMessage({ type: 'lan_http_probe', payload: { probeId, targetDeviceId, senderLanHttpUrl: null }, fromDeviceId: getOrCreateDeviceId(), ts: Date.now() }).catch((e) => {
+      sendMessage({ type: 'lan_http_probe', payload: { probeId, targetDeviceId, senderLanHttpUrl: selfLanUrl }, fromDeviceId: myId, ts: Date.now() }).catch((e) => {
         clearTimeout(timer);
         pendingLanHttpProbesRef.current.delete(probeId);
         resolve({ success: false });
       });
     });
-  }, []);
+  }, [devices]);
 
   // ─── WebRTC signal handling ───────────────────────────────────────────
 
@@ -824,7 +826,12 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       const peerIsWeb = isWebPeer(peer?.platform);
       const entry = deviceReach[deviceId];
       const methods = entry?.methods;
-      const httpAvailable = !!(methods?.directHttp || methods?.lanSignaling);
+      const httpAvailable = !!(
+        methods?.directHttp ||
+        methods?.pullReachable ||
+        methods?.peerHttpHealthy ||
+        methods?.lanSignaling
+      );
       const s3Available = s3Configured && s3Online;
       const options = buildTransferModeOptions({
         peerIsWeb,

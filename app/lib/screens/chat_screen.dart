@@ -917,7 +917,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       hint: ok == true
           ? l10n.chatProbeAvailable(connectionModeLabel(mode, l10n: l10n))
           : ok == false
-          ? l10n.chatProbeUnavailable(connectionModeLabel(mode, l10n: l10n))
+          ? (mode == SendMode.lan || mode == SendMode.nearby)
+              ? l10n.chatProbeUnverifiedAttemptable(
+                  connectionModeLabel(mode, l10n: l10n),
+                )
+              : l10n.chatProbeUnavailable(connectionModeLabel(mode, l10n: l10n))
           : l10n.chatProbeTriggered(connectionModeLabel(mode, l10n: l10n)),
     );
   }
@@ -1017,38 +1021,37 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     bool isCurrent() => _isProbeRequestCurrent(peerId, requestId);
 
     bool directHttp = false;
-    bool lanSignaling = false;
+    bool peerHttpHealthy = false;
+    bool pullReachable = false;
     bool webrtc = false;
 
     switch (mode) {
       case SendMode.nearby:
       case SendMode.lan:
-        await Future.wait([
-          () async {
-            if (device.lanHttpUrl != null && device.lanHttpUrl!.isNotEmpty) {
-              try {
-                directHttp = await probeHttp(
-                  device.lanHttpUrl!,
-                  timeout: const Duration(seconds: 3),
-                );
-              } catch (_) {}
-            }
-            if (mounted && isCurrent()) {
-              reach.mergeDetail(peerId, directHttp: directHttp);
-            }
-          }(),
-          () async {
-            if (!_effectiveOffline) {
-              try {
-                final r = await _sendLanHttpProbe(peerId);
-                lanSignaling = r.success;
-              } catch (_) {}
-            }
-            if (mounted && isCurrent()) {
-              reach.mergeDetail(peerId, lanSignaling: lanSignaling);
-            }
-          }(),
-        ]);
+        if (device.lanHttpUrl != null && device.lanHttpUrl!.isNotEmpty) {
+          try {
+            directHttp = await probeHttp(
+              device.lanHttpUrl!,
+              timeout: const Duration(seconds: 3),
+            );
+          } catch (_) {}
+        }
+        if (mounted && isCurrent()) {
+          reach.mergeDetail(peerId, directHttp: directHttp);
+        }
+        final lanReach = await _resolveLanReachFromProbes(
+          device,
+          directHttp: directHttp,
+        );
+        peerHttpHealthy = lanReach.peerHttpHealthy;
+        pullReachable = lanReach.pullReachable;
+        if (mounted && isCurrent()) {
+          reach.mergeDetail(
+            peerId,
+            peerHttpHealthy: peerHttpHealthy,
+            pullReachable: pullReachable,
+          );
+        }
         break;
       case SendMode.webrtc:
         if (!_effectiveOffline) {
@@ -1089,12 +1092,59 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     switch (mode) {
       case SendMode.nearby:
       case SendMode.lan:
-        return detail.directHttp || detail.lanSignaling;
+        return httpTransferAvailable(detail);
       case SendMode.webrtc:
         return detail.webrtc == true;
       case SendMode.s3:
         return s3Online;
     }
+  }
+
+  void _applyProbeLanHttpUrl(String deviceId, String? lanHttpUrl) {
+    final url = lanHttpUrl?.trim();
+    if (url == null || url.isEmpty) return;
+    final device = _findKnownDeviceById(deviceId);
+    _lanDiscovery?.addManualDevice(
+      DeviceDto(
+        deviceId: deviceId,
+        name: device?.name ?? deviceId,
+        platform: device?.platform,
+        lanHttpUrl: url,
+        lastSeen: DateTime.now().millisecondsSinceEpoch,
+        presenceStatus: device?.presenceStatus,
+        presenceUpdatedAt: device?.presenceUpdatedAt,
+        displayCode: device?.displayCode,
+      ),
+    );
+  }
+
+  Future<({bool peerHttpHealthy, bool pullReachable})> _resolveLanReachFromProbes(
+    DeviceDto device, {
+    required bool directHttp,
+    Duration signalingTimeout = const Duration(seconds: 5),
+  }) async {
+    var peerHttpHealthy = false;
+    var pullReachable = false;
+
+    if (!_effectiveOffline) {
+      try {
+        final r = await _sendLanHttpProbe(
+          device.deviceId,
+          responseTimeout: signalingTimeout,
+        );
+        peerHttpHealthy = r.success;
+        pullReachable = r.senderReachable;
+        _applyProbeLanHttpUrl(device.deviceId, r.lanHttpUrl);
+      } catch (_) {}
+    }
+
+    if (!directHttp && !pullReachable && !_effectiveOffline) {
+      try {
+        pullReachable = await _sendPullProbe(device.deviceId);
+      } catch (_) {}
+    }
+
+    return (peerHttpHealthy: peerHttpHealthy, pullReachable: pullReachable);
   }
 
   DeviceDto? _findKnownDeviceById(String deviceId) {
@@ -1739,35 +1789,31 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         requestId == null || _isProbeRequestCurrent(device.deviceId, requestId);
 
     bool directHttp = false;
-    bool lanSignaling = false;
 
-    await Future.wait([
-      () async {
-        if (device.lanHttpUrl == null || device.lanHttpUrl!.isEmpty) return;
-        try {
-          directHttp = await probeHttp(
-            device.lanHttpUrl!,
-            timeout: _probeQuickDirectHttp,
-          );
-        } catch (_) {}
-      }(),
-      () async {
-        if (_effectiveOffline) return;
-        try {
-          final r = await _sendLanHttpProbe(
-            device.deviceId,
-            responseTimeout: _probeQuickLanSignaling,
-          );
-          lanSignaling = r.success;
-        } catch (_) {}
-      }(),
-    ]);
+    if (device.lanHttpUrl != null && device.lanHttpUrl!.isNotEmpty) {
+      try {
+        directHttp = await probeHttp(
+          device.lanHttpUrl!,
+          timeout: _probeQuickDirectHttp,
+        );
+      } catch (_) {}
+    }
 
+    if (!isCurrent()) return;
+
+    final lanReach = await _resolveLanReachFromProbes(
+      device,
+      directHttp: directHttp,
+      signalingTimeout: _probeQuickLanSignaling,
+    );
     if (!isCurrent()) return;
 
     Object? webrtcUpdate = kDeviceReachMergeUnset;
     if (!_effectiveOffline) {
-      final lanReachable = directHttp || lanSignaling;
+      final lanReachable =
+          directHttp ||
+          lanReach.pullReachable ||
+          lanReach.peerHttpHealthy;
       if (!lanReachable) {
         try {
           final connectivity = await _sendWebRTCProbe(
@@ -1789,7 +1835,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     ref.read(deviceReachabilityProvider.notifier).mergeDetail(
       device.deviceId,
       directHttp: directHttp,
-      lanSignaling: lanSignaling,
+      peerHttpHealthy: lanReach.peerHttpHealthy,
+      pullReachable: lanReach.pullReachable,
       webrtc: webrtcUpdate,
       checking: false,
       provisionalOnline: false,
@@ -5025,6 +5072,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         );
       case SendMode.lan:
         final lanReachMap = ref.read(deviceReachabilityProvider);
+        final manualHttpLocked =
+            ref.read(connectionManualOverrideProvider) &&
+            ref.read(connectionManualModeProvider) == SendMode.lan;
         final lanDiscoveredIds = (_lanDiscovery?.currentDiscovered ?? [])
             .where((d) => d.lanHttpUrl != null && d.lanHttpUrl!.isNotEmpty)
             .map((d) => d.deviceId)
@@ -5033,8 +5083,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
             .where(
               (d) =>
                   selectedTargets.contains(d.deviceId) &&
-                  (lanReachMap[d.deviceId]?.directHttp == true ||
-                      lanReachMap[d.deviceId]?.lanSignaling == true ||
+                  (manualHttpLocked ||
+                      lanReachMap[d.deviceId]?.directHttp == true ||
+                      lanReachMap[d.deviceId]?.pullReachable == true ||
+                      lanReachMap[d.deviceId]?.peerHttpHealthy == true ||
                       lanDiscoveredIds.contains(d.deviceId)),
             )
             .toList();

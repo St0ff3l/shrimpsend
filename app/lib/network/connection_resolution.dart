@@ -14,12 +14,18 @@ class ConnectionCandidate {
     required this.mode,
     required this.kind,
     required this.available,
+    required this.attemptable,
     required this.reason,
   });
 
   final SendMode mode;
   final SmartLinkKind kind;
+
+  /// Probe-confirmed transfer path (includes reverse pull).
   final bool available;
+
+  /// User may manually select and attempt (even when [available] is false).
+  final bool attemptable;
   final String reason;
 }
 
@@ -98,7 +104,16 @@ DeviceDto? findDeviceById(Ref ref, String deviceId) {
 }
 
 bool httpDirectAvailable(DeviceReachDetail detail) {
-  return detail.directHttp || detail.lanSignaling;
+  return detail.directHttp || detail.peerHttpHealthy;
+}
+
+/// HTTP transfer path verified by probe (direct push, peer healthy, or reverse pull).
+bool httpTransferAvailable(DeviceReachDetail detail) {
+  return detail.directHttp || detail.pullReachable || detail.peerHttpHealthy;
+}
+
+bool httpPullOnlyAvailable(DeviceReachDetail detail) {
+  return detail.pullReachable && !detail.directHttp;
 }
 
 String connectionPeerLabel(String deviceId, {DeviceDto? device}) {
@@ -221,8 +236,9 @@ List<ConnectionCandidate> buildConnectionCandidates({
       ConnectionCandidate(
         mode: item.mode,
         kind: item.kind,
-        available: availability.$1,
-        reason: availability.$2,
+        available: availability.available,
+        attemptable: availability.attemptable,
+        reason: availability.reason,
       ),
     );
   }
@@ -265,46 +281,85 @@ List<({SendMode mode, SmartLinkKind kind})> _expandKind(SmartLinkKind kind) {
   }
 }
 
-(bool, String) _checkAvailability({
+({bool available, bool attemptable, String reason}) _checkAvailability({
   required SendMode mode,
   required SelectedConnectionContext context,
 }) {
   switch (mode) {
     case SendMode.nearby:
-      final ok = httpDirectAvailable(context.reach);
-      return (ok, ok ? '附近链路可用' : '未发现可用局域网设备');
+      final ok = httpTransferAvailable(context.reach);
+      return (
+        available: ok,
+        attemptable: context.peer != null,
+        reason: ok ? '附近链路可用' : '未发现可用局域网设备',
+      );
     case SendMode.lan:
       if (!context.isLoggedIn) {
-        return (false, '登录后可使用');
+        return (
+          available: false,
+          attemptable: false,
+          reason: '登录后可使用',
+        );
       }
       if (!context.isRegisteredPeer) {
         final directOk = context.reach.directHttp;
-        return (directOk, directOk ? 'HTTP 直连可用' : 'HTTP 直连不可达');
+        return (
+          available: directOk,
+          attemptable: context.peer != null,
+          reason: directOk ? 'HTTP 直连可用' : 'HTTP 直连不可达',
+        );
       }
-      final lanOk = httpDirectAvailable(context.reach);
-      return (lanOk, lanOk ? 'HTTP 直连可用' : 'HTTP 直连不可达');
+      final lanOk = httpTransferAvailable(context.reach);
+      final pullOnly = httpPullOnlyAvailable(context.reach);
+      return (
+        available: lanOk,
+        attemptable: true,
+        reason: lanOk
+            ? (pullOnly ? 'HTTP 反向拉取可用' : 'HTTP 直连可用')
+            : 'HTTP 直连不可达',
+      );
     case SendMode.webrtc:
       if (!allowsAccountTransferModes(context)) {
-        return (false, '仅支持账号下已注册设备');
+        return (
+          available: false,
+          attemptable: false,
+          reason: '仅支持账号下已注册设备',
+        );
       }
       final rtc = context.reach.webrtc;
       if (rtc == true) {
-        return (true, 'WebRTC 可用');
+        return (available: true, attemptable: true, reason: 'WebRTC 可用');
       }
       if (rtc == false) {
-        return (false, 'WebRTC 信令/ICE 不可达');
+        return (
+          available: false,
+          attemptable: true,
+          reason: 'WebRTC 信令/ICE 不可达',
+        );
       }
-      return (true, 'WebRTC 未检测');
+      return (available: true, attemptable: true, reason: 'WebRTC 未检测');
     case SendMode.s3:
       if (!allowsAccountTransferModes(context)) {
-        return (false, '仅支持账号下已注册设备');
+        return (
+          available: false,
+          attemptable: false,
+          reason: '仅支持账号下已注册设备',
+        );
       }
       if (!context.s3Configured) {
-        return (false, 'S3 未配置');
+        return (
+          available: false,
+          attemptable: false,
+          reason: 'S3 未配置',
+        );
       }
       if (!context.s3Online) {
-        return (false, 'S3 不可用');
+        return (
+          available: false,
+          attemptable: false,
+          reason: 'S3 不可用',
+        );
       }
-      return (true, 'S3 可用');
+      return (available: true, attemptable: true, reason: 'S3 可用');
   }
 }

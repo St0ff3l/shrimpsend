@@ -390,12 +390,17 @@ final s3OnlineProvider = StateProvider<bool>((_) => false);
 final s3CheckingProvider = StateProvider<bool>((_) => true);
 
 // ---------------------------------------------------------------------------
-// Device reachability (per-method: directHttp / lanSignaling / webrtc)
+// Device reachability (per-method: directHttp / peerHttpHealthy / pullReachable / webrtc)
 // ---------------------------------------------------------------------------
 
 class DeviceReachDetail {
   final bool directHttp;
-  final bool lanSignaling;
+
+  /// Peer HTTP service self-check passed via Centrifugo [lan_http_probe].
+  final bool peerHttpHealthy;
+
+  /// Peer can reach this device's HTTP (reverse pull direction).
+  final bool pullReachable;
 
   /// `null` = not probed (e.g. WebRTC skipped when LAN already works).
   final bool? webrtc;
@@ -407,24 +412,32 @@ class DeviceReachDetail {
 
   const DeviceReachDetail({
     this.directHttp = false,
-    this.lanSignaling = false,
+    this.peerHttpHealthy = false,
+    this.pullReachable = false,
     this.webrtc,
     this.checking = false,
     this.provisionalOnline = false,
   });
 
+  /// Back-compat alias for [peerHttpHealthy].
+  bool get lanSignaling => peerHttpHealthy;
+
+  bool get canPushDirect => directHttp;
+
+  bool get canPullOnly => pullReachable && !canPushDirect;
+
   bool get isOnline =>
-      directHttp || lanSignaling || webrtc == true;
+      directHttp || pullReachable || peerHttpHealthy || webrtc == true;
 
   /// At least one path verified by probe (excludes provisional).
-  bool get isConfirmedOnline =>
-      directHttp || lanSignaling || webrtc == true;
+  bool get isConfirmedOnline => isOnline;
 
-  String get status => isOnline
-      ? 'online'
-      : checking
-      ? 'checking'
-      : 'offline';
+  String get status {
+    if (checking) return 'checking';
+    if (canPullOnly) return 'pull_online';
+    if (isOnline) return 'online';
+    return 'offline';
+  }
 
   static const offlineDetail = DeviceReachDetail();
   static const checkingDetail = DeviceReachDetail(checking: true);
@@ -444,6 +457,8 @@ class DeviceReachabilityNotifier
     String deviceId, {
     bool? directHttp,
     bool? lanSignaling,
+    bool? peerHttpHealthy,
+    bool? pullReachable,
     Object? webrtc = kDeviceReachMergeUnset,
     bool? checking,
     bool? provisionalOnline,
@@ -452,11 +467,14 @@ class DeviceReachabilityNotifier
     final nextWebrtc = identical(webrtc, kDeviceReachMergeUnset)
         ? existing.webrtc
         : webrtc as bool?;
+    final nextPeerHealthy =
+        peerHttpHealthy ?? lanSignaling ?? existing.peerHttpHealthy;
     state = {
       ...state,
       deviceId: DeviceReachDetail(
         directHttp: directHttp ?? existing.directHttp,
-        lanSignaling: lanSignaling ?? existing.lanSignaling,
+        peerHttpHealthy: nextPeerHealthy,
+        pullReachable: pullReachable ?? existing.pullReachable,
         webrtc: nextWebrtc,
         checking: checking ?? existing.checking,
         provisionalOnline: provisionalOnline ?? existing.provisionalOnline,
@@ -470,7 +488,8 @@ class DeviceReachabilityNotifier
       ...state,
       deviceId: DeviceReachDetail(
         directHttp: existing.directHttp,
-        lanSignaling: existing.lanSignaling,
+        peerHttpHealthy: existing.peerHttpHealthy,
+        pullReachable: existing.pullReachable,
         webrtc: existing.webrtc,
         checking: true,
         provisionalOnline: false,
@@ -484,7 +503,8 @@ class DeviceReachabilityNotifier
       final existing = state[id] ?? DeviceReachDetail();
       updates[id] = DeviceReachDetail(
         directHttp: existing.directHttp,
-        lanSignaling: existing.lanSignaling,
+        peerHttpHealthy: existing.peerHttpHealthy,
+        pullReachable: existing.pullReachable,
         webrtc: existing.webrtc,
         checking: true,
         provisionalOnline: false,

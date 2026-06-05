@@ -1912,6 +1912,14 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String chatProbeUnverifiedAttemptable(String mode) {
+    return '$mode未验证，仍可尝试传输';
+  }
+
+  @override
+  String get connectionOrchestratorHttpUnverifiedSubtitle => '连接未验证，将尝试直连/反向拉取';
+
+  @override
   String connectionOrchestratorManualOk(String mode) {
     return '手动·$mode';
   }

@@ -3588,6 +3588,18 @@ abstract class AppLocalizations {
   /// **'{mode} · probe requested'**
   String chatProbeTriggered(String mode);
 
+  /// No description provided for @chatProbeUnverifiedAttemptable.
+  ///
+  /// In en, this message translates to:
+  /// **'{mode} unverified — you can still try'**
+  String chatProbeUnverifiedAttemptable(String mode);
+
+  /// No description provided for @connectionOrchestratorHttpUnverifiedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Link unverified — will try direct or reverse pull'**
+  String get connectionOrchestratorHttpUnverifiedSubtitle;
+
   /// No description provided for @connectionOrchestratorManualOk.
   ///
   /// In en, this message translates to:

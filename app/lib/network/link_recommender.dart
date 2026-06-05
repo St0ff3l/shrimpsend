@@ -23,7 +23,8 @@ LinkRecommendation buildLinkRecommendation({
 }) {
   final chain = context.chain;
   final primary = chain.isNotEmpty ? chain.first : SmartLinkKind.internetRelay;
-  final lanOk = httpDirectAvailable(context.reach);
+  final lanOk = httpTransferAvailable(context.reach);
+  final pullOnly = httpPullOnlyAvailable(context.reach);
   final webrtcOk = context.reach.webrtc == true;
   final online = context.reach.isConfirmedOnline;
 
@@ -33,8 +34,10 @@ LinkRecommendation buildLinkRecommendation({
       primary: SmartLinkKind.sameLan,
       fallbackChain: chain,
       uiTone: SmartLinkUiTone.optimal,
-      title: '局域网直连可用',
-      subtitle: 'HTTP 局域网传输已就绪，通常为最快方式',
+      title: pullOnly ? 'HTTP 反向拉取可用' : '局域网直连可用',
+      subtitle: pullOnly
+          ? '单向网络已检测到反向路径，发送时将由对端拉取'
+          : 'HTTP 局域网传输已就绪，通常为最快方式',
       lanHttpAvailable: true,
       webrtcAvailable: webrtcOk,
     );

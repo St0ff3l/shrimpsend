@@ -3,6 +3,8 @@ import type { WebSendMode } from '@/lib/sendTargetStorage';
 export type TransferModeOption = {
   value: WebSendMode;
   available: boolean;
+  /** User may select and try even when [available] is false. */
+  attemptable: boolean;
 };
 
 export function buildTransferModeOptions(input: {
@@ -15,15 +17,19 @@ export function buildTransferModeOptions(input: {
   const modes: TransferModeOption[] = [];
   if (input.peerIsWeb) {
     if (input.webrtcAvailable) {
-      modes.push({ value: 'webrtc', available: input.webrtcReachable });
+      modes.push({ value: 'webrtc', available: input.webrtcReachable, attemptable: true });
     }
-    modes.push({ value: 's3', available: input.s3Available });
+    modes.push({ value: 's3', available: input.s3Available, attemptable: input.s3Available });
   } else {
-    modes.push({ value: 'lan', available: input.httpAvailable });
+    modes.push({
+      value: 'lan',
+      available: input.httpAvailable,
+      attemptable: true,
+    });
     if (input.webrtcAvailable) {
-      modes.push({ value: 'webrtc', available: input.webrtcReachable });
+      modes.push({ value: 'webrtc', available: input.webrtcReachable, attemptable: true });
     }
-    modes.push({ value: 's3', available: input.s3Available });
+    modes.push({ value: 's3', available: input.s3Available, attemptable: input.s3Available });
   }
   return modes;
 }

@@ -28,17 +28,23 @@ class ConnectionBarModeItem {
     required this.mode,
     required this.label,
     required this.available,
+    required this.attemptable,
     required this.isSelected,
     this.reachKnownOnline,
+    this.reachPullOnly = false,
   });
 
   final SendMode mode;
   final String label;
   final bool available;
+  final bool attemptable;
   final bool isSelected;
 
   /// Per-mode probe result. `null` on WebRTC means skipped / not probed yet.
   final bool? reachKnownOnline;
+
+  /// HTTP verified only via reverse pull (asymmetric link).
+  final bool reachPullOnly;
 }
 
 class ConnectionBarViewModel {
@@ -119,14 +125,15 @@ List<ConnectionBarModeItem> buildConnectionBarModeItems({
   final modeForSelection = accountModes ? currentMode : SendMode.nearby;
 
   final byMode = <SendMode, ConnectionBarModeItem>{};
+  final reachDetail = reach ?? DeviceReachDetail.offlineDetail;
   for (final candidate in visible) {
     final reachKnownOnline = switch (candidate.mode) {
       SendMode.webrtc => reach?.webrtc,
-      SendMode.lan => httpDirectAvailable(
-        reach ?? DeviceReachDetail.offlineDetail,
-      ),
+      SendMode.lan => httpTransferAvailable(reachDetail),
       _ => candidate.available,
     };
+    final reachPullOnly = candidate.mode == SendMode.lan &&
+        httpPullOnlyAvailable(reachDetail);
     byMode.putIfAbsent(
       candidate.mode,
       () => ConnectionBarModeItem(
@@ -135,8 +142,10 @@ List<ConnectionBarModeItem> buildConnectionBarModeItems({
             ? transferModeBarLabel(candidate.mode, l10n: l10n)
             : connectionModeLabel(candidate.mode, localOs: localOs, l10n: l10n),
         available: candidate.available,
+        attemptable: candidate.attemptable,
         isSelected: candidate.mode == modeForSelection,
         reachKnownOnline: reachKnownOnline,
+        reachPullOnly: reachPullOnly,
       ),
     );
   }
@@ -149,14 +158,15 @@ List<ConnectionBarModeItem> buildConnectionBarModeItems({
           ? transferModeBarLabel(modeForSelection, l10n: l10n)
           : connectionModeLabel(modeForSelection, localOs: localOs, l10n: l10n),
       available: false,
+      attemptable: modeForSelection == SendMode.lan && isLoggedIn,
       isSelected: true,
       reachKnownOnline: switch (modeForSelection) {
         SendMode.webrtc => reach?.webrtc,
-        SendMode.lan => httpDirectAvailable(
-          reach ?? DeviceReachDetail.offlineDetail,
-        ),
+        SendMode.lan => httpTransferAvailable(reachDetail),
         _ => false,
       },
+      reachPullOnly: modeForSelection == SendMode.lan &&
+          httpPullOnlyAvailable(reachDetail),
     ),
   );
 

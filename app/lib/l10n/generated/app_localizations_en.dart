@@ -1987,6 +1987,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String chatProbeUnverifiedAttemptable(String mode) {
+    return '$mode unverified — you can still try';
+  }
+
+  @override
+  String get connectionOrchestratorHttpUnverifiedSubtitle =>
+      'Link unverified — will try direct or reverse pull';
+
+  @override
   String connectionOrchestratorManualOk(String mode) {
     return 'Manual · $mode';
   }

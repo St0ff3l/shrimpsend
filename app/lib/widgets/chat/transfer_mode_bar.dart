@@ -11,6 +11,7 @@ import '../../network/connection_orchestrator.dart';
 import '../../providers/app_locale.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/device_provider.dart';
+import '../../color_theme.dart';
 import '../../ui/app_ui.dart';
 import '../busy_status_indicator.dart';
 
@@ -118,13 +119,15 @@ class TransferModeBar extends ConsumerWidget {
                 final primary = theme.colorScheme.primary;
                 final canTap =
                     onModeSelected != null &&
-                    m.available &&
+                    m.attemptable &&
                     (!isSelected ||
                         (m.mode == SendMode.webrtc &&
                             m.reachKnownOnline == null));
                 final dotColor = _transferModeDotColor(
                   mode: m.mode,
                   reachKnownOnline: m.reachKnownOnline,
+                  reachPullOnly: m.reachPullOnly,
+                  attemptable: m.attemptable,
                   colors: colors,
                   primary: primary,
                 );
@@ -143,7 +146,7 @@ class TransferModeBar extends ConsumerWidget {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? primary.withValues(alpha: 0.08)
-                            : m.available
+                            : m.attemptable
                             ? colors.surfaceMuted.withValues(alpha: 0.6)
                             : colors.surfaceMuted.withValues(alpha: 0.3),
                         border: isSelected
@@ -161,7 +164,7 @@ class TransferModeBar extends ConsumerWidget {
                               fontWeight: FontWeight.w500,
                               color: isSelected
                                   ? primary
-                                  : m.available
+                                  : m.attemptable
                                   ? colors.textPrimary
                                   : colors.textTertiary.withValues(alpha: 0.6),
                             ),
@@ -213,6 +216,8 @@ class TransferModeBar extends ConsumerWidget {
 Color _transferModeDotColor({
   required SendMode mode,
   required bool? reachKnownOnline,
+  required bool reachPullOnly,
+  required bool attemptable,
   required AppThemeColors colors,
   required Color primary,
 }) {
@@ -220,7 +225,10 @@ Color _transferModeDotColor({
     return primary;
   }
   if (reachKnownOnline == true) {
-    return colors.success;
+    return reachPullOnly ? AppColorTheme.s3Color : colors.success;
+  }
+  if (attemptable && mode == SendMode.lan) {
+    return colors.warning;
   }
   return colors.textTertiary.withValues(alpha: 0.6);
 }

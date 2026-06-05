@@ -93,8 +93,10 @@ class FileSendSheet extends StatefulWidget {
     this.onWebRTC,
     this.lanReceiverUrl,
     this.onProbePull,
+    this.onLanHttpProbe,
     this.onWebRTCProbe,
     this.offlineMode = false,
+    this.manualHttpAttempt = false,
     this.s3Configured = true,
     this.onOpenS3Settings,
   });
@@ -107,8 +109,12 @@ class FileSendSheet extends StatefulWidget {
   final void Function(List<DeviceDto> selected)? onWebRTC;
   final String? lanReceiverUrl;
   final Future<bool> Function(String targetDeviceId)? onProbePull;
+  final Future<({bool success, String? lanHttpUrl, bool senderReachable})>
+  Function(String targetDeviceId)?
+  onLanHttpProbe;
   final Future<String> Function(String targetDeviceId)? onWebRTCProbe;
   final bool offlineMode;
+  final bool manualHttpAttempt;
   final bool s3Configured;
   final VoidCallback? onOpenS3Settings;
 
@@ -209,7 +215,9 @@ class _FileSendSheetState extends State<FileSendSheet>
     });
     for (final d in widget.allDevices) {
       final hasLan = d.lanHttpUrl != null && d.lanHttpUrl!.isNotEmpty;
-      if (hasLan) {
+      if (!widget.offlineMode && widget.onLanHttpProbe != null) {
+        _probeLanViaCentrifugo(d.deviceId, fallbackLanUrl: d.lanHttpUrl);
+      } else if (hasLan) {
         _probeDirectPush(d.deviceId, d.lanHttpUrl!);
       } else if (widget.lanReceiverUrl != null && widget.onProbePull != null) {
         _probeReversePull(d.deviceId);
@@ -217,6 +225,45 @@ class _FileSendSheetState extends State<FileSendSheet>
         setState(() => _setLanReach(d.deviceId, 'offline'));
       }
       if (!widget.offlineMode) _probeWebRTC(d.deviceId);
+    }
+  }
+
+  Future<void> _probeLanViaCentrifugo(
+    String deviceId, {
+    String? fallbackLanUrl,
+  }) async {
+    try {
+      final result = await widget.onLanHttpProbe!(deviceId).timeout(
+        const Duration(seconds: 5),
+        onTimeout: () =>
+            (success: false, lanHttpUrl: null, senderReachable: false),
+      );
+      if (!mounted) return;
+      if (result.senderReachable) {
+        setState(() => _setLanReach(deviceId, 'pull_online'));
+        return;
+      }
+      final url = result.lanHttpUrl ?? fallbackLanUrl;
+      if (result.success && url != null && url.isNotEmpty) {
+        await _probeDirectPush(deviceId, url);
+        return;
+      }
+      if (result.success) {
+        setState(() => _setLanReach(deviceId, 'pull_offline'));
+        return;
+      }
+      if (widget.lanReceiverUrl != null && widget.onProbePull != null) {
+        await _probeReversePull(deviceId);
+        return;
+      }
+      setState(() => _setLanReach(deviceId, 'offline'));
+    } catch (_) {
+      if (!mounted) return;
+      if (widget.lanReceiverUrl != null && widget.onProbePull != null) {
+        await _probeReversePull(deviceId);
+        return;
+      }
+      setState(() => _setLanReach(deviceId, 'offline'));
     }
   }
 
@@ -592,7 +639,10 @@ class _FileSendSheetState extends State<FileSendSheet>
         ..._sortedByLanStatus(devices).map((d) {
           final hasLan = d.lanHttpUrl != null && d.lanHttpUrl!.isNotEmpty;
           final status = _reachability[d.deviceId] ?? 'checking';
-          final canSelect = status == 'online' || status == 'pull_online';
+          final canSelect =
+              status == 'online' ||
+              status == 'pull_online' ||
+              widget.manualHttpAttempt;
           final idShort = d.deviceId.length > 12
               ? '${d.deviceId.substring(0, 12)}…'
               : d.deviceId;
