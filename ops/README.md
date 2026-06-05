@@ -65,6 +65,8 @@ export ULTRASEND_OPS_DIR=/path/to/shrimpsend-ops   # 若 ops 在业务仓外
 | `backend.env` | `backend/.env` |
 | `docker.env` | `.env`（Docker Compose） |
 | `web/.env.local` 或 `ops/web/.env.local` | `web/.env.local` |
+| `local/flutter/env.secrets.dart` 或 `ops/flutter/env.secrets.dart` | `app/lib/config/env.secrets.dart` |
+| `local/flutter/openpanel_env.secrets.dart` 或 `ops/flutter/openpanel_env.secrets.dart` | `app/lib/config/openpanel_env.secrets.dart` |
 
 启动 / 停止（在**业务仓**根目录，勿在仅 clone 的 ops 仓内执行）：
 

@@ -70,6 +70,19 @@ elif [ -f "$OPS_DIR/web/.env.local" ]; then
   copy_file "$OPS_DIR/web/.env.local" "$ROOT/web/.env.local"
 fi
 
+# Flutter secrets（RevenueCat 公钥、生产 API/WS；local/flutter 可覆盖 ops/flutter）
+if [ -f "$LOCAL_DIR/flutter/env.secrets.dart" ]; then
+  copy_file "$LOCAL_DIR/flutter/env.secrets.dart" "$ROOT/app/lib/config/env.secrets.dart"
+elif [ -f "$OPS_DIR/flutter/env.secrets.dart" ]; then
+  copy_file "$OPS_DIR/flutter/env.secrets.dart" "$ROOT/app/lib/config/env.secrets.dart"
+fi
+
+if [ -f "$LOCAL_DIR/flutter/openpanel_env.secrets.dart" ]; then
+  copy_file "$LOCAL_DIR/flutter/openpanel_env.secrets.dart" "$ROOT/app/lib/config/openpanel_env.secrets.dart"
+elif [ -f "$OPS_DIR/flutter/openpanel_env.secrets.dart" ]; then
+  copy_file "$OPS_DIR/flutter/openpanel_env.secrets.dart" "$ROOT/app/lib/config/openpanel_env.secrets.dart"
+fi
+
 if [ "$SKIP_DB" = true ]; then
   echo "==> 已跳过数据库初始化 (--skip-db)"
 else
