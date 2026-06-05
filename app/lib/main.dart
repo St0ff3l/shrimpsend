@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +22,9 @@ import 'font_size_store.dart';
 import 'typography.dart';
 import 'shortcut_preferences.dart';
 import 'logger.dart';
+import 'device_id.dart';
 import 'providers/app_locale.dart';
+import 'providers/app_mode_provider.dart';
 import 'providers/auth_provider.dart';
 import 'theme_store.dart';
 import 'ui/app_ui.dart';
@@ -116,22 +120,85 @@ void main(List<String> args) async {
     container.read(authProvider).isLoggedIn,
   );
 
-  Future<bool> tryRefreshStoredSession() async {
-    final refreshToken = await getStoredRefreshToken();
-    if (refreshToken == null || refreshToken.isEmpty) {
-      logAuth.info('tryRefreshAndSave no refreshToken');
-      return false;
+  Future<RefreshSessionOutcome> tryRefreshStoredSession({int attempt = 1}) {
+    return refreshStoredSession(
+      readRefreshToken: getStoredRefreshToken,
+      onSuccess: (auth) async {
+        await container.read(authProvider.notifier).refreshTokenSuccess(auth);
+      },
+      onAttemptFinished:
+          ({
+            required outcome,
+            required failureKind,
+            error,
+            httpStatus,
+            attempt = 1,
+          }) {
+            if (outcome == RefreshSessionOutcome.success) {
+              logAuth.info(
+                'tryRefreshAndSave success attempt=$attempt '
+                'launchedAtStartup=$launchedAtStartup',
+              );
+              return;
+            }
+            logAuth.warning(
+              'tryRefreshAndSave failed attempt=$attempt '
+              'launchedAtStartup=$launchedAtStartup outcome=$outcome '
+              'failureKind=$failureKind httpStatus=$httpStatus error=$error',
+            );
+          },
+      attempt: attempt,
+    );
+  }
+
+  Future<void> waitForStartupNetworkIfNeeded() async {
+    if (!Platform.isWindows || !launchedAtStartup) return;
+
+    const maxWait = Duration(seconds: 30);
+    const pollInterval = Duration(seconds: 1);
+    final deadline = DateTime.now().add(maxWait);
+    logAuth.info(
+      'startup network wait: begin maxWait=${maxWait.inSeconds}s',
+    );
+
+    while (DateTime.now().isBefore(deadline)) {
+      final results = await Connectivity().checkConnectivity();
+      if (results.any((r) => r != ConnectivityResult.none)) {
+        logAuth.info('startup network wait: connectivity available');
+        return;
+      }
+      await Future.delayed(pollInterval);
     }
-    logAuth.info('tryRefreshAndSave attempting');
-    try {
-      final auth = await refreshTokens(refreshToken);
-      await container.read(authProvider.notifier).refreshTokenSuccess(auth);
-      logAuth.info('tryRefreshAndSave success');
-      return true;
-    } catch (e) {
-      logAuth.warning('tryRefreshAndSave failed: $e');
-      return false;
+
+    logAuth.warning(
+      'startup network wait: timed out after ${maxWait.inSeconds}s, continuing',
+    );
+  }
+
+  Future<RefreshSessionOutcome> tryRefreshStoredSessionWithRetry({
+    required bool useRetry,
+  }) async {
+    const retryDelays = <Duration>[
+      Duration.zero,
+      Duration(seconds: 2),
+      Duration(seconds: 4),
+    ];
+    final maxAttempts = useRetry ? retryDelays.length : 1;
+    var lastOutcome = RefreshSessionOutcome.transientFailure;
+
+    for (var attempt = 1; attempt <= maxAttempts; attempt++) {
+      if (attempt > 1) {
+        await Future.delayed(retryDelays[attempt - 1]);
+        logAuth.info('tryRefreshAndSave retry attempt=$attempt');
+      }
+      lastOutcome = await tryRefreshStoredSession(attempt: attempt);
+      if (lastOutcome == RefreshSessionOutcome.success ||
+          lastOutcome == RefreshSessionOutcome.permanentFailure ||
+          lastOutcome == RefreshSessionOutcome.noRefreshToken) {
+        return lastOutcome;
+      }
     }
+    return lastOutcome;
   }
 
   void syncAppLocaleFromStore() {
@@ -146,15 +213,7 @@ void main(List<String> args) async {
 
   setOn401Refresh(tryRefreshStoredSession);
 
-  if (container.read(authProvider).isLoggedIn) {
-    final refreshed = await tryRefreshStoredSession();
-    if (!refreshed) {
-      logAuth.warning('main startup token refresh failed, clearing auth');
-      await container.read(authProvider.notifier).clearAuth();
-    }
-  }
-
-  setOnSessionInvalidated(() async {
+  Future<void> invalidateSessionAndNavigate() async {
     await container.read(authProvider.notifier).clearAuth();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final ctx = navigatorKey.currentContext;
@@ -170,7 +229,57 @@ void main(List<String> args) async {
         );
       }
     });
-  });
+  }
+
+  setOnSessionInvalidated(invalidateSessionAndNavigate);
+
+  Future<void> runStartupAuthRefreshInBackground() async {
+    if (!container.read(authProvider).isLoggedIn) return;
+
+    String? localDeviceId;
+    try {
+      localDeviceId = await getOrCreateDeviceId();
+    } catch (e) {
+      logAuth.warning('startup auth: read deviceId failed: $e');
+    }
+    logAuth.info(
+      'startup auth: begin (background) launchedAtStartup=$launchedAtStartup '
+      'hasDeviceId=${localDeviceId != null && localDeviceId.isNotEmpty}',
+    );
+
+    await waitForStartupNetworkIfNeeded();
+
+    final outcome = await tryRefreshStoredSessionWithRetry(
+      useRetry: launchedAtStartup || RuntimePlatform.isDesktop,
+    );
+
+    if (outcome == RefreshSessionOutcome.permanentFailure ||
+        outcome == RefreshSessionOutcome.noRefreshToken) {
+      logAuth.warning(
+        'startup auth refresh permanent failure ($outcome), clearing auth',
+      );
+      container.read(networkFallbackOfflineProvider.notifier).state = false;
+      await invalidateSessionAndNavigate();
+      return;
+    }
+
+    if (outcome == RefreshSessionOutcome.success) {
+      logAuth.info('startup auth refresh success, clearing offline fallback');
+      container.read(networkFallbackOfflineProvider.notifier).state = false;
+      return;
+    }
+
+    logAuth.warning(
+      'startup auth refresh transient failure, keeping stored session',
+    );
+    container.read(networkFallbackOfflineProvider.notifier).state = true;
+  }
+
+  if (container.read(authProvider).isLoggedIn) {
+    // 先展示 UI，后台异步 refresh；刷新完成前按离线 fallback 处理。
+    container.read(networkFallbackOfflineProvider.notifier).state = true;
+    unawaited(runStartupAuthRefreshInBackground());
+  }
 
   logAuth.info(
     'main auth loaded, isLoggedIn=${container.read(authProvider).isLoggedIn}',

@@ -1,12 +1,16 @@
 export 'client.dart'
     show
         AuthException,
+        RefreshSessionOutcome,
+        RefreshSessionFailureKind,
+        RefreshTokenException,
+        classifyRefreshFailure,
         formatApiError,
         jsonHeadersOnly,
         setOn401Refresh,
         setOnSessionInvalidated,
         setAccessToken;
-export 'auth.dart';
+export 'auth.dart' show refreshStoredSession, refreshTokensTimeout;
 export 'devices.dart';
 export 'messages.dart';
 export 's3.dart';

@@ -1,15 +1,107 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import '../config/env.dart';
 import '../logger.dart';
+
+/// 启动/运行时 refresh 会话的结果。
+enum RefreshSessionOutcome {
+  success,
+  transientFailure,
+  permanentFailure,
+  noRefreshToken,
+}
+
+extension RefreshSessionOutcomeX on RefreshSessionOutcome {
+  bool get shouldClearAuth =>
+      this == RefreshSessionOutcome.permanentFailure ||
+      this == RefreshSessionOutcome.noRefreshToken;
+
+  bool get shouldKeepSession =>
+      this == RefreshSessionOutcome.success ||
+      this == RefreshSessionOutcome.transientFailure;
+}
+
+enum RefreshSessionFailureKind { transient, permanent }
+
+class RefreshTokenException implements Exception {
+  final String message;
+  final int? httpStatus;
+
+  const RefreshTokenException(this.message, {this.httpStatus});
+
+  @override
+  String toString() => message;
+}
+
+/// 根据 refresh 失败原因区分临时网络问题与永久会话失效。
+RefreshSessionFailureKind classifyRefreshFailure(
+  Object error, {
+  int? httpStatus,
+}) {
+  if (error is TimeoutException) {
+    return RefreshSessionFailureKind.transient;
+  }
+  if (error is SocketException || error is HttpException) {
+    return RefreshSessionFailureKind.transient;
+  }
+  if (error is http.ClientException) {
+    return RefreshSessionFailureKind.transient;
+  }
+  if (error is HandshakeException || error is TlsException) {
+    return RefreshSessionFailureKind.transient;
+  }
+
+  if (httpStatus != null) {
+    if (httpStatus >= 500) return RefreshSessionFailureKind.transient;
+    if (httpStatus == 401 || httpStatus == 403) {
+      return RefreshSessionFailureKind.permanent;
+    }
+    if (httpStatus >= 400 && httpStatus < 500) {
+      return RefreshSessionFailureKind.permanent;
+    }
+  }
+
+  final message = error.toString().toLowerCase();
+  if (message.contains('登录已失效') ||
+      message.contains('用户不存在') ||
+      message.contains('invalid') && message.contains('token') ||
+      message.contains('expired')) {
+    return RefreshSessionFailureKind.permanent;
+  }
+
+  if (message.contains('failed host lookup') ||
+      message.contains('connection timed out') ||
+      message.contains('connection refused') ||
+      message.contains('network is unreachable') ||
+      message.contains('connection closed') ||
+      message.contains('software caused connection abort') ||
+      message.contains('operation timed out') ||
+      message.contains('no route to host')) {
+    return RefreshSessionFailureKind.transient;
+  }
+
+  return RefreshSessionFailureKind.transient;
+}
+
+RefreshSessionOutcome outcomeFromRefreshFailure(RefreshSessionFailureKind kind) {
+  switch (kind) {
+    case RefreshSessionFailureKind.transient:
+      return RefreshSessionOutcome.transientFailure;
+    case RefreshSessionFailureKind.permanent:
+      return RefreshSessionOutcome.permanentFailure;
+  }
+}
 
 String get apiBaseUrl => Env.apiUrl;
 
 String? _accessToken;
 
-Future<bool> Function()? _on401Refresh;
+Future<RefreshSessionOutcome> Function()? _on401Refresh;
 
-void setOn401Refresh(Future<bool> Function()? callback) {
+void setOn401Refresh(Future<RefreshSessionOutcome> Function()? callback) {
   _on401Refresh = callback;
 }
 
@@ -96,8 +188,8 @@ Future<T> withAuthRetry<T>(Future<T> Function() fn) async {
   } on AuthException catch (_) {
     logApi.info('withAuthRetry: auth failed, attempting refresh');
     if (_on401Refresh != null) {
-      final ok = await _on401Refresh!();
-      if (ok) {
+      final outcome = await _on401Refresh!();
+      if (outcome == RefreshSessionOutcome.success) {
         logApi.info('withAuthRetry: refresh ok, retrying');
         try {
           return await fn();
@@ -106,6 +198,12 @@ Future<T> withAuthRetry<T>(Future<T> Function() fn) async {
           await _runOnSessionInvalidated();
           rethrow;
         }
+      }
+      if (outcome == RefreshSessionOutcome.transientFailure) {
+        logApi.warning(
+          'withAuthRetry: transient refresh failure, keeping session',
+        );
+        rethrow;
       }
     }
     await _runOnSessionInvalidated();

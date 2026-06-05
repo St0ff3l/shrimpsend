@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import '../logger.dart';
 import 'client.dart';
@@ -278,27 +280,95 @@ Future<void> apiLogout({String? deviceId}) async {
   }
 }
 
-Future<AuthResponse> refreshTokens(String refreshToken) async {
-  logApi.info('refreshTokens');
-  final r = await http.post(
-    Uri.parse('$apiBaseUrl/api/auth/refresh'),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'refreshToken': refreshToken}),
-  );
+const refreshTokensTimeout = Duration(seconds: 12);
+
+Future<AuthResponse> refreshTokens(
+  String refreshToken, {
+  Duration timeout = refreshTokensTimeout,
+}) async {
+  logApi.info('refreshTokens timeout=${timeout.inSeconds}s');
+  http.Response r;
+  try {
+    r = await http
+        .post(
+          Uri.parse('$apiBaseUrl/api/auth/refresh'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'refreshToken': refreshToken}),
+        )
+        .timeout(timeout);
+  } on TimeoutException catch (e) {
+    logApi.warning('refreshTokens timeout: $e');
+    rethrow;
+  }
   if (r.statusCode != 200) {
+    String? serverError;
     try {
       final data = jsonDecode(r.body);
       if (data is Map && data['error'] != null) {
-        logApi.warning('refreshTokens failed: ${data['error']}');
-        throw Exception(data['error'].toString());
+        serverError = data['error'].toString();
       }
-    } catch (e) {
-      if (e is Exception) rethrow;
-    }
-    logApi.warning('refreshTokens failed');
-    throw Exception('刷新失败');
+    } catch (_) {}
+    final message = serverError ?? '刷新失败';
+    logApi.warning(
+      'refreshTokens failed status=${r.statusCode} error=$message',
+    );
+    throw RefreshTokenException(message, httpStatus: r.statusCode);
   }
   final res = AuthResponse.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
   logApi.info('refreshTokens success userId=${res.userId}');
   return res;
+}
+
+/// 尝试用本地 refreshToken 刷新会话，并返回可区分临时/永久失败的结果。
+Future<RefreshSessionOutcome> refreshStoredSession({
+  required Future<String?> Function() readRefreshToken,
+  required Future<void> Function(AuthResponse auth) onSuccess,
+  void Function({
+    required RefreshSessionOutcome outcome,
+    required RefreshSessionFailureKind? failureKind,
+    Object? error,
+    int? httpStatus,
+    int attempt,
+  })?
+  onAttemptFinished,
+  int attempt = 1,
+}) async {
+  final refreshToken = await readRefreshToken();
+  if (refreshToken == null || refreshToken.isEmpty) {
+    onAttemptFinished?.call(
+      outcome: RefreshSessionOutcome.noRefreshToken,
+      failureKind: null,
+      attempt: attempt,
+    );
+    return RefreshSessionOutcome.noRefreshToken;
+  }
+
+  try {
+    final auth = await refreshTokens(refreshToken);
+    await onSuccess(auth);
+    onAttemptFinished?.call(
+      outcome: RefreshSessionOutcome.success,
+      failureKind: null,
+      attempt: attempt,
+    );
+    return RefreshSessionOutcome.success;
+  } catch (e, st) {
+    final httpStatus = e is RefreshTokenException ? e.httpStatus : null;
+    final failureKind = classifyRefreshFailure(e, httpStatus: httpStatus);
+    final outcome = outcomeFromRefreshFailure(failureKind);
+    logApi.warning(
+      'refreshStoredSession attempt=$attempt failureKind=$failureKind '
+      'httpStatus=$httpStatus error=$e',
+      e,
+      st,
+    );
+    onAttemptFinished?.call(
+      outcome: outcome,
+      failureKind: failureKind,
+      error: e,
+      httpStatus: httpStatus,
+      attempt: attempt,
+    );
+    return outcome;
+  }
 }
