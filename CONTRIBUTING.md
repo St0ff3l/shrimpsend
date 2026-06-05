@@ -27,9 +27,10 @@ git clone git@github.com:shrimpsend/shrimpsend.git
 cd shrimpsend
 ```
 
-**Maintainers** (with `ops/local/` from private [shrimpsend/ops](https://github.com/shrimpsend/ops)):
+**Maintainers** (with ops at sibling `../ops` or `ULTRASEND_OPS_DIR`, from [public-ops](https://github.com/shrimpsend/public-ops) or private [shrimpsend/ops](https://github.com/shrimpsend/ops)):
 
 ```bash
+git clone git@github.com:shrimpsend/public-ops.git ../ops   # or private ops repo
 ./scripts/deploy-local.sh
 ./scripts/start-dev.sh              # China logic
 # ./scripts/start-dev.sh --overseas # ShrimpSend logic

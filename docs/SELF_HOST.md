@@ -58,13 +58,27 @@ stripe listen --forward-to localhost:9000/api/membership/stripe/webhook
 
 ## Production deployment
 
-Production runs on bare metal via `./scripts/deploy.sh`. Secrets live in private **shrimpsend-ops** (see [ops/README.md](../ops/README.md)).
+Production runs on bare metal via `./scripts/deploy.sh`. Secrets live in an **ops** config directory (see [ops/README.md](../ops/README.md)).
 
 ### One-time server setup
 
-1. Clone the public app repo (`git@github.com:shrimpsend/shrimpsend.git`) and private **shrimpsend-ops** (`git@github.com:shrimpsend/ops.git`), or use in-tree `ops/` with real payloads on maintainer machines.
-2. Set `export ULTRASEND_OPS_DIR=/path/to/shrimpsend-ops` if ops is outside the app repo.
+1. Clone the public app repo and an ops config repo **as siblings**:
+
+```bash
+git clone git@github.com:shrimpsend/shrimpsend.git ultrasend
+cd ultrasend
+
+# Self-hosters: public samples (replace placeholders before production)
+git clone git@github.com:shrimpsend/public-ops.git ../ops
+
+# Maintainers: private production ops (requires access)
+# git clone git@github.com:shrimpsend/ops.git ../ops
+```
+
+2. Optional: `export ULTRASEND_OPS_DIR=/path/to/your-ops` if ops is not at `../ops`.
 3. Ensure Java 17+, Node.js, MySQL, and `scripts/bin/linux/centrifugo` are available on the server.
+
+Scripts resolve ops in this order: `ULTRASEND_OPS_DIR` → sibling `../ops` → validate `.ultrasend-ops` marker and at least one config subdirectory (`cn/`, `overseas/`, `local/`, etc.).
 
 ### Deploy (interactive)
 
@@ -139,7 +153,7 @@ See [backend/.env.example](../backend/.env.example). Critical production values:
 | Web | `web/.env.example` | `web/.env.local` (sync from `ops/web/.env.local`) |
 | Flutter OpenPanel | `openpanel_env.secrets.example.dart` | `openpanel_env.secrets.dart` (gitignored) |
 | Flutter RC / prod URLs | `env.secrets.example.dart` | `env.secrets.dart` (gitignored) |
-| Production | `*.example.yml`, `config.prod.example.bare.json` | Private **shrimpsend-ops** repo (`github.com/shrimpsend/ops`) |
+| Production | `*.example.yml`, `config.prod.example.bare.json` | [public-ops](https://github.com/shrimpsend/public-ops) samples or private ops → `sync-to-build-machine.sh` |
 
 ## Docker (optional)
 

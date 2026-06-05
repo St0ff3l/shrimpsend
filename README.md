@@ -136,11 +136,14 @@ Backend-only debugging (no Centrifugo/Web): `backend/scripts/run-dev-overseas.sh
 
 ### Production (bare metal)
 
-Requires private **shrimpsend-ops** configs synced to this repo. Full steps: [docs/SELF_HOST.md](docs/SELF_HOST.md#production-deployment).
+Requires an **ops** config directory synced into this repo. Full steps: [docs/SELF_HOST.md](docs/SELF_HOST.md#production-deployment).
 
 ```bash
-git clone git@github.com:shrimpsend/ops.git /path/to/shrimpsend-ops   # private; maintainer access only
-export ULTRASEND_OPS_DIR=/path/to/shrimpsend-ops
+git clone git@github.com:shrimpsend/shrimpsend.git ultrasend
+cd ultrasend
+git clone git@github.com:shrimpsend/public-ops.git ../ops   # samples; replace placeholders for production
+# Maintainers: git clone git@github.com:shrimpsend/ops.git ../ops
+# Optional: export ULTRASEND_OPS_DIR=/path/to/your-ops
 ./scripts/deploy.sh          # interactive: git pull, cn vs overseas, build, restart
 ./scripts/deploy.sh stop     # stop Centrifugo + backend + Web
 ./scripts/deploy.sh status

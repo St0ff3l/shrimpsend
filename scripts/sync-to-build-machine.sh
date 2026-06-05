@@ -2,17 +2,13 @@
 # 从 ops 仓同步生产配置到业务仓（部署 / 官方打包前执行）
 # 用法（在业务仓根目录）:
 #   ./scripts/sync-to-build-machine.sh
-#   ULTRASEND_OPS_DIR=../shrimpsend-ops ./scripts/sync-to-build-machine.sh
+#   ULTRASEND_OPS_DIR=/path/to/ops ./scripts/sync-to-build-machine.sh
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-OPS_DIR="${ULTRASEND_OPS_DIR:-$ROOT/ops}"
-
-if [ ! -d "$OPS_DIR" ]; then
-  echo "错误: ops 目录不存在: $OPS_DIR" >&2
-  echo "请 clone 私有 shrimpsend-ops (git@github.com:shrimpsend/ops.git) 并设置 ULTRASEND_OPS_DIR" >&2
-  exit 1
-fi
+# shellcheck source=lib/ops-common.sh
+source "$ROOT/scripts/lib/ops-common.sh"
+OPS_DIR="$(resolve_ultrasend_ops_dir "$ROOT")"
 
 echo "==> 同步 ops 配置 from $OPS_DIR"
 

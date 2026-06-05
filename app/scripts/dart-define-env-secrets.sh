@@ -8,8 +8,15 @@
 #   COMMON+=("${DART_DEFINE_SECRETS[@]}")
 _SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 _REPO_ROOT="$(cd "$_SCRIPT_DIR/../.." && pwd)"
-_BUILD_ENV="$_REPO_ROOT/ops/flutter/build.env"
-if [ -f "$_BUILD_ENV" ]; then
+# shellcheck source=../../scripts/lib/ops-common.sh
+source "$_REPO_ROOT/scripts/lib/ops-common.sh"
+_OPS_DIR=""
+if _OPS_DIR="$(try_resolve_ultrasend_ops_dir "$_REPO_ROOT")"; then
+  _BUILD_ENV="$_OPS_DIR/flutter/build.env"
+else
+  _BUILD_ENV=""
+fi
+if [ -n "$_BUILD_ENV" ] && [ -f "$_BUILD_ENV" ]; then
   set -a
   # shellcheck disable=SC1090
   source "$_BUILD_ENV"

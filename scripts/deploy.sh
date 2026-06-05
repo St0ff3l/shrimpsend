@@ -22,6 +22,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 # shellcheck source=lib/dev-common.sh
 source "$ROOT/scripts/lib/dev-common.sh"
+# shellcheck source=lib/ops-common.sh
+source "$ROOT/scripts/lib/ops-common.sh"
 cd "$ROOT"
 
 PID_FILE="$ROOT/scripts/.prod-pids"
@@ -33,17 +35,17 @@ CLUSTER_LABEL="${CLUSTER_LABEL:-国内 (xiachuan)}"
 
 mkdir -p "$LOG_DIR"
 
-ULTRASEND_OPS_DIR="${ULTRASEND_OPS_DIR:-$ROOT/ops}"
-
 # 从 ops 仓同步生产配置到业务仓（gitignored 的 prod 文件）
 sync_ops_config() {
   local sync_script="$ROOT/scripts/sync-to-build-machine.sh"
+  local ops_dir
+  ops_dir="$(resolve_ultrasend_ops_dir "$ROOT")"
   if [ ! -x "$sync_script" ]; then
     chmod +x "$sync_script" 2>/dev/null || true
   fi
   if [ -f "$sync_script" ]; then
-    echo "  -> 同步 ops 配置 (ULTRASEND_OPS_DIR=$ULTRASEND_OPS_DIR)..."
-    ULTRASEND_OPS_DIR="$ULTRASEND_OPS_DIR" "$sync_script"
+    echo "  -> 同步 ops 配置 (ULTRASEND_OPS_DIR=$ops_dir)..."
+    ULTRASEND_OPS_DIR="$ops_dir" "$sync_script"
   else
     echo "  [警告] 未找到 $sync_script，跳过 ops 同步"
   fi
@@ -53,7 +55,7 @@ assert_prod_config_present() {
   if [ "$SPRING_PROFILE" = "prod-overseas" ]; then
     if [ ! -f "$ROOT/backend/src/main/resources/application-prod-overseas.yml" ]; then
       echo "  [错误] 缺少 application-prod-overseas.yml"
-      echo "  请设置 ULTRASEND_OPS_DIR 并运行 scripts/sync-to-build-machine.sh"
+      echo "  请 clone ops 到 ../ops 或设置 ULTRASEND_OPS_DIR，并运行 scripts/sync-to-build-machine.sh"
       exit 1
     fi
     if [ ! -f "$ROOT/config.prod-overseas.bare.json" ]; then
@@ -63,7 +65,7 @@ assert_prod_config_present() {
   else
     if [ ! -f "$ROOT/backend/src/main/resources/application-prod.yml" ]; then
       echo "  [错误] 缺少 application-prod.yml"
-      echo "  请设置 ULTRASEND_OPS_DIR 并运行 scripts/sync-to-build-machine.sh"
+      echo "  请 clone ops 到 ../ops 或设置 ULTRASEND_OPS_DIR，并运行 scripts/sync-to-build-machine.sh"
       exit 1
     fi
     if [ ! -f "$ROOT/config.prod.bare.json" ]; then
@@ -326,7 +328,7 @@ case "${1:-}" in
     echo "  SPRING_PROFILE=prod-overseas     使用 application-prod-overseas.yml"
     echo ""
     echo "环境变量:"
-    echo "  ULTRASEND_OPS_DIR                私有 ops 仓路径（默认: 业务仓 ops/）"
+    echo "  ULTRASEND_OPS_DIR                ops 仓路径（未设置时自动查找 ../ops）"
     echo ""
     echo "海外 Web 构建: 选海外集群且构建 Web 时设置 NEXT_PUBLIC_STRIPE_BILLING=live（使用 web/.env.local 中 LIVE 价）。"
     exit 0

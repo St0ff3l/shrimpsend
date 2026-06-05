@@ -3,6 +3,8 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/ops-common.sh
+source "$ROOT/scripts/lib/ops-common.sh"
 cd "$ROOT"
 
 copy_if_missing() {
@@ -85,14 +87,15 @@ fi
 
 echo ""
 echo "下一步:"
-if [ -d "${ULTRASEND_OPS_DIR:-$ROOT/ops}/local" ]; then
+_OPS_DIR=""
+if _OPS_DIR="$(try_resolve_ultrasend_ops_dir "$ROOT")" && [ -d "$_OPS_DIR/local" ]; then
   echo "  检测到 ops/local，正在同步团队本地配置..."
-  "$ROOT/scripts/sync-to-local.sh"
+  ULTRASEND_OPS_DIR="$_OPS_DIR" "$ROOT/scripts/sync-to-local.sh"
 else
   echo "  1. 准备 MySQL（见 README.md）"
   echo "  2. ./scripts/start-dev.sh"
   echo ""
-  echo "维护者本地调试: ./scripts/deploy-local.sh（需 ops/local/，见 ops/README.md）"
+  echo "维护者本地调试: clone public-ops 到 ../ops 后 ./scripts/deploy-local.sh（见 ops/README.md）"
 fi
 echo ""
 echo "生产部署 / 官方打包: 从 ops 仓 sync（见 ops/README.md）"

@@ -137,11 +137,14 @@ stripe listen --forward-to localhost:9000/api/membership/stripe/webhook
 
 ### 生产部署（裸机）
 
-需私有 **shrimpsend-ops** 配置同步到本仓。完整说明：[SELF_HOST.md](SELF_HOST.md)。
+需 **ops** 配置目录同步到本仓。完整说明：[SELF_HOST.md](SELF_HOST.md)。
 
 ```bash
-git clone git@github.com:shrimpsend/ops.git /path/to/shrimpsend-ops   # 私有仓，需维护者权限
-export ULTRASEND_OPS_DIR=/path/to/shrimpsend-ops
+git clone git@github.com:shrimpsend/shrimpsend.git ultrasend
+cd ultrasend
+git clone git@github.com:shrimpsend/public-ops.git ../ops   # 公开样例；生产前替换占位值
+# 维护者：git clone git@github.com:shrimpsend/ops.git ../ops
+# 可选：export ULTRASEND_OPS_DIR=/path/to/your-ops
 ./scripts/deploy.sh          # 交互：拉代码、选国内/海外、构建、重启
 ./scripts/deploy.sh stop
 ./scripts/deploy.sh status

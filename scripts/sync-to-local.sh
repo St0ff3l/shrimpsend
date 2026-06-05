@@ -3,11 +3,13 @@
 # 用法（在业务仓根目录）:
 #   ./scripts/sync-to-local.sh              # 同步配置 + 建库/迁移
 #   ./scripts/sync-to-local.sh --skip-db    # 仅同步配置
-#   ULTRASEND_OPS_DIR=../shrimpsend-ops ./scripts/sync-to-local.sh
+#   ULTRASEND_OPS_DIR=/path/to/ops ./scripts/sync-to-local.sh
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-OPS_DIR="${ULTRASEND_OPS_DIR:-$ROOT/ops}"
+# shellcheck source=lib/ops-common.sh
+source "$ROOT/scripts/lib/ops-common.sh"
+OPS_DIR="$(resolve_ultrasend_ops_dir "$ROOT")"
 LOCAL_DIR="$OPS_DIR/local"
 SKIP_DB=false
 
@@ -28,7 +30,7 @@ done
 
 if [ ! -d "$LOCAL_DIR" ]; then
   echo "错误: ops/local 目录不存在: $LOCAL_DIR" >&2
-  echo "请在私有 ops 仓创建 local/ 并设置 ULTRASEND_OPS_DIR（见 ops/README.md）" >&2
+  echo "请在 ops 仓创建 local/（见 ops/README.md 或 clone public-ops 到 ../ops）" >&2
   exit 1
 fi
 
