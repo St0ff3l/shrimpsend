@@ -1,13 +1,22 @@
 #!/usr/bin/env bash
-# 下载与当前 OS/arch 匹配的 Centrifugo 到 scripts/bin/centrifugo（本地开发用）
+# 下载与当前 OS/arch 匹配的 Centrifugo 到 scripts/bin/{mac,linux}/centrifugo
 # 用法: ./scripts/install-centrifugo.sh
 # 可选: CENTRIFUGO_VERSION=6.8.1 ./scripts/install-centrifugo.sh
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/dev-common.sh
+source "$ROOT/scripts/lib/dev-common.sh"
+
 VERSION="${CENTRIFUGO_VERSION:-6.8.1}"
-DEST="$ROOT/scripts/bin/centrifugo"
-mkdir -p "$ROOT/scripts/bin"
+platform="$(centrifugo_platform_subdir)"
+if [ -z "$platform" ]; then
+  echo "[错误] 不支持的操作系统: $(uname -s)" >&2
+  exit 1
+fi
+
+DEST="$ROOT/scripts/bin/$platform/centrifugo"
+mkdir -p "$ROOT/scripts/bin/$platform"
 
 os=$(uname -s | tr '[:upper:]' '[:lower:]')
 arch=$(uname -m)
@@ -56,5 +65,5 @@ if ! "$DEST" version; then
 fi
 
 echo "==> 已安装: $DEST"
-echo "    生产/Linux 部署仍可使用 $ROOT/bin/centrifugo（linux_amd64 等）"
+echo "    生产部署使用: $ROOT/scripts/bin/linux/centrifugo"
 echo "    本地启动: ./scripts/start-dev.sh"

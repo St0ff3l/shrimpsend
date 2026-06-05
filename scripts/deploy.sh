@@ -20,6 +20,8 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=lib/dev-common.sh
+source "$ROOT/scripts/lib/dev-common.sh"
 cd "$ROOT"
 
 PID_FILE="$ROOT/scripts/.prod-pids"
@@ -186,7 +188,14 @@ start_services() {
     exit 1
   fi
   echo "  Centrifugo 配置: $(basename "$centrifugo_config")"
-  "$ROOT/bin/centrifugo" -c "$centrifugo_config" >> "$LOG_DIR/centrifugo.log" 2>&1 &
+  local cfgo_bin
+  cfgo_bin="$(centrifugo_linux_bin)"
+  if ! centrifugo_runnable "$cfgo_bin"; then
+    echo "  [错误] 未找到可执行的 Centrifugo: $cfgo_bin"
+    echo "  请在 Linux 上运行 ./scripts/install-centrifugo.sh，或手动放置 Linux 二进制到该路径"
+    exit 1
+  fi
+  "$cfgo_bin" -c "$centrifugo_config" >> "$LOG_DIR/centrifugo.log" 2>&1 &
   local pid_c=$!
   echo $pid_c >> "$PID_FILE"
 

@@ -64,7 +64,7 @@ Production runs on bare metal via `./scripts/deploy.sh`. Secrets live in private
 
 1. Clone the public app repo (`git@github.com:shrimpsend/shrimpsend.git`) and private **shrimpsend-ops** (`git@github.com:shrimpsend/ops.git`), or use in-tree `ops/` with real payloads on maintainer machines.
 2. Set `export ULTRASEND_OPS_DIR=/path/to/shrimpsend-ops` if ops is outside the app repo.
-3. Ensure Java 17+, Node.js, MySQL, and `bin/centrifugo` are available on the server.
+3. Ensure Java 17+, Node.js, MySQL, and `scripts/bin/linux/centrifugo` are available on the server.
 
 ### Deploy (interactive)
 

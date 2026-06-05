@@ -1,5 +1,7 @@
 # Centrifugo 二进制（仅根目录下的可执行文件）
 /centrifugo
+scripts/bin/mac/centrifugo
+scripts/bin/linux/centrifugo
 scripts/bin/centrifugo
 web/.npm-cache/
 

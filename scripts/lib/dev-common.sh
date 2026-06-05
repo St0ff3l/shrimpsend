@@ -34,6 +34,19 @@ require_file() {
   fi
 }
 
+# Returns mac or linux for scripts/bin subdir; empty if unsupported.
+centrifugo_platform_subdir() {
+  case "$(uname -s)" in
+    Darwin*) echo mac ;;
+    Linux*) echo linux ;;
+    *) echo "" ;;
+  esac
+}
+
+centrifugo_linux_bin() {
+  echo "$ROOT/scripts/bin/linux/centrifugo"
+}
+
 # Returns 0 if the binary runs on this machine (OS/arch), not merely chmod +x.
 centrifugo_runnable() {
   local bin="$1"
@@ -41,9 +54,12 @@ centrifugo_runnable() {
 }
 
 centrifugo_candidate_paths() {
-  printf '%s\n' \
-    "$ROOT/scripts/bin/centrifugo" \
-    "$ROOT/bin/centrifugo"
+  local platform
+  platform="$(centrifugo_platform_subdir)"
+  if [ -n "$platform" ]; then
+    printf '%s\n' "$ROOT/scripts/bin/$platform/centrifugo"
+  fi
+  printf '%s\n' "$ROOT/scripts/bin/centrifugo"
   if command -v centrifugo >/dev/null 2>&1; then
     command -v centrifugo
   fi
@@ -86,7 +102,11 @@ centrifugo_resolve_error_msg() {
   if [ -n "$bad" ]; then
     msg+=" 检测到 $bad 与当前系统不匹配$(centrifugo_mismatch_hint "$bad")。"
   fi
-  msg+=" 请运行: ./scripts/install-centrifugo.sh（或从 https://github.com/centrifugal/centrifugo/releases 下载对应平台二进制到 scripts/bin/centrifugo）"
+  local platform_hint="scripts/bin/mac/centrifugo 或 scripts/bin/linux/centrifugo"
+  if [ -n "$(centrifugo_platform_subdir)" ]; then
+    platform_hint="scripts/bin/$(centrifugo_platform_subdir)/centrifugo"
+  fi
+  msg+=" 请运行: ./scripts/install-centrifugo.sh（或从 https://github.com/centrifugal/centrifugo/releases 下载对应平台二进制到 $platform_hint）"
   echo "$msg"
 }
 
