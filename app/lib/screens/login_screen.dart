@@ -11,6 +11,7 @@ import '../l10n/generated/app_localizations.dart';
 import '../preferences/country_cluster.dart';
 import '../preferences/locale_region_store.dart';
 import '../providers/auth_provider.dart';
+import '../providers/auth_session_provider.dart';
 import '../services/analytics/analytics.dart';
 import '../services/analytics/analytics_events.dart';
 import '../ui/app_ui.dart';
@@ -155,6 +156,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         platform: platform,
       );
       await ref.read(authProvider.notifier).login(auth);
+      ref.read(authSessionControllerProvider.notifier).onLoginSuccess();
       if (!mounted) return;
       logAuth.info('login_screen code login success, back to chat');
       Analytics.track(AnalyticsEvents.loginCodeSubmit, {
@@ -204,6 +206,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               platform: platform,
             );
       await ref.read(authProvider.notifier).login(auth);
+      ref.read(authSessionControllerProvider.notifier).onLoginSuccess();
       if (!mounted) return;
       logAuth.info('login_screen success, back to chat');
       Analytics.track(

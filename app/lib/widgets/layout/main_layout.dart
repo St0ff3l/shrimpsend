@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../providers/device_provider.dart';
 import '../../ui/app_ui.dart';
+import '../../services/auth_session_controller.dart';
 import 'device_list_panel.dart';
 import 'device_list_panel_width.dart';
 import '../chat/chat_header.dart';
@@ -21,7 +22,7 @@ class MainLayout extends ConsumerStatefulWidget {
   final String deviceName;
   final bool statusCheckDone;
   final bool isLoggedIn;
-  final bool networkFallback;
+  final AuthSessionPhase authSessionPhase;
   final VoidCallback onShowSettings;
   final VoidCallback? onSearch;
   final VoidCallback? onScanQr;
@@ -56,7 +57,7 @@ class MainLayout extends ConsumerStatefulWidget {
     this.myDeviceId,
     this.statusCheckDone = true,
     this.isLoggedIn = true,
-    this.networkFallback = false,
+    this.authSessionPhase = AuthSessionPhase.authenticated,
     required this.onShowSettings,
     this.onSearch,
     this.onScanQr,
@@ -154,7 +155,7 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
                 myDeviceId: widget.myDeviceId,
                 statusCheckDone: widget.statusCheckDone,
                 isLoggedIn: widget.isLoggedIn,
-                networkFallback: widget.networkFallback,
+                authSessionPhase: widget.authSessionPhase,
                 onShowSettings: widget.onShowSettings,
                 onSearch: widget.onSearch,
                 onScanQr: widget.onScanQr,
@@ -283,7 +284,7 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
       myDeviceId: widget.myDeviceId,
       statusCheckDone: widget.statusCheckDone,
       isLoggedIn: widget.isLoggedIn,
-      networkFallback: widget.networkFallback,
+      authSessionPhase: widget.authSessionPhase,
       onShowSettings: widget.onShowSettings,
       onSearch: widget.onSearch,
       onScanQr: widget.onScanQr,

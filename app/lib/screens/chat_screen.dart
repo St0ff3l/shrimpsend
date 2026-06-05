@@ -23,6 +23,8 @@ import '../device_id.dart';
 import '../providers/app_locale.dart';
 import '../providers/auth_provider.dart';
 import '../providers/app_mode_provider.dart';
+import '../providers/auth_session_provider.dart';
+import '../services/auth_session_controller.dart';
 import '../providers/device_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:saver_gallery/saver_gallery.dart';
@@ -546,7 +548,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           return;
         }
         if (!mounted) return;
-        ref.read(networkFallbackOfflineProvider.notifier).state = false;
         unawaited(_init());
       }
     });
@@ -786,10 +787,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     if (_presencePausedByLifecycle) return;
 
     final probing = ref.read(devicesProbingProvider);
-    final isOfflineMode = ref.read(isOfflineModeProvider);
     final loggedIn = ref.read(authProvider).isLoggedIn;
-    final networkFallback = ref.read(networkFallbackOfflineProvider);
-    final shouldRefreshCloud = loggedIn && !isOfflineMode && !networkFallback;
+    final cloudActive = ref.read(isCloudSessionActiveProvider);
+    final shouldRefreshCloud = loggedIn && cloudActive;
 
     if (shouldRefreshCloud) {
       await _refreshCloudDeviceRosterSnapshot();
@@ -828,9 +828,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   Future<void> _refreshRosterAndProbeSelected(String reason) async {
     if (!mounted) return;
     final loggedIn = ref.read(authProvider).isLoggedIn;
-    final isOfflineMode = ref.read(isOfflineModeProvider);
-    final networkFallback = ref.read(networkFallbackOfflineProvider);
-    if (loggedIn && !isOfflineMode && !networkFallback) {
+    final cloudActive = ref.read(isCloudSessionActiveProvider);
+    if (loggedIn && cloudActive) {
       logChat.fine('roster snapshot refresh reason=$reason');
       await _refreshCloudDeviceRosterSnapshot();
     }
@@ -1275,9 +1274,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     if (ref.read(devicesProbingProvider)) return;
 
     final loggedIn = ref.read(authProvider).isLoggedIn;
-    final isOfflineMode = ref.read(isOfflineModeProvider);
-    final networkFallback = ref.read(networkFallbackOfflineProvider);
-    final shouldRefreshCloud = loggedIn && !isOfflineMode && !networkFallback;
+    final cloudActive = ref.read(isCloudSessionActiveProvider);
+    final shouldRefreshCloud = loggedIn && cloudActive;
 
     if (shouldRefreshCloud) {
       await _checkS3Config();
@@ -1951,80 +1949,127 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       if (!isCurrentCheck()) return;
       setState(() => _statusCheckDone = true);
       _showStatusCheckToast();
-      // Still probe LAN devices (direct HTTP only, no signaling needed)
       probeDevicesIfCurrent();
       return;
     }
+
+    final session = ref.read(authSessionControllerProvider.notifier);
+
     try {
-      // 使用更轻量级的 fetchUserProfile 来检测连接，而不是 registerDevice
-      // 这样可以更快地检测服务器是否可达
       await fetchUserProfile().timeout(const Duration(seconds: 8));
       if (!isCurrentCheck()) return;
-      ref.read(networkFallbackOfflineProvider.notifier).state = false;
-
-      // 先完成注册再拉设备列表，避免 listDevices 早于注册返回（首次注册场景）。
-      try {
-        await registerDevice(
-          _deviceId,
-          _deviceName,
-          platform: Platform.operatingSystem,
-          sessionId: _presenceSessionId,
-        );
-      } catch (e) {
-        logChat.warning(
-          '_checkServerConnection registerDevice failed (non-blocking): $e',
-        );
-      }
+      session.markServerReachable();
       if (!isCurrentCheck()) return;
-
-      ref.read(networkFallbackOfflineProvider.notifier).state = false;
-      _hasNoMoreHistory = false;
-      await _refreshCloudDeviceRosterSnapshot();
-      await _restoreResumableS3Transfers();
-      if (!isCurrentCheck()) return;
-      await _restoreResumableWebRTCTransfers();
-      if (!isCurrentCheck()) return;
-      _connectCentrifuge();
-      await _loadHistory();
-
-      // Probe devices after server connection + initial device roster snapshot.
-      probeDevicesIfCurrent();
-    } on AuthException catch (_) {
+      setState(() => _statusCheckDone = true);
+      _showStatusCheckToast();
+      unawaited(
+        _runPostServerConnectSetup(
+          checkGeneration: checkGeneration,
+          probeDevicesIfCurrent: probeDevicesIfCurrent,
+        ),
+      );
+    } on SessionUnavailableException catch (e) {
       if (!isCurrentCheck()) return;
       logChat.warning(
-        '_checkServerConnection AuthException (session cleared by client)',
+        '_checkServerConnection session unavailable kind=${e.kind}: $e',
       );
-      // clearAuth + 跳转登录由 withAuthRetry → setOnSessionInvalidated 处理
-      ref.read(networkFallbackOfflineProvider.notifier).state = false;
+      if (e.isTransient) {
+        session.markNetworkUnavailable();
+      }
+      setState(() => _statusCheckDone = true);
+      _showStatusCheckToast();
+      probeDevicesIfCurrent();
     } on TimeoutException catch (e) {
       if (!isCurrentCheck()) return;
       logChat.warning(
         '_checkServerConnection timeout, fallback to offline: $e',
       );
-      ref.read(networkFallbackOfflineProvider.notifier).state = true;
-      // LAN direct probe still works in offline fallback
+      session.markNetworkUnavailable();
+      setState(() => _statusCheckDone = true);
+      _showStatusCheckToast();
       probeDevicesIfCurrent();
     } catch (e) {
       if (!isCurrentCheck()) return;
       logChat.warning('_checkServerConnection failed, fallback to offline: $e');
-      ref.read(networkFallbackOfflineProvider.notifier).state = true;
+      session.markNetworkUnavailable();
+      setState(() => _statusCheckDone = true);
+      _showStatusCheckToast();
       probeDevicesIfCurrent();
     }
+  }
+
+  Future<void> _runPostServerConnectSetup({
+    required int checkGeneration,
+    required void Function() probeDevicesIfCurrent,
+  }) async {
+    bool isCurrentCheck() =>
+        mounted && checkGeneration == _serverConnectionCheckGeneration;
+
+    try {
+      await registerDevice(
+        _deviceId,
+        _deviceName,
+        platform: Platform.operatingSystem,
+        sessionId: _presenceSessionId,
+      );
+    } catch (e) {
+      logChat.warning(
+        '_runPostServerConnectSetup registerDevice failed (non-blocking): $e',
+      );
+    }
     if (!isCurrentCheck()) return;
-    setState(() => _statusCheckDone = true);
-    _showStatusCheckToast();
+
+    _hasNoMoreHistory = false;
+    try {
+      await _refreshCloudDeviceRosterSnapshot();
+    } catch (e) {
+      logChat.warning(
+        '_runPostServerConnectSetup refresh roster failed: $e',
+      );
+    }
+    if (!isCurrentCheck()) return;
+
+    try {
+      await _restoreResumableS3Transfers();
+    } catch (e) {
+      logChat.warning(
+        '_runPostServerConnectSetup restore S3 transfers failed: $e',
+      );
+    }
+    if (!isCurrentCheck()) return;
+
+    try {
+      await _restoreResumableWebRTCTransfers();
+    } catch (e) {
+      logChat.warning(
+        '_runPostServerConnectSetup restore WebRTC transfers failed: $e',
+      );
+    }
+    if (!isCurrentCheck()) return;
+
+    _connectCentrifuge();
+    try {
+      await _loadHistory();
+    } catch (e) {
+      logChat.warning('_runPostServerConnectSetup loadHistory failed: $e');
+    }
+    if (!isCurrentCheck()) return;
+    probeDevicesIfCurrent();
   }
 
   void _showStatusCheckToast() {
     if (!mounted) return;
     final String message;
     final offline = ref.read(isOfflineModeProvider);
+    final phase = ref.read(authSessionPhaseProvider);
     if (offline) {
       message = _l10n.chatScreenConnNotLoggedInHttp;
-    } else if (ref.read(networkFallbackOfflineProvider)) {
+    } else if (phase == AuthSessionPhase.networkUnavailable) {
       message = _l10n.chatScreenConnOffline;
-    } else {
+    } else if (phase == AuthSessionPhase.authenticated) {
       message = _l10n.chatScreenConnServerOk;
+    } else {
+      return;
     }
     AppToast.show(
       context,
@@ -7694,7 +7739,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       statusCheckDone: _statusCheckDone,
       isLoggedIn: !isAuthOffline,
       compactDeviceListChrome: mobileHomeTabs,
-      networkFallback: ref.watch(networkFallbackOfflineProvider),
+      authSessionPhase: ref.watch(authSessionPhaseProvider),
       onLoginTap: () {
         _composerKey.currentState?.unfocus();
         Navigator.pushNamed(context, '/login');

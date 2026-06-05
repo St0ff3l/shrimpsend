@@ -6,6 +6,25 @@ import 'package:http/http.dart' as http;
 import '../config/env.dart';
 import '../logger.dart';
 
+enum SessionUnavailableKind { transient, expired }
+
+/// API 在 401 且 refresh 未能恢复会话时抛出；区分网络暂不可用与会话失效。
+class SessionUnavailableException implements Exception {
+  final SessionUnavailableKind kind;
+  final String message;
+
+  const SessionUnavailableException(
+    this.kind, [
+    this.message = '会话不可用',
+  ]);
+
+  bool get isTransient => kind == SessionUnavailableKind.transient;
+  bool get isExpired => kind == SessionUnavailableKind.expired;
+
+  @override
+  String toString() => message;
+}
+
 /// 启动/运行时 refresh 会话的结果。
 enum RefreshSessionOutcome {
   success,
@@ -36,7 +55,29 @@ class RefreshTokenException implements Exception {
   String toString() => message;
 }
 
+/// 根据错误文案判断是否为会话/凭证失效（优先于 HTTP 5xx 的 transient 默认规则）。
+bool isAuthSessionFailureMessage(String rawMessage) {
+  final message = rawMessage.toLowerCase();
+  if (message.contains('登录已失效') ||
+      message.contains('登录已过期') ||
+      message.contains('用户不存在') ||
+      message.contains('jwt') ||
+      message.contains('signature does not match') ||
+      message.contains('cannot be asserted') ||
+      message.contains('should not be trusted') ||
+      message.contains('malformed') && message.contains('token') ||
+      message.contains('invalid') && message.contains('token') ||
+      message.contains('invalid') && message.contains('refresh') ||
+      message.contains('expired') ||
+      message.contains('refresh token') ||
+      (message.contains('session') && message.contains('invalid'))) {
+    return true;
+  }
+  return false;
+}
+
 /// 根据 refresh 失败原因区分临时网络问题与永久会话失效。
+/// 优先看 HTTP 状态码；仅对旧服务端 5xx+JWT 文案保留 [isAuthSessionFailureMessage] 兜底。
 RefreshSessionFailureKind classifyRefreshFailure(
   Object error, {
   int? httpStatus,
@@ -55,23 +96,25 @@ RefreshSessionFailureKind classifyRefreshFailure(
   }
 
   if (httpStatus != null) {
-    if (httpStatus >= 500) return RefreshSessionFailureKind.transient;
     if (httpStatus == 401 || httpStatus == 403) {
       return RefreshSessionFailureKind.permanent;
     }
     if (httpStatus >= 400 && httpStatus < 500) {
       return RefreshSessionFailureKind.permanent;
     }
+    if (httpStatus >= 500) {
+      if (isAuthSessionFailureMessage(error.toString())) {
+        return RefreshSessionFailureKind.permanent;
+      }
+      return RefreshSessionFailureKind.transient;
+    }
   }
 
-  final message = error.toString().toLowerCase();
-  if (message.contains('登录已失效') ||
-      message.contains('用户不存在') ||
-      message.contains('invalid') && message.contains('token') ||
-      message.contains('expired')) {
+  if (isAuthSessionFailureMessage(error.toString())) {
     return RefreshSessionFailureKind.permanent;
   }
 
+  final message = error.toString().toLowerCase();
   if (message.contains('failed host lookup') ||
       message.contains('connection timed out') ||
       message.contains('connection refused') ||
@@ -99,17 +142,12 @@ String get apiBaseUrl => Env.apiUrl;
 
 String? _accessToken;
 
-Future<RefreshSessionOutcome> Function()? _on401Refresh;
+Future<R> Function<R>(Future<R> Function())? _authRetryHandler;
 
-void setOn401Refresh(Future<RefreshSessionOutcome> Function()? callback) {
-  _on401Refresh = callback;
-}
-
-/// 刷新 token 仍失败时调用（如设备被踢）：用于清本地登录态并跳转登录页。
-Future<void> Function()? _onSessionInvalidated;
-
-void setOnSessionInvalidated(Future<void> Function()? callback) {
-  _onSessionInvalidated = callback;
+void setAuthRetryHandler(
+  Future<R> Function<R>(Future<R> Function() fn)? handler,
+) {
+  _authRetryHandler = handler;
 }
 
 void setAccessToken(String? token) {
@@ -149,6 +187,7 @@ String errorMessageFromResponse(http.Response r, String fallback) {
 /// 将 API 调用抛出的异常转为适合展示的短文案（含 [AuthException] 与 [Exception]）。
 String formatApiError(Object e) {
   if (e is AuthException) return e.message;
+  if (e is SessionUnavailableException) return e.message;
   return e.toString().replaceFirst('Exception: ', '');
 }
 
@@ -180,44 +219,10 @@ void checkAuthResponse(http.Response r, {String fallback = '请求失败'}) {
   }
 }
 
-/// 带 401 自动刷新并重试的请求封装：先执行 [fn]；若抛出 [AuthException] 则调用 _on401Refresh，成功则重试一次。
-/// 若重试仍 401，与刷新失败同等处理（清会话后 rethrow），避免静默二次 401。
+/// 带 401 自动刷新并重试的请求封装，委托 [AuthSessionController.handle401WithRetry]。
 Future<T> withAuthRetry<T>(Future<T> Function() fn) async {
-  try {
-    return await fn();
-  } on AuthException catch (_) {
-    logApi.info('withAuthRetry: auth failed, attempting refresh');
-    if (_on401Refresh != null) {
-      final outcome = await _on401Refresh!();
-      if (outcome == RefreshSessionOutcome.success) {
-        logApi.info('withAuthRetry: refresh ok, retrying');
-        try {
-          return await fn();
-        } on AuthException catch (_) {
-          logApi.warning('withAuthRetry: still 401 after refresh, invalidating session');
-          await _runOnSessionInvalidated();
-          rethrow;
-        }
-      }
-      if (outcome == RefreshSessionOutcome.transientFailure) {
-        logApi.warning(
-          'withAuthRetry: transient refresh failure, keeping session',
-        );
-        rethrow;
-      }
-    }
-    await _runOnSessionInvalidated();
-    logApi.warning('withAuthRetry: rethrowing');
-    rethrow;
+  if (_authRetryHandler != null) {
+    return _authRetryHandler!<T>(fn);
   }
-}
-
-Future<void> _runOnSessionInvalidated() async {
-  if (_onSessionInvalidated != null) {
-    try {
-      await _onSessionInvalidated!();
-    } catch (e, st) {
-      logApi.warning('onSessionInvalidated failed: $e\n$st');
-    }
-  }
+  return fn();
 }

@@ -766,6 +766,8 @@
   "fileSendTabMyDevices": "我的设备",
   "fileSendTabWebRtc": "WebRTC",
   "devicePanelStatusServerUnreachable": "服务器不可达",
+  "devicePanelStatusValidating": "验证登录…",
+  "devicePanelStatusSessionExpired": "登录已失效",
   "devicePanelStatusConnected": "已连接",
   "devicePanelStatusConnecting": "连接中…",
   "devicePanelEmptyNoOtherDevices": "暂无其他设备",

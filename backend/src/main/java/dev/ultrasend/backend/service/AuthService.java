@@ -16,11 +16,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
+
+    public static final String SESSION_EXPIRED_MESSAGE = "登录已失效，请重新登录";
 
     private final UserRepository userRepository;
     private final DeviceRepository deviceRepository;
@@ -133,15 +137,17 @@ public class AuthService {
         User user = userRepository.findById(Long.parseLong(userId))
                 .orElseThrow(() -> {
                     log.warn("refresh failed user not found userId={}", userId);
-                    return new IllegalArgumentException("用户不存在");
+                    return new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED, SESSION_EXPIRED_MESSAGE);
                 });
         log.info("refresh ok userId={}", userId);
         if (parsed.deviceId() != null && parsed.deviceSessionVersion() != null) {
             Device d = deviceRepository
                     .findByUser_IdAndDeviceIdAndActiveTrue(Long.parseLong(userId), parsed.deviceId())
-                    .orElseThrow(() -> new IllegalArgumentException("登录已失效，请重新登录"));
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED, SESSION_EXPIRED_MESSAGE));
             if (d.getSessionVersion() != parsed.deviceSessionVersion()) {
-                throw new IllegalArgumentException("登录已失效，请重新登录");
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, SESSION_EXPIRED_MESSAGE);
             }
             String accessToken = jwtService.generateAccessToken(userId, user.getEmail(), d.getDeviceId(), d.getSessionVersion());
             String refreshToken = jwtService.generateRefreshToken(userId, d.getDeviceId(), d.getSessionVersion());

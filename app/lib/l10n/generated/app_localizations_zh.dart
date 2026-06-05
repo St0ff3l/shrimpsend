@@ -2072,6 +2072,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get devicePanelStatusServerUnreachable => '服务器不可达';
 
   @override
+  String get devicePanelStatusValidating => '验证登录…';
+
+  @override
+  String get devicePanelStatusSessionExpired => '登录已失效';
+
+  @override
   String get devicePanelStatusConnected => '已连接';
 
   @override

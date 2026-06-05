@@ -6,7 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../api/api.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../logger.dart';
-import '../providers/auth_provider.dart';
 import '../services/analytics/analytics.dart';
 import '../services/analytics/analytics_events.dart';
 import '../services/s3_config_cache.dart';
@@ -217,8 +216,6 @@ class _S3SettingsScreenState extends ConsumerState<S3SettingsScreen> {
       }
       logSettings.info('s3_settings save success');
       Analytics.track(AnalyticsEvents.s3SettingsSave, {'result': 'success'});
-    } on AuthException catch (_) {
-      if (mounted) await _handleAuthExpired();
     } catch (e) {
       logSettings.warning('s3_settings save failed: $e');
       if (mounted) {
@@ -244,8 +241,6 @@ class _S3SettingsScreenState extends ConsumerState<S3SettingsScreen> {
         );
       }
       logSettings.info('s3_settings test success');
-    } on AuthException catch (_) {
-      if (mounted) await _handleAuthExpired();
     } catch (e) {
       logSettings.warning('s3_settings test failed: $e');
       if (mounted) {
@@ -292,8 +287,6 @@ class _S3SettingsScreenState extends ConsumerState<S3SettingsScreen> {
         );
       }
       logSettings.info('s3_settings clear success');
-    } on AuthException catch (_) {
-      if (mounted) await _handleAuthExpired();
     } catch (e) {
       logSettings.warning('s3_settings clear failed: $e');
       if (mounted) {
@@ -338,8 +331,6 @@ class _S3SettingsScreenState extends ConsumerState<S3SettingsScreen> {
         message: AppLocalizations.of(context).s3SettingsSwitchedBackOk,
       );
       logSettings.info('s3_settings switch back to hosted success');
-    } on AuthException catch (_) {
-      if (mounted) await _handleAuthExpired();
     } catch (e) {
       logSettings.warning('s3_settings switch back failed: $e');
       if (mounted) {
@@ -367,8 +358,6 @@ class _S3SettingsScreenState extends ConsumerState<S3SettingsScreen> {
         message: AppLocalizations.of(context).s3SettingsSwitchedToCustomOk,
       );
       logSettings.info('s3_settings switch to saved custom success');
-    } on AuthException catch (_) {
-      if (mounted) await _handleAuthExpired();
     } catch (e) {
       logSettings.warning('s3_settings switch to custom failed: $e');
       if (mounted) {
@@ -385,19 +374,6 @@ class _S3SettingsScreenState extends ConsumerState<S3SettingsScreen> {
     _accessKeyIdController.clear();
     _secretAccessKeyController.clear();
     _pathStyleAccessEnabled = true;
-  }
-
-  Future<void> _handleAuthExpired() async {
-    await ref.read(authProvider.notifier).clearAuth();
-    if (!mounted) return;
-    AppToast.show(
-      context,
-      message: AppLocalizations.of(context).s3SettingsLoginExpired,
-    );
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      '/login',
-      (route) => route.isFirst,
-    );
   }
 
   static String _displayEndpointHost(String raw) {

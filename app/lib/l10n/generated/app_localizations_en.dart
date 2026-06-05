@@ -2154,6 +2154,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get devicePanelStatusServerUnreachable => 'Server unreachable';
 
   @override
+  String get devicePanelStatusValidating => 'Verifying sign-in…';
+
+  @override
+  String get devicePanelStatusSessionExpired => 'Session expired';
+
+  @override
   String get devicePanelStatusConnected => 'Connected';
 
   @override

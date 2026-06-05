@@ -22,10 +22,9 @@ import 'font_size_store.dart';
 import 'typography.dart';
 import 'shortcut_preferences.dart';
 import 'logger.dart';
-import 'device_id.dart';
 import 'providers/app_locale.dart';
-import 'providers/app_mode_provider.dart';
 import 'providers/auth_provider.dart';
+import 'providers/auth_session_provider.dart';
 import 'theme_store.dart';
 import 'ui/app_ui.dart';
 import 'l10n/app_brand.dart';
@@ -115,41 +114,12 @@ void main(List<String> args) async {
 
   final container = ProviderContainer();
   await container.read(authProvider.notifier).loadFromStorage();
+  final isLoggedIn = container.read(authProvider).isLoggedIn;
   final offlineWithoutLogin = await loadOfflineWithoutLogin();
-  await localeRegionStore.applyLoggedInDefaultsIfNeeded(
-    container.read(authProvider).isLoggedIn,
-  );
+  await localeRegionStore.applyLoggedInDefaultsIfNeeded(isLoggedIn);
 
-  Future<RefreshSessionOutcome> tryRefreshStoredSession({int attempt = 1}) {
-    return refreshStoredSession(
-      readRefreshToken: getStoredRefreshToken,
-      onSuccess: (auth) async {
-        await container.read(authProvider.notifier).refreshTokenSuccess(auth);
-      },
-      onAttemptFinished:
-          ({
-            required outcome,
-            required failureKind,
-            error,
-            httpStatus,
-            attempt = 1,
-          }) {
-            if (outcome == RefreshSessionOutcome.success) {
-              logAuth.info(
-                'tryRefreshAndSave success attempt=$attempt '
-                'launchedAtStartup=$launchedAtStartup',
-              );
-              return;
-            }
-            logAuth.warning(
-              'tryRefreshAndSave failed attempt=$attempt '
-              'launchedAtStartup=$launchedAtStartup outcome=$outcome '
-              'failureKind=$failureKind httpStatus=$httpStatus error=$error',
-            );
-          },
-      attempt: attempt,
-    );
-  }
+  final authSession = container.read(authSessionControllerProvider.notifier);
+  authSession.onStorageLoaded(isLoggedIn: isLoggedIn);
 
   Future<void> waitForStartupNetworkIfNeeded() async {
     if (!Platform.isWindows || !launchedAtStartup) return;
@@ -175,32 +145,6 @@ void main(List<String> args) async {
     );
   }
 
-  Future<RefreshSessionOutcome> tryRefreshStoredSessionWithRetry({
-    required bool useRetry,
-  }) async {
-    const retryDelays = <Duration>[
-      Duration.zero,
-      Duration(seconds: 2),
-      Duration(seconds: 4),
-    ];
-    final maxAttempts = useRetry ? retryDelays.length : 1;
-    var lastOutcome = RefreshSessionOutcome.transientFailure;
-
-    for (var attempt = 1; attempt <= maxAttempts; attempt++) {
-      if (attempt > 1) {
-        await Future.delayed(retryDelays[attempt - 1]);
-        logAuth.info('tryRefreshAndSave retry attempt=$attempt');
-      }
-      lastOutcome = await tryRefreshStoredSession(attempt: attempt);
-      if (lastOutcome == RefreshSessionOutcome.success ||
-          lastOutcome == RefreshSessionOutcome.permanentFailure ||
-          lastOutcome == RefreshSessionOutcome.noRefreshToken) {
-        return lastOutcome;
-      }
-    }
-    return lastOutcome;
-  }
-
   void syncAppLocaleFromStore() {
     container.read(appLocaleProvider.notifier).state =
         localeRegionStore.notifier.value.locale;
@@ -211,14 +155,10 @@ void main(List<String> args) async {
 
   final navigatorKey = GlobalKey<NavigatorState>();
 
-  setOn401Refresh(tryRefreshStoredSession);
-
   Future<void> invalidateSessionAndNavigate() async {
-    await container.read(authProvider.notifier).clearAuth();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final ctx = navigatorKey.currentContext;
       if (ctx != null && ctx.mounted) {
-        // 保留根路由，否则栈中只有 /login，返回会黑屏
         Navigator.of(
           ctx,
         ).pushNamedAndRemoveUntil('/login', (route) => route.isFirst);
@@ -231,59 +171,20 @@ void main(List<String> args) async {
     });
   }
 
-  setOnSessionInvalidated(invalidateSessionAndNavigate);
+  authSession.onSessionExpiredNavigate = invalidateSessionAndNavigate;
 
-  Future<void> runStartupAuthRefreshInBackground() async {
-    if (!container.read(authProvider).isLoggedIn) return;
+  setAuthRetryHandler(authSession.handle401WithRetry);
 
-    String? localDeviceId;
-    try {
-      localDeviceId = await getOrCreateDeviceId();
-    } catch (e) {
-      logAuth.warning('startup auth: read deviceId failed: $e');
-    }
-    logAuth.info(
-      'startup auth: begin (background) launchedAtStartup=$launchedAtStartup '
-      'hasDeviceId=${localDeviceId != null && localDeviceId.isNotEmpty}',
+  if (isLoggedIn) {
+    unawaited(
+      authSession.bootstrapSession(
+        useRetry: launchedAtStartup || RuntimePlatform.isDesktop,
+        waitForNetwork: waitForStartupNetworkIfNeeded,
+      ),
     );
-
-    await waitForStartupNetworkIfNeeded();
-
-    final outcome = await tryRefreshStoredSessionWithRetry(
-      useRetry: launchedAtStartup || RuntimePlatform.isDesktop,
-    );
-
-    if (outcome == RefreshSessionOutcome.permanentFailure ||
-        outcome == RefreshSessionOutcome.noRefreshToken) {
-      logAuth.warning(
-        'startup auth refresh permanent failure ($outcome), clearing auth',
-      );
-      container.read(networkFallbackOfflineProvider.notifier).state = false;
-      await invalidateSessionAndNavigate();
-      return;
-    }
-
-    if (outcome == RefreshSessionOutcome.success) {
-      logAuth.info('startup auth refresh success, clearing offline fallback');
-      container.read(networkFallbackOfflineProvider.notifier).state = false;
-      return;
-    }
-
-    logAuth.warning(
-      'startup auth refresh transient failure, keeping stored session',
-    );
-    container.read(networkFallbackOfflineProvider.notifier).state = true;
   }
 
-  if (container.read(authProvider).isLoggedIn) {
-    // 先展示 UI，后台异步 refresh；刷新完成前按离线 fallback 处理。
-    container.read(networkFallbackOfflineProvider.notifier).state = true;
-    unawaited(runStartupAuthRefreshInBackground());
-  }
-
-  logAuth.info(
-    'main auth loaded, isLoggedIn=${container.read(authProvider).isLoggedIn}',
-  );
+  logAuth.info('main auth loaded, isLoggedIn=$isLoggedIn');
 
   // Boot env snapshot is scheduled to run after the first frame (see below):
   // on cold start the IDE debug console attaches *after* main() begins, so

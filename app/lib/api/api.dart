@@ -4,11 +4,13 @@ export 'client.dart'
         RefreshSessionOutcome,
         RefreshSessionFailureKind,
         RefreshTokenException,
+        SessionUnavailableException,
+        SessionUnavailableKind,
         classifyRefreshFailure,
         formatApiError,
+        isAuthSessionFailureMessage,
         jsonHeadersOnly,
-        setOn401Refresh,
-        setOnSessionInvalidated,
+        setAuthRetryHandler,
         setAccessToken;
 export 'auth.dart';
 export 'devices.dart';

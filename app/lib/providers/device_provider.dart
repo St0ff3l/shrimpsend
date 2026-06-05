@@ -7,8 +7,8 @@ import '../api/api.dart';
 import '../device_id.dart';
 import '../lan/lan_discovery.dart';
 import '../logger.dart';
-import 'app_mode_provider.dart';
 import 'auth_provider.dart';
+import 'auth_session_provider.dart';
 
 /// Virtual device ID for the S3 cloud relay entry in the device list.
 const s3VirtualDeviceId = '__s3_cloud__';
@@ -78,7 +78,7 @@ class CloudDeviceRosterNotifier
     }
     try {
       final devices = await listDevices();
-      ref.read(networkFallbackOfflineProvider.notifier).state = false;
+      ref.read(authSessionControllerProvider.notifier).markServerReachable();
       state = AsyncValue.data(devices);
     } catch (e, st) {
       logChat.warning('cloudDeviceRoster refresh failed: $e');

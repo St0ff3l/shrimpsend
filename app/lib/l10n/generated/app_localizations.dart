@@ -3870,6 +3870,18 @@ abstract class AppLocalizations {
   /// **'Server unreachable'**
   String get devicePanelStatusServerUnreachable;
 
+  /// No description provided for @devicePanelStatusValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying sign-in…'**
+  String get devicePanelStatusValidating;
+
+  /// No description provided for @devicePanelStatusSessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Session expired'**
+  String get devicePanelStatusSessionExpired;
+
   /// No description provided for @devicePanelStatusConnected.
   ///
   /// In en, this message translates to:

@@ -1205,6 +1205,8 @@
   "fileSendTabMyDevices": "My devices",
   "fileSendTabWebRtc": "WebRTC",
   "devicePanelStatusServerUnreachable": "Server unreachable",
+  "devicePanelStatusValidating": "Verifying sign-in…",
+  "devicePanelStatusSessionExpired": "Session expired",
   "devicePanelStatusConnected": "Connected",
   "devicePanelStatusConnecting": "Connecting…",
   "devicePanelEmptyNoOtherDevices": "No other devices yet",

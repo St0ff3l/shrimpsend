@@ -7,6 +7,7 @@ import '../../l10n/generated/app_localizations.dart';
 import '../../preferences/locale_region_store.dart';
 import '../../providers/device_provider.dart';
 import '../../providers/app_mode_provider.dart';
+import '../../services/auth_session_controller.dart';
 import '../../ui/app_ui.dart';
 import '../../ui/platform_performance.dart';
 import '../../utils/runtime_platform.dart';
@@ -31,7 +32,7 @@ class DeviceListPanel extends ConsumerWidget {
   final String? myDeviceId;
   final bool statusCheckDone;
   final bool isLoggedIn;
-  final bool networkFallback;
+  final AuthSessionPhase authSessionPhase;
   final VoidCallback onShowSettings;
   final VoidCallback? onSearch;
   final VoidCallback? onScanQr;
@@ -55,7 +56,7 @@ class DeviceListPanel extends ConsumerWidget {
     this.myDeviceId,
     this.statusCheckDone = true,
     this.isLoggedIn = true,
-    this.networkFallback = false,
+    this.authSessionPhase = AuthSessionPhase.authenticated,
     required this.onShowSettings,
     this.onSearch,
     this.onScanQr,
@@ -71,17 +72,21 @@ class DeviceListPanel extends ConsumerWidget {
     AppLocalizations l10n,
     AppThemeColors colors,
   ) {
-    if (!statusCheckDone) {
-      return (l10n.chatS3StatusChecking, colors.warning);
+    switch (authSessionPhase) {
+      case AuthSessionPhase.validating:
+        return (l10n.devicePanelStatusValidating, colors.warning);
+      case AuthSessionPhase.unauthenticated:
+        return (l10n.settingsBadgeNotSignedIn, colors.textTertiary);
+      case AuthSessionPhase.sessionExpired:
+        return (l10n.devicePanelStatusSessionExpired, colors.danger);
+      case AuthSessionPhase.networkUnavailable:
+        return (l10n.devicePanelStatusServerUnreachable, colors.danger);
+      case AuthSessionPhase.authenticated:
+        if (connected) {
+          return (l10n.devicePanelStatusConnected, colors.success);
+        }
+        return (l10n.devicePanelStatusConnecting, colors.warning);
     }
-    if (!isLoggedIn) {
-      return (l10n.settingsBadgeNotSignedIn, colors.textTertiary);
-    }
-    if (networkFallback) {
-      return (l10n.devicePanelStatusServerUnreachable, colors.danger);
-    }
-    if (connected) return (l10n.devicePanelStatusConnected, colors.success);
-    return (l10n.devicePanelStatusConnecting, colors.warning);
   }
 
   @override
@@ -179,7 +184,9 @@ class DeviceListPanel extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         GestureDetector(
-                          onTap: (!isLoggedIn && statusCheckDone)
+                          onTap: (authSessionPhase ==
+                                      AuthSessionPhase.sessionExpired ||
+                                  (!isLoggedIn && statusCheckDone))
                               ? onLoginTap
                               : null,
                           child: Row(
