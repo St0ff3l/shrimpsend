@@ -73,7 +73,22 @@ abstract final class AppDialog {
 /// Scroll/list bottom inset when content draws full-bleed under the mobile
 /// floating [GlassBottomBar] (narrow home shell — connect / files / settings tabs).
 class AppLayout {
-  static const double floatingBottomBarScrollInset = 96;
+  /// Matches [GlassBottomBar.barHeight] on the narrow home shell.
+  static const double floatingBottomBarHeight = 64;
+
+  /// Gap above the home indicator ([_kMobileFloatingBarBottomGap] in chat_screen).
+  static const double floatingBottomBarBottomGap = 12;
+
+  /// Extra breathing room so the last list row clears the bar.
+  static const double floatingBottomBarScrollExtra = 8;
+
+  static double floatingBottomBarScrollInset(BuildContext context) {
+    final bottom = MediaQuery.paddingOf(context).bottom;
+    return bottom +
+        floatingBottomBarBottomGap +
+        floatingBottomBarHeight +
+        floatingBottomBarScrollExtra;
+  }
 }
 
 @immutable

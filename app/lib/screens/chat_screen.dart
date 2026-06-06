@@ -8012,6 +8012,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     final selectedDeviceId = ref.watch(selectedDeviceIdProvider);
     final mobileChatSession =
         !_isDesktopPlatform && selectedDeviceId != null;
+    final mobileHomeFloatingBar =
+        !_isDesktopPlatform &&
+        selectedDeviceId == null &&
+        MediaQuery.sizeOf(context).width < kChatNarrowLayoutBreakpoint;
 
     return PopScope(
       canPop: !_isSelectionMode && selectedDeviceId == null,
@@ -8037,6 +8041,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 },
               )
             : SafeArea(
+                bottom: !mobileHomeFloatingBar,
                 child: _isDesktopPlatform
                     ? DesktopPasteShortcuts(
                         onPasteFiles: _handleDesktopPasteFromClipboard,
@@ -8244,7 +8249,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                               unselectedIconColor: colors.muted,
                                               horizontalPadding:
                                                   _kMobileGlassBarHPadding,
-                                              verticalPadding: 20,
+                                              verticalPadding: 0,
                                               barHeight: 64,
                                               barBorderRadius: 45,
                                               tabWidth:

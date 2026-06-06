@@ -143,7 +143,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       AppSpacing.xs,
       AppSpacing.md,
       AppSpacing.lg +
-          (widget.embedded ? AppLayout.floatingBottomBarScrollInset : 0),
+          (widget.embedded
+              ? AppLayout.floatingBottomBarScrollInset(context)
+              : 0),
     );
   }
 

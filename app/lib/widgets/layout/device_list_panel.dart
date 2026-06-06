@@ -347,7 +347,7 @@ class DeviceListPanel extends ConsumerWidget {
               builder: (context, constraints) {
                 final scrollBottom =
                     constraints.maxWidth < _kNarrowLayoutBreakpoint
-                    ? AppLayout.floatingBottomBarScrollInset
+                    ? AppLayout.floatingBottomBarScrollInset(context)
                     : 0.0;
                 final listChildren = <Widget>[
                   if ((s3Configured || s3Checking) && !isOffline)
