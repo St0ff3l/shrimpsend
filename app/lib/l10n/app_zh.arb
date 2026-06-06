@@ -119,7 +119,7 @@
   "settingsFontWeightNormal": "正常",
   "settingsFontWeightMedium": "中等",
   "settingsFontWeightSemibold": "较粗",
-  "settingsAboutFontLicenses": "Windows 版内置文源黑体 WenYuan Sans SC（SIL Open Font License 1.1）；其他平台使用系统字体。来源：https://github.com/takushun-wu/WenYuanFonts",
+  "settingsFontLicenses": "Windows 版内置文源黑体 WenYuan Sans SC（SIL Open Font License 1.1）；其他平台使用系统字体。来源：https://github.com/takushun-wu/WenYuanFonts",
   "settingsFileSavePath": "文件保存路径",
   "settingsFileSavePathNotSet": "未设置",
   "settingsSavePathBadgeDefault": "默认",

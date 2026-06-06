@@ -362,7 +362,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsFontWeightSemibold => 'Semibold';
 
   @override
-  String get settingsAboutFontLicenses =>
+  String get settingsFontLicenses =>
       'Windows builds bundle WenYuan Sans SC / 文源黑体 (SIL Open Font License 1.1). Other platforms use system fonts. Source: https://github.com/takushun-wu/WenYuanFonts';
 
   @override

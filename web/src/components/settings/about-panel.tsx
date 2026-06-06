@@ -16,7 +16,6 @@ export function AboutPanel() {
         </div>
         <p className="text-sm">{t('common.brandName')}</p>
         <p className="text-xs text-muted-foreground mt-1">{t('common.brandTagline')}</p>
-        <p className="text-xs text-muted-foreground mt-2">{t('about.fontLicenses')}</p>
         <Separator className="my-2" />
         <p className="text-xs text-muted-foreground">{t('about.versionLine', { version: SETTINGS_APP_VERSION })}</p>
       </CardContent>

@@ -353,7 +353,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsFontWeightSemibold => '较粗';
 
   @override
-  String get settingsAboutFontLicenses =>
+  String get settingsFontLicenses =>
       'Windows 版内置文源黑体 WenYuan Sans SC（SIL Open Font License 1.1）；其他平台使用系统字体。来源：https://github.com/takushun-wu/WenYuanFonts';
 
   @override

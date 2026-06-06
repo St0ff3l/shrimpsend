@@ -100,6 +100,13 @@ class FontSettingsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+                      const SizedBox(height: AppSpacing.lg),
+                      Text(
+                        l10n.settingsFontLicenses,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colors.textTertiary,
+                        ),
+                      ),
                     ],
                   ),
                 ),

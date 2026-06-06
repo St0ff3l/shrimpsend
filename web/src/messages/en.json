@@ -548,8 +548,7 @@
   "about": {
     "title": "About",
     "getClient": "Get the app",
-    "versionLine": "Version {version}",
-    "fontLicenses": "Windows builds bundle WenYuan Sans SC / 文源黑体 (SIL Open Font License 1.1). Other platforms use system fonts. Source: https://github.com/takushun-wu/WenYuanFonts"
+    "versionLine": "Version {version}"
   },
   "shortcuts": {
     "sendTitle": "Send message",
@@ -582,7 +581,8 @@
     "fontWeightNormal": "Normal",
     "fontWeightMedium": "Medium",
     "fontWeightSemibold": "Semibold",
-    "fontPreview": "ShrimpSend · Hello world · 123"
+    "fontPreview": "ShrimpSend · Hello world · 123",
+    "fontLicenses": "Windows builds bundle WenYuan Sans SC / 文源黑体 (SIL Open Font License 1.1). Other platforms use system fonts. Source: https://github.com/takushun-wu/WenYuanFonts"
   },
   "image": {
     "fallback": "Image",

@@ -548,8 +548,7 @@
   "about": {
     "title": "关于",
     "getClient": "获取客户端",
-    "versionLine": "版本 {version}",
-    "fontLicenses": "Windows 版内置文源黑体 WenYuan Sans SC（SIL Open Font License 1.1）；其他平台使用系统字体。来源：https://github.com/takushun-wu/WenYuanFonts"
+    "versionLine": "版本 {version}"
   },
   "shortcuts": {
     "sendTitle": "发送消息",
@@ -582,7 +581,8 @@
     "fontWeightNormal": "正常",
     "fontWeightMedium": "中等",
     "fontWeightSemibold": "较粗",
-    "fontPreview": "ShrimpSend · 你好世界 · 123"
+    "fontPreview": "ShrimpSend · 你好世界 · 123",
+    "fontLicenses": "Windows 版内置文源黑体 WenYuan Sans SC（SIL Open Font License 1.1）；其他平台使用系统字体。来源：https://github.com/takushun-wu/WenYuanFonts"
   },
   "image": {
     "fallback": "图片",

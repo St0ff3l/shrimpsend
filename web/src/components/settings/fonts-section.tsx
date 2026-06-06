@@ -122,6 +122,7 @@ export function FontsPanel() {
       >
         {t('appearance.fontPreview')}
       </div>
+      <p className="text-xs text-muted-foreground">{t('appearance.fontLicenses')}</p>
     </div>
   );
 }

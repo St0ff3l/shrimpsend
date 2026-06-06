@@ -770,11 +770,11 @@ abstract class AppLocalizations {
   /// **'Semibold'**
   String get settingsFontWeightSemibold;
 
-  /// No description provided for @settingsAboutFontLicenses.
+  /// No description provided for @settingsFontLicenses.
   ///
   /// In en, this message translates to:
   /// **'Windows builds bundle WenYuan Sans SC / 文源黑体 (SIL Open Font License 1.1). Other platforms use system fonts. Source: https://github.com/takushun-wu/WenYuanFonts'**
-  String get settingsAboutFontLicenses;
+  String get settingsFontLicenses;
 
   /// No description provided for @settingsFileSavePath.
   ///

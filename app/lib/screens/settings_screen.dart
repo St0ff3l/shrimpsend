@@ -926,16 +926,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                             const SizedBox(
                                               height: AppSpacing.xxs,
                                             ),
-                                            Text(
-                                              l10n.settingsAboutFontLicenses,
-                                              style: theme.textTheme.bodySmall
-                                                  ?.copyWith(
-                                                    color: colors.textTertiary,
-                                                  ),
-                                            ),
-                                            const SizedBox(
-                                              height: AppSpacing.xxs,
-                                            ),
                                             ref
                                                 .watch(packageInfoProvider)
                                                 .when(
