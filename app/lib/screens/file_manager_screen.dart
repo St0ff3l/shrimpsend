@@ -88,7 +88,7 @@ class _FileManagerScreenState extends State<FileManagerScreen>
 
   bool get _isSearching => _searchQuery.isNotEmpty;
 
-  bool get _isSaveFolderTab => _tabController.index == 1;
+  bool get _isSaveFolderTab => _tabController.index == 0;
 
   List<ReceivedFileInfo> get _activeFiles =>
       _isSaveFolderTab ? _filteredSaveFolderFiles : _files;
@@ -109,6 +109,7 @@ class _FileManagerScreenState extends State<FileManagerScreen>
     _scrollController.addListener(_onScroll);
     _loadReceiveDirPath();
     unawaited(_loadSaveFolderDisplayInfo());
+    unawaited(_loadSaveFolderFiles());
     unawaited(_loadSortPreference().then((_) => _loadFiles()));
     ReceivedFileDao.addChangedListener(_onIndexChanged);
     FileStore.addReceiveDirChangedListener(_onReceiveDirChanged);
@@ -133,6 +134,7 @@ class _FileManagerScreenState extends State<FileManagerScreen>
     _indexChangeDebounce = Timer(const Duration(milliseconds: 250), () {
       if (!mounted) return;
       _silentRefreshFiles();
+      unawaited(_silentRefreshSaveFolder());
     });
   }
 
@@ -178,7 +180,7 @@ class _FileManagerScreenState extends State<FileManagerScreen>
 
   /// Reload listing without clearing the list or showing the full-screen loading state.
   Future<void> _silentRefreshFiles() async {
-    if (!mounted || _loading) return;
+    if (!mounted) return;
 
     try {
       await _loadReceiveDirPath(invalidateDirCache: true);
@@ -387,7 +389,7 @@ class _FileManagerScreenState extends State<FileManagerScreen>
   }
 
   Future<void> _silentRefreshSaveFolder() async {
-    if (!mounted || _saveFolderLoading) return;
+    if (!mounted) return;
     await _loadSaveFolderFiles(showBlockingLoading: false);
   }
 
@@ -1230,6 +1232,29 @@ class _FileManagerScreenState extends State<FileManagerScreen>
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(l10n.fmSaveFolderHintTitle, style: sectionTitleStyle),
+              const SizedBox(height: AppSpacing.xxs),
+              Text(
+                _isDesktop
+                    ? l10n.fmSaveFolderHintBodyDesktop
+                    : l10n.fmSaveFolderHintBody,
+                style: bodyStyle,
+              ),
+              if (saveFolderInfo.path != null &&
+                  saveFolderInfo.path!.isNotEmpty) ...[
+                const SizedBox(height: AppSpacing.sm),
+                Text(l10n.fmSaveFolderPathLabel, style: pathLabelStyle),
+                const SizedBox(height: AppSpacing.xxs),
+                SelectableText(
+                  saveFolderInfo.label != null &&
+                          saveFolderInfo.label!.isNotEmpty &&
+                          saveFolderInfo.label != saveFolderInfo.path
+                      ? '${saveFolderInfo.label!}\n${saveFolderInfo.path!}'
+                      : saveFolderInfo.path!,
+                  style: pathStyle,
+                ),
+              ],
+              const SizedBox(height: AppSpacing.md),
               Row(
                 children: [
                   Expanded(
@@ -1263,29 +1288,6 @@ class _FileManagerScreenState extends State<FileManagerScreen>
                 Text(l10n.fmCachePathLabel, style: pathLabelStyle),
                 const SizedBox(height: AppSpacing.xxs),
                 SelectableText(_receiveDirPath!, style: pathStyle),
-              ],
-              const SizedBox(height: AppSpacing.md),
-              Text(l10n.fmSaveFolderHintTitle, style: sectionTitleStyle),
-              const SizedBox(height: AppSpacing.xxs),
-              Text(
-                _isDesktop
-                    ? l10n.fmSaveFolderHintBodyDesktop
-                    : l10n.fmSaveFolderHintBody,
-                style: bodyStyle,
-              ),
-              if (saveFolderInfo.path != null &&
-                  saveFolderInfo.path!.isNotEmpty) ...[
-                const SizedBox(height: AppSpacing.sm),
-                Text(l10n.fmSaveFolderPathLabel, style: pathLabelStyle),
-                const SizedBox(height: AppSpacing.xxs),
-                SelectableText(
-                  saveFolderInfo.label != null &&
-                          saveFolderInfo.label!.isNotEmpty &&
-                          saveFolderInfo.label != saveFolderInfo.path
-                      ? '${saveFolderInfo.label!}\n${saveFolderInfo.path!}'
-                      : saveFolderInfo.path!,
-                  style: pathStyle,
-                ),
               ],
             ],
           ),
@@ -1428,8 +1430,8 @@ class _FileManagerScreenState extends State<FileManagerScreen>
                 unselectedLabelColor: colors.textSecondary,
                 dividerColor: colors.border,
                 tabs: [
-                  Tab(text: l10n.fmTabCache),
                   Tab(text: _saveFolderTabLabel(l10n)),
+                  Tab(text: l10n.fmTabCache),
                 ],
               ),
         leading: _isSelectionMode
@@ -1545,8 +1547,8 @@ class _FileManagerScreenState extends State<FileManagerScreen>
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildCacheTabBody(context),
                 _buildSaveFolderTabBody(context),
+                _buildCacheTabBody(context),
               ],
             ),
           ),
