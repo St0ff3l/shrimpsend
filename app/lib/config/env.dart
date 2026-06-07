@@ -23,12 +23,12 @@ class Env {
 
   static const _devApiUrl = String.fromEnvironment(
     'API_URL',
-    defaultValue: 'http://localhost:9000',
+    defaultValue: 'http://192.168.0.104:9000',
   );
 
   static const _devCentrifugoWs = String.fromEnvironment(
     'CENTRIFUGO_WS',
-    defaultValue: 'ws://localhost:8000/connection/websocket',
+    defaultValue: 'ws://192.168.0.104:8000/connection/websocket',
   );
 
   static const _prodApiXiachuan = String.fromEnvironment(

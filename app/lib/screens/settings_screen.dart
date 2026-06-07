@@ -26,6 +26,8 @@ import '../providers/app_mode_provider.dart';
 import '../providers/app_update_provider.dart';
 import '../theme_store.dart';
 import '../ui/app_ui.dart';
+import '../utils/effective_save_dir_display.dart';
+import '../utils/effective_save_dir_display.dart';
 import '../utils/gallery_permission.dart';
 import '../utils/toast.dart';
 import '../widgets/app_confirm_dialog.dart';
@@ -1709,16 +1711,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     );
   }
 
-  String _formatEffectiveSaveDir(ReceiveDirResolution resolution) {
-    final visible = resolution.visibleExportTarget;
-    if (visible != null) return visible.displayName;
-    if (resolution.customSafTreeUri != null) {
-      final name = resolution.customSafDisplayName?.trim();
-      if (name != null && name.isNotEmpty) return name;
-      return resolution.customSafTreeUri!;
-    }
-    return resolution.path;
-  }
+  String _formatEffectiveSaveDir(ReceiveDirResolution resolution) =>
+      formatEffectiveSaveDir(resolution);
 
   Future<void> _selectCustomSaveDir() async {
     if (Platform.isAndroid) {
@@ -1801,7 +1795,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       if (!mounted) return;
       setState(() {
         _customSaveDir = normalizedDirPath;
-        _effectiveSaveDir = resolution.path;
+        _effectiveSaveDir = _formatEffectiveSaveDir(resolution);
         _receiveDirResolution = resolution;
         _receiveDirFallback = fallback;
       });
