@@ -2,9 +2,18 @@
 cmake_minimum_required(VERSION 3.14)
 project(Shrimpsend LANGUAGES CXX)
 
-# The name of the executable created for the application. Change this to change
-# the on-disk name of your application.
+# CMake 目标名保持 ASCII（Flutter/插件链接要求）；磁盘 exe 名由 OUTPUT_NAME 区分 cn/intl。
+# WINDOWS_OVERSEAS_BUILD=1 → Shrimpsend.exe；未设置或其它值 → 虾传.exe
 set(BINARY_NAME "Shrimpsend")
+if(DEFINED ENV{WINDOWS_OVERSEAS_BUILD} AND "$ENV{WINDOWS_OVERSEAS_BUILD}" STREQUAL "1")
+  set(APP_EXECUTABLE_NAME "Shrimpsend")
+  set(APP_PRODUCT_NAME "ShrimpSend")
+  set(APP_FILE_DESCRIPTION "ShrimpSend")
+else()
+  set(APP_EXECUTABLE_NAME "虾传")
+  set(APP_PRODUCT_NAME "虾传")
+  set(APP_FILE_DESCRIPTION "虾传")
+endif()
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.

@@ -126,6 +126,10 @@ flutter:
     - assets/tray_icon_windows.ico
 
   # BEGIN_WINDOWS_FONT
+  fonts:
+    - family: UltrasendWenYuanSansSC
+      fonts:
+        - asset: assets/fonts/windows/WenYuanSansSCVF.ttf
   # END_WINDOWS_FONT
 
 # Tobias 支付宝插件：iOS 回调需配置 url_scheme（不可含下划线）

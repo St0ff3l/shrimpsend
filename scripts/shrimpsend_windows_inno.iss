@@ -1,6 +1,8 @@
-; Inno Setup 6 — 官网渠道安装向导（可选安装路径 + 默认勾选桌面快捷方式）。
+﻿; Inno Setup 6 — 官网渠道安装向导（可选安装路径 + 默认勾选桌面快捷方式）。
 ; 通常由 app/scripts/package_windows.ps1 调用 ISCC 并传入 /D 参数；也可手动编译：
-;   "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /DReleaseDir="...\Release" /DOutputDir="...\app\dist\1.1.1.11" /DMyAppVersion=1.1.1.11 /DRegionSlug=cn scripts\shrimpsend_windows_inno.iss
+;   cn:   ... /DRegionSlug=cn /DIsCnBuild=1 scripts\shrimpsend_windows_inno.iss
+;   intl: ... /DRegionSlug=intl scripts\shrimpsend_windows_inno.iss
+; 本文件须 UTF-8 BOM；显示名在脚本内定义，勿经 ISCC /D 传中文。
 
 #ifndef ReleaseDir
 #define ReleaseDir "..\..\app\build\windows\x64\runner\Release"
@@ -16,19 +18,26 @@
 #define RegionSlug "cn"
 #endif
 
-#define MyAppName "Shrimpsend"
-#define MyAppPublisher "Ultrasend"
+#ifdef IsCnBuild
+#define MyAppDisplayName "虾传"
+#define MyAppExeName "虾传.exe"
+#else
+#define MyAppDisplayName "Shrimpsend"
 #define MyAppExeName "Shrimpsend.exe"
+#endif
+
+#define MyAppInstallFolder "Shrimpsend"
+#define MyAppPublisher "Ultrasend"
 
 [Setup]
 AppId={{A8F3E8B1-6D2C-4E9F-9B1A-0C2D3E4F5A6B}
-AppName={#MyAppName}
+AppName={#MyAppDisplayName}
 AppVersion={#MyAppVersion}
 VersionInfoVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 ; 允许用户在向导中选择安装目录（非 MSIX）
 DisableDirPage=no
-DefaultDirName={autopf}\{#MyAppName}
+DefaultDirName={autopf}\{#MyAppInstallFolder}
 UsePreviousAppDir=yes
 DisableProgramGroupPage=yes
 WizardStyle=modern
@@ -53,10 +62,16 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 ; 排除误落在 Release 目录的 *.msix（正式产物只在 dist；不应打进 exe 安装包）
 Source: "{#ReleaseDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "*.msix"
 
+#ifdef IsCnBuild
+[InstallDelete]
+; 覆盖升级：移除旧版英文主程序，避免与 虾传.exe 并存
+Type: files; Name: "{app}\Shrimpsend.exe"
+#endif
+
 [Icons]
 ; 显式指定从安装目录下的 exe 取图标（索引 0），避免快捷方式仍显示缓存中的 Flutter 默认壳图标。
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\{#MyAppExeName}"; IconIndex: 0
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\{#MyAppExeName}"; IconIndex: 0; Tasks: desktopicon
+Name: "{autoprograms}\{#MyAppDisplayName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\{#MyAppExeName}"; IconIndex: 0
+Name: "{autodesktop}\{#MyAppDisplayName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\{#MyAppExeName}"; IconIndex: 0; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppDisplayName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent

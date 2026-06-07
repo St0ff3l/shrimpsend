@@ -1,8 +1,8 @@
-Installation complete / 安装已完成
+﻿Installation complete / 安装已完成
 
 Program files / 程序文件目录：
 {app}
 
-Launch from the desktop shortcut (if selected) or Start Menu / 可通过桌面快捷方式（若安装时勾选）或开始菜单启动 Shrimpsend。
+Launch from the desktop shortcut (if selected) or Start Menu / 可通过桌面快捷方式（若安装时勾选）或开始菜单启动应用。
 
 For in-app ZIP updates, keep all files under this folder / 使用内置在线更新时，请勿打乱上述文件夹内的程序布局。

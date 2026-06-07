@@ -165,7 +165,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(1280, 720);
-  if (!window.Create(L"虾传", origin, size)) {
+#if defined(WINDOWS_OVERSEAS_BRAND)
+  constexpr wchar_t kAppWindowTitle[] = L"ShrimpSend";
+#else
+  constexpr wchar_t kAppWindowTitle[] = L"虾传";
+#endif
+  if (!window.Create(kAppWindowTitle, origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);
