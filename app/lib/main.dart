@@ -91,13 +91,13 @@ void main(List<String> args) async {
 
   await OpenpanelBootstrap.initIfEligible();
 
-  // 桌面更新 zip 内需含与 windows/CMakeLists.txt BINARY_NAME 一致的主程序（Shrimpsend.exe）。
+  // 桌面更新 zip 内需含与 windows/CMakeLists.txt BINARY_NAME 一致的主程序（cn: 虾传.exe，intl: Shrimpsend.exe）。
   // MSIX/商店安装目录不可被 ZIP 覆盖，故不配置内置更新器（由商店负责更新）。
   if ((Platform.isWindows || Platform.isMacOS || Platform.isLinux) &&
       !(Platform.isWindows && isWindowsMsixPackaged)) {
     desktop_upd.UpdateConfig().configure(
       updateJsonUrl: '${Env.apiUrl}/api/app/desktop-update.json',
-      appExecutableBaseName: 'Shrimpsend',
+      appExecutableBaseName: Env.overseasBuild ? 'Shrimpsend' : '虾传',
       onLog: (m) => logUpdate.info(m),
       onError: (m) => logUpdate.warning(m),
     );

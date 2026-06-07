@@ -132,6 +132,8 @@ function Invoke-PackageWindowsRegion {
 
     $overseasDefine = if ($OverseasRegion) { 'true' } else { 'false' }
     $region = if ($OverseasRegion) { 'intl' } else { 'cn' }
+    # Unicode code points avoid PowerShell source/CLI encoding issues for msix display-name.
+    $appDisplayName = if ($OverseasRegion) { 'Shrimpsend' } else { -join ([char]0x867E, [char]0x4F20) }
 
     Write-Host ''
     Write-Host "==> Windows package: region=$region"
@@ -140,7 +142,9 @@ function Invoke-PackageWindowsRegion {
         Clear-WindowsCmakeStaleCache
         Write-Host 'Enable Windows font assets...'
         & (Join-Path $AppDir 'scripts\windows_font_assets.ps1') enable
-        Write-Host "flutter build windows --release --dart-define=OVERSEAS_BUILD=$overseasDefine"
+        & (Join-Path $AppDir 'scripts\ensure_windows_pdfium.ps1')
+        $env:WINDOWS_OVERSEAS_BUILD = if ($OverseasRegion) { '1' } else { '0' }
+        Write-Host "flutter build windows --release --dart-define=OVERSEAS_BUILD=$overseasDefine (WINDOWS_OVERSEAS_BUILD=$env:WINDOWS_OVERSEAS_BUILD)"
         flutter build windows --release "--dart-define=OVERSEAS_BUILD=$overseasDefine"
         if ($LASTEXITCODE -ne 0) {
             Write-Error "flutter build windows failed with exit code $LASTEXITCODE"
@@ -149,6 +153,19 @@ function Invoke-PackageWindowsRegion {
 
     if (-not (Test-Path $ReleaseDir)) {
         Write-Error "Release output missing: $ReleaseDir"
+    }
+
+    $cnExeName = -join ([char]0x867E, [char]0x4F20) + '.exe'
+    $expectedExe = if ($OverseasRegion) { 'Shrimpsend.exe' } else { $cnExeName }
+    $staleExe = if ($OverseasRegion) { $cnExeName } else { 'Shrimpsend.exe' }
+    $expectedPath = Join-Path $ReleaseDir $expectedExe
+    $stalePath = Join-Path $ReleaseDir $staleExe
+    if (-not (Test-Path -LiteralPath $expectedPath)) {
+        Write-Error "Expected main executable missing: $expectedPath"
+    }
+    if (Test-Path -LiteralPath $stalePath) {
+        Write-Host "Remove stale executable: $stalePath"
+        Remove-Item -LiteralPath $stalePath -Force
     }
 
     Copy-VcRuntimeDlls $VcRuntimeDir $ReleaseDir
@@ -185,7 +202,14 @@ function Invoke-PackageWindowsRegion {
             Write-Warning "Inno script missing: $InnoIss"
         } else {
             Write-Host "Inno -> $(Join-Path $DistDir $setupName)"
-            & $iscc "/DReleaseDir=$ReleaseDir" "/DOutputDir=$DistDir" "/DMyAppVersion=$v" "/DRegionSlug=$region" $InnoIss
+            $isccArgs = @(
+                "/DReleaseDir=$ReleaseDir",
+                "/DOutputDir=$DistDir",
+                "/DMyAppVersion=$v",
+                "/DRegionSlug=$region"
+            )
+            if (-not $OverseasRegion) { $isccArgs += '/DIsCnBuild=1' }
+            & $iscc @isccArgs $InnoIss
             if ($LASTEXITCODE -ne 0) {
                 Write-Error "ISCC failed with exit code $LASTEXITCODE"
             }
@@ -195,7 +219,7 @@ function Invoke-PackageWindowsRegion {
     if (-not $SkipMsix -and -not $ZipOnly) {
         Write-Host "MSIX -> $msixPath"
         # pubspec msix_config.build_windows=false；PowerShell 下请用 =false 单参数，避免 false 被当成布尔量传错
-        dart run msix:create "--build-windows=false" --output-path $DistDir --output-name $msixName
+        dart run msix:create "--build-windows=false" --output-path $DistDir --output-name $msixName "--display-name=$appDisplayName"
         if ($LASTEXITCODE -ne 0) {
             Write-Error "msix:create failed with exit code $LASTEXITCODE"
         }

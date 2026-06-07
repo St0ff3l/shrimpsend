@@ -5,6 +5,15 @@ project(runner LANGUAGES CXX)
 # top-level CMakeLists.txt, not the value here, or `flutter run` will no longer
 # work.
 #
+# Runner.rc.in is configured per cn/intl branding (see windows/CMakeLists.txt).
+# Generated under build/; resource paths must point back to the source tree.
+file(TO_CMAKE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" RUNNER_SOURCE_DIR)
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/Runner.rc.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/Runner.rc"
+  @ONLY
+)
+
 # Any new source files that you add to the application should be added here.
 add_executable(${BINARY_NAME} WIN32
   "flutter_window.cpp"
@@ -12,13 +21,14 @@ add_executable(${BINARY_NAME} WIN32
   "utils.cpp"
   "win32_window.cpp"
   "${FLUTTER_MANAGED_DIR}/generated_plugin_registrant.cc"
-  "Runner.rc"
+  "${CMAKE_CURRENT_BINARY_DIR}/Runner.rc"
   "runner.exe.manifest"
 )
 
 # Apply the standard set of build settings. This can be removed for applications
 # that need different build settings.
 apply_standard_settings(${BINARY_NAME})
+set_target_properties(${BINARY_NAME} PROPERTIES OUTPUT_NAME "${APP_EXECUTABLE_NAME}")
 
 # Add preprocessor definitions for the build version.
 target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION=\"${FLUTTER_VERSION}\"")
@@ -29,6 +39,10 @@ target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION_BUILD=${FLUTT
 
 # Disable Windows macros that collide with C++ standard library functions.
 target_compile_definitions(${BINARY_NAME} PRIVATE "NOMINMAX")
+
+if(DEFINED ENV{WINDOWS_OVERSEAS_BUILD} AND "$ENV{WINDOWS_OVERSEAS_BUILD}" STREQUAL "1")
+  target_compile_definitions(${BINARY_NAME} PRIVATE "WINDOWS_OVERSEAS_BRAND=1")
+endif()
 
 # Add dependency libraries and include directories. Add any application-specific
 # dependencies here.

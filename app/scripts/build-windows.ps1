@@ -14,5 +14,7 @@ $ErrorActionPreference = 'Stop'
 $AppDir = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $AppDir
 & (Join-Path $AppDir 'scripts\windows_font_assets.ps1') enable
+& (Join-Path $AppDir 'scripts\ensure_windows_pdfium.ps1')
 $overseasDefine = if ($Overseas) { 'true' } else { 'false' }
+$env:WINDOWS_OVERSEAS_BUILD = if ($Overseas) { '1' } else { '0' }
 flutter build windows --release "--dart-define=OVERSEAS_BUILD=$overseasDefine" @args

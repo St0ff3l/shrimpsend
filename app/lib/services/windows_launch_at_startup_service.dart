@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../config/env.dart';
+
 class WindowsLaunchAtStartupService {
   WindowsLaunchAtStartupService._();
 
   static const startupArg = '--startup';
   static const _keyEnabled = 'ultrasend_windows_launch_at_startup';
-  static const _appName = 'ShrimpSend';
+  static String get _appName => Env.overseasBuild ? 'ShrimpSend' : '虾传';
   static const _msixPackageName = 'DevUltrasend.Shrimpsend';
 
   static bool _configured = false;
