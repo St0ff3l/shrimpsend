@@ -49,6 +49,9 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 ; 安装结束时显示说明（含 {app} 实际路径）
 InfoAfterFile=install_notes_inno.txt
+; 安装/升级时强制关闭占用文件的进程（Restart Manager）；安装后不自动重启（由 [Run] 可选启动）
+CloseApplications=force
+RestartApplications=no
 
 [Languages]
 ; 仅使用安装器自带的 Default.isl：精简版 Inno 往往不带 ChineseSimplified.isl（需从官网单独下载语言包）。
@@ -75,3 +78,22 @@ Name: "{autodesktop}\{#MyAppDisplayName}"; Filename: "{app}\{#MyAppExeName}"; Ic
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppDisplayName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+
+[Code]
+procedure KillRunningAppProcesses;
+var
+  ResultCode: Integer;
+begin
+  { 128 = 进程不存在，可忽略 }
+  Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /T /IM Shrimpsend.exe',
+    '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /T /IM {#MyAppExeName}',
+    '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+end;
+
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+begin
+  NeedsRestart := False;
+  Result := '';
+  KillRunningAppProcesses;
+end;

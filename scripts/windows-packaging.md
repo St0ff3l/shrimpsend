@@ -54,6 +54,7 @@ Get-Item app\windows\vc_redist\x64\*.dll | Select-Object Name,@{Name='FileVersio
 ## Inno Setup（官网安装包）
 
 - 需安装 [Inno Setup 6](https://jrsoftware.org/isdl.php)，脚本为 [`shrimpsend_windows_inno.iss`](shrimpsend_windows_inno.iss)：向导为 **英文界面**（依赖自带的 `Default.isl`，避免未安装中文语言包时编译失败）；结束页的 [`install_notes_inno.txt`](install_notes_inno.txt) 仍为 **中英双语** 并显示 **`{app}`** 路径。向导中 **可选安装目录**、**默认勾选创建桌面快捷方式**。
+- **安装/升级时若应用已在运行**：安装器会通过 Restart Manager 与 `taskkill` 自动强制结束 `Shrimpsend.exe` / `虾传.exe`（与 ZIP 内更新行为一致），无需用户手动关进程。
 - **cn / intl 品牌**：`RegionSlug=cn` 时主程序为 **`虾传.exe`**、快捷方式/向导标题为「虾传」，安装目录仍为 `Program Files\Shrimpsend`；`intl` 为 **`Shrimpsend.exe`**。构建前由 `package_windows.ps1` 设置 `WINDOWS_OVERSEAS_BUILD`（与 `OVERSEAS_BUILD` 一致）。
 - **中文不乱码**：`shrimpsend_windows_inno.iss` 与 `install_notes_inno.txt` 须 **UTF-8 BOM**；cn 包额外传 `/DIsCnBuild=1`，**勿**用 `/D` 传中文显示名。
 - **cn OTA ZIP** 内主程序文件名为 **`虾传.exe`**（与 `app/lib/main.dart` 中 `appExecutableBaseName` 一致）。
