@@ -217,9 +217,12 @@ void main(List<String> args) async {
   // Mobile: fixed tier avoids mid-session downgrades on the tab bar; revisit
   // if old devices need the adaptive benchmark.
   final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+  final desktopAppRoot = Platform.isWindows
+      ? DesktopWindowCloseShortcuts(child: appRoot)
+      : appRoot;
   runApp(
     isDesktop
-        ? appRoot
+        ? desktopAppRoot
         : LiquidGlassWidgets.wrap(adaptiveQuality: false, child: appRoot),
   );
 

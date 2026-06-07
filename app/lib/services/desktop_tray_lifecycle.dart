@@ -13,6 +13,11 @@ const _kDesktopLifecycleChannel = MethodChannel(
 
 bool get desktopTraySupported => Platform.isWindows || Platform.isMacOS;
 
+Future<void> _setSkipTaskbar(bool skip) async {
+  if (!desktopTraySupported) return;
+  await windowManager.setSkipTaskbar(skip);
+}
+
 final _DesktopWindowListener _windowListener = _DesktopWindowListener();
 final _TrayShowListener _trayShowListener = _TrayShowListener();
 bool _trayInitialized = false;
@@ -21,9 +26,7 @@ class _DesktopWindowListener with WindowListener {
   @override
   void onWindowClose() {
     Future<void>(() async {
-      if (Platform.isWindows) {
-        await windowManager.setSkipTaskbar(true);
-      }
+      await _setSkipTaskbar(true);
       await windowManager.hide();
     });
   }
@@ -64,9 +67,7 @@ class _TrayShowListener with TrayListener {
 
 Future<void> bringMainWindowToFront() async {
   if (!desktopTraySupported) return;
-  if (Platform.isWindows) {
-    await windowManager.setSkipTaskbar(false);
-  }
+  await _setSkipTaskbar(false);
   if (await windowManager.isMinimized()) {
     await windowManager.restore();
   }
@@ -98,7 +99,7 @@ Future<void> initDesktopWindowBeforeRunApp({bool startHidden = false}) async {
           : const Size(1280, 720),
       center: savedBounds == null,
       title: 'ShrimpSend',
-      skipTaskbar: startHidden && Platform.isWindows,
+      skipTaskbar: startHidden,
     ),
     () async {
       if (savedBounds != null) {
@@ -107,9 +108,7 @@ Future<void> initDesktopWindowBeforeRunApp({bool startHidden = false}) async {
         );
       }
       if (startHidden) {
-        if (Platform.isWindows) {
-          await windowManager.setSkipTaskbar(true);
-        }
+        await _setSkipTaskbar(true);
         await windowManager.hide();
         return;
       }
@@ -158,4 +157,37 @@ Future<void> initDesktopTrayAfterFirstFrame() async {
       ],
     ),
   );
+}
+
+class _CloseWindowIntent extends Intent {
+  const _CloseWindowIntent();
+}
+
+/// Windows: Ctrl+W closes the window (same as clicking X — hide to tray).
+class DesktopWindowCloseShortcuts extends StatelessWidget {
+  const DesktopWindowCloseShortcuts({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!Platform.isWindows) return child;
+    return Shortcuts(
+      shortcuts: const {
+        SingleActivator(LogicalKeyboardKey.keyW, control: true):
+            _CloseWindowIntent(),
+      },
+      child: Actions(
+        actions: {
+          _CloseWindowIntent: CallbackAction<_CloseWindowIntent>(
+            onInvoke: (_) {
+              windowManager.close();
+              return null;
+            },
+          ),
+        },
+        child: child,
+      ),
+    );
+  }
 }
