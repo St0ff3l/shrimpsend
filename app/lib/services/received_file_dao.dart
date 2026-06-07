@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
@@ -143,7 +144,11 @@ class ReceivedFileDao {
   ReceivedFileDao._();
   static final instance = ReceivedFileDao._();
 
-  Database get _db => AppDatabase.instance.db;
+  /// In-memory DB for unit tests; when null, uses [AppDatabase.instance].
+  @visibleForTesting
+  static Database? testDatabase;
+
+  Database get _db => testDatabase ?? AppDatabase.instance.db;
 
   static final List<void Function()> _changedListeners = [];
 
@@ -509,21 +514,47 @@ class ReceivedFileDao {
       if (knownPaths.contains(first.path)) continue;
       final existing = await _db.query(
         _table,
-        columns: ['message_id', 'abs_path'],
+        columns: [
+          'message_id',
+          'abs_path',
+          'cache_path',
+          'export_status',
+          'visible_path',
+        ],
         where: 'message_id = ?',
         whereArgs: [dirName],
         limit: 1,
       );
       if (existing.isNotEmpty) {
-        final knownPath = existing.first['abs_path'] as String? ?? '';
-        if (knownPath != first.path) {
-          await upsert(
-            messageId: dirName,
-            absPath: first.path,
-            cachePath: first.path,
-            protocol: _inferProtocolFromMessageId(dirName),
-            exportStatus: ExportStatus.pending,
+        final row = existing.first;
+        final knownPath = row['abs_path'] as String? ?? '';
+        final currentCachePath = row['cache_path'] as String?;
+        if (knownPath != first.path || currentCachePath != first.path) {
+          final exportStatus = ReceivedFileRecord._parseExportStatus(
+            row['export_status'] as String?,
           );
+          if (exportStatus == ExportStatus.done ||
+              exportStatus == ExportStatus.exporting) {
+            final visiblePath = row['visible_path'] as String?;
+            await updateExportState(
+              messageId: dirName,
+              exportStatus: exportStatus,
+              cachePath: first.path,
+              absPath: FileStore.resolveReadablePath(
+                cachePath: first.path,
+                visiblePath: visiblePath,
+                absPath: knownPath.isNotEmpty ? knownPath : first.path,
+              ),
+            );
+          } else {
+            await upsert(
+              messageId: dirName,
+              absPath: first.path,
+              cachePath: first.path,
+              protocol: _inferProtocolFromMessageId(dirName),
+              exportStatus: ExportStatus.pending,
+            );
+          }
           changed++;
         }
         continue;
