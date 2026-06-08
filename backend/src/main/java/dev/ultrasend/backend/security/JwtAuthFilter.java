@@ -58,13 +58,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 Optional<Device> od = deviceRepository.findByUser_IdAndDeviceIdAndActiveTrue(
                         Long.parseLong(userId), parsed.deviceId());
                 if (od.isEmpty()) {
-                    log.warn("JWT device inactive or missing userId={} deviceId={}", userId, parsed.deviceId());
+                    log.warn(
+                            "JWT auth failed reason=device_inactive userId={} deviceId={} tokenDsv={} path={}",
+                            userId, parsed.deviceId(), parsed.deviceSessionVersion(), request.getRequestURI());
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
                 Device d = od.get();
                 if (d.getSessionVersion() != parsed.deviceSessionVersion()) {
-                    log.warn("JWT device session mismatch userId={} deviceId={}", userId, parsed.deviceId());
+                    log.warn(
+                            "JWT auth failed reason=session_version_mismatch userId={} deviceId={} tokenDsv={} deviceDsv={} path={}",
+                            userId, parsed.deviceId(), parsed.deviceSessionVersion(), d.getSessionVersion(),
+                            request.getRequestURI());
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
@@ -78,7 +83,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(auth);
             log.debug("JWT authenticated userId={} path={}", userId, request.getRequestURI());
         } catch (Exception e) {
-            log.warn("JWT invalid token path={} error={}", request.getRequestURI(), e.getMessage());
+            log.warn(
+                    "JWT auth failed reason=invalid_token path={} error={}",
+                    request.getRequestURI(), e.getMessage());
         }
         filterChain.doFilter(request, response);
     }

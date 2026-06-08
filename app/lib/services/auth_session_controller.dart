@@ -23,6 +23,10 @@ class AuthSessionController extends StateNotifier<AuthSessionPhase> {
   Completer<RefreshSessionOutcome>? _refreshInFlight;
   bool _invalidateInProgress = false;
   bool _invalidatingSession = false;
+  Timer? _proactiveRefreshTimer;
+
+  static const _proactiveRefreshBuffer = Duration(minutes: 3);
+  static const _defaultAccessTtl = Duration(minutes: 15);
 
   /// 由 main.dart 注入：清会话后导航登录页并 toast。
   Future<void> Function()? onSessionExpiredNavigate;
@@ -46,6 +50,7 @@ class AuthSessionController extends StateNotifier<AuthSessionPhase> {
   }
 
   void onLogout() {
+    cancelProactiveRefresh();
     state = AuthSessionPhase.unauthenticated;
   }
 
@@ -87,10 +92,78 @@ class AuthSessionController extends StateNotifier<AuthSessionPhase> {
     if (outcome == RefreshSessionOutcome.success) {
       logAuth.info('auth session bootstrap success');
       state = AuthSessionPhase.authenticated;
+      unawaited(scheduleProactiveRefresh());
       return;
     }
     logAuth.warning('auth session bootstrap transient failure, keeping session');
     state = AuthSessionPhase.networkUnavailable;
+    unawaited(scheduleProactiveRefresh());
+  }
+
+  void cancelProactiveRefresh() {
+    _proactiveRefreshTimer?.cancel();
+    _proactiveRefreshTimer = null;
+  }
+
+  Future<void> scheduleProactiveRefresh() async {
+    cancelProactiveRefresh();
+    if (!ref.read(authProvider).isLoggedIn) return;
+
+    final expiresAt =
+        await ref.read(authProvider.notifier).getAccessTokenExpiresAt();
+    final refreshAt = expiresAt != null
+        ? expiresAt.subtract(_proactiveRefreshBuffer)
+        : DateTime.now().add(_defaultAccessTtl - _proactiveRefreshBuffer);
+
+    final delay = refreshAt.difference(DateTime.now());
+    if (delay.isNegative) {
+      unawaited(_runProactiveRefresh());
+      return;
+    }
+
+    _proactiveRefreshTimer = Timer(delay, () {
+      unawaited(_runProactiveRefresh());
+    });
+  }
+
+  Future<void> _runProactiveRefresh() async {
+    if (!ref.read(authProvider).isLoggedIn) return;
+    logAuth.info('auth session proactive refresh');
+    final outcome = await refreshSingleFlight();
+    if (outcome == RefreshSessionOutcome.success) {
+      if (state != AuthSessionPhase.sessionExpired) {
+        state = AuthSessionPhase.authenticated;
+      }
+      await scheduleProactiveRefresh();
+      return;
+    }
+    if (outcome == RefreshSessionOutcome.permanentFailure ||
+        outcome == RefreshSessionOutcome.noRefreshToken) {
+      logAuth.warning('auth session proactive refresh permanent failure ($outcome)');
+      await invalidateSession(showToast: true);
+    }
+  }
+
+  Future<void> onAppResumed() async {
+    if (!ref.read(authProvider).isLoggedIn) return;
+    if (state == AuthSessionPhase.sessionExpired) return;
+
+    final expiresAt =
+        await ref.read(authProvider.notifier).getAccessTokenExpiresAt();
+    final threshold = expiresAt?.subtract(_proactiveRefreshBuffer) ??
+        DateTime.now().add(_defaultAccessTtl - _proactiveRefreshBuffer);
+    if (DateTime.now().isBefore(threshold)) return;
+
+    logAuth.info('auth session resume refresh');
+    final outcome = await refreshSingleFlight(useRetry: true);
+    if (outcome == RefreshSessionOutcome.success) {
+      state = AuthSessionPhase.authenticated;
+      await scheduleProactiveRefresh();
+      return;
+    }
+    if (outcome == RefreshSessionOutcome.transientFailure) {
+      markNetworkUnavailable();
+    }
   }
 
   Future<RefreshSessionOutcome> refreshSingleFlight({
@@ -175,6 +248,7 @@ class AuthSessionController extends StateNotifier<AuthSessionPhase> {
     if (_invalidateInProgress) return;
     _invalidateInProgress = true;
     _invalidatingSession = true;
+    cancelProactiveRefresh();
     try {
       state = AuthSessionPhase.sessionExpired;
       await ref.read(authProvider.notifier).clearAuth();

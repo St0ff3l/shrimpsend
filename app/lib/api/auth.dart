@@ -9,15 +9,18 @@ class AuthResponse {
   final String accessToken;
   final String refreshToken;
   final String userId;
+  final int expiresIn;
   AuthResponse({
     required this.accessToken,
     required this.refreshToken,
     required this.userId,
+    this.expiresIn = 900,
   });
   factory AuthResponse.fromJson(Map<String, dynamic> j) => AuthResponse(
     accessToken: j['accessToken'] as String,
     refreshToken: j['refreshToken'] as String,
     userId: j['userId'] as String,
+    expiresIn: (j['expiresIn'] as num?)?.toInt() ?? 900,
   );
 }
 

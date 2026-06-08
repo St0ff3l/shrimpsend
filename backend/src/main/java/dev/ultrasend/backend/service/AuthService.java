@@ -136,19 +136,27 @@ public class AuthService {
         String userId = parsed.userId();
         User user = userRepository.findById(Long.parseLong(userId))
                 .orElseThrow(() -> {
-                    log.warn("refresh failed user not found userId={}", userId);
+                    log.warn("refresh failed reason=user_not_found userId={}", userId);
                     return new ResponseStatusException(
                             HttpStatus.UNAUTHORIZED, SESSION_EXPIRED_MESSAGE);
                 });
-        log.info("refresh ok userId={}", userId);
         if (parsed.deviceId() != null && parsed.deviceSessionVersion() != null) {
             Device d = deviceRepository
                     .findByUser_IdAndDeviceIdAndActiveTrue(Long.parseLong(userId), parsed.deviceId())
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.UNAUTHORIZED, SESSION_EXPIRED_MESSAGE));
+                    .orElseThrow(() -> {
+                        log.warn(
+                                "refresh failed reason=device_inactive userId={} deviceId={} tokenDsv={}",
+                                userId, parsed.deviceId(), parsed.deviceSessionVersion());
+                        return new ResponseStatusException(
+                                HttpStatus.UNAUTHORIZED, SESSION_EXPIRED_MESSAGE);
+                    });
             if (d.getSessionVersion() != parsed.deviceSessionVersion()) {
+                log.warn(
+                        "refresh failed reason=session_version_mismatch userId={} deviceId={} tokenDsv={} deviceDsv={}",
+                        userId, parsed.deviceId(), parsed.deviceSessionVersion(), d.getSessionVersion());
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, SESSION_EXPIRED_MESSAGE);
             }
+            log.info("refresh ok userId={} deviceId={} dsv={}", userId, d.getDeviceId(), d.getSessionVersion());
             String accessToken = jwtService.generateAccessToken(userId, user.getEmail(), d.getDeviceId(), d.getSessionVersion());
             String refreshToken = jwtService.generateRefreshToken(userId, d.getDeviceId(), d.getSessionVersion());
             return AuthResponse.builder()
@@ -158,6 +166,7 @@ public class AuthService {
                     .expiresIn(jwtService.getAccessExpirationSeconds())
                     .build();
         }
+        log.info("refresh ok userId={} legacyTokenWithoutDevice", userId);
         String accessToken = jwtService.generateAccessToken(userId, user.getEmail());
         String refreshToken = jwtService.generateRefreshToken(userId);
         return AuthResponse.builder()

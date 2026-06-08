@@ -396,19 +396,8 @@ public class DeviceService {
         if (sessionId == null || sessionId.isBlank()) {
             return;
         }
-        String normalizedSessionId = sessionId.trim();
-        DevicePresenceSession session = devicePresenceSessionRepository
-                .findByUserIdAndDeviceIdAndSessionId(userId, deviceId, normalizedSessionId)
-                .orElseGet(() -> DevicePresenceSession.builder()
-                        .userId(userId)
-                        .deviceId(deviceId)
-                        .sessionId(normalizedSessionId)
-                        .createdAt(now)
-                        .build());
-        session.setPlatform(platform);
-        session.setLastSeen(now);
-        session.setClosedAt(null);
-        devicePresenceSessionRepository.save(session);
+        devicePresenceSessionRepository.upsertOpenSession(
+                userId, deviceId, sessionId.trim(), platform, now);
     }
 
     private Device aggregateDevicePresence(Device device, Instant now) {

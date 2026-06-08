@@ -36,4 +36,22 @@ public interface DevicePresenceSessionRepository extends JpaRepository<DevicePre
             @Param("userId") Long userId,
             @Param("deviceId") String deviceId,
             @Param("closedAt") Instant closedAt);
+
+    @Modifying
+    @Query(value = """
+            INSERT INTO device_presence_sessions
+              (user_id, device_id, session_id, platform, created_at, last_seen, closed_at)
+            VALUES
+              (:userId, :deviceId, :sessionId, :platform, :now, :now, NULL)
+            ON DUPLICATE KEY UPDATE
+              platform = VALUES(platform),
+              last_seen = VALUES(last_seen),
+              closed_at = NULL
+            """, nativeQuery = true)
+    int upsertOpenSession(
+            @Param("userId") Long userId,
+            @Param("deviceId") String deviceId,
+            @Param("sessionId") String sessionId,
+            @Param("platform") String platform,
+            @Param("now") Instant now);
 }
