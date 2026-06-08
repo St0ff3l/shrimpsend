@@ -89,22 +89,58 @@ export function ConnectionDiagnosticSheet({ open, onOpenChange, state }: Props) 
         </DialogContent>
       </Dialog>
 
-      <Dialog open={helpStepId != null} onOpenChange={(o) => !o && setHelpStepId(null)}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>{help?.title}</DialogTitle>
-          </DialogHeader>
-          <DialogDescription className="whitespace-pre-line leading-relaxed">
-            {help?.body}
-          </DialogDescription>
-          <div className="flex justify-end pt-2">
-            <Button type="button" onClick={() => setHelpStepId(null)}>
-              {t('common.confirm')}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {helpStepId != null && help ? (
+        <DiagnosticStepHelpOverlay
+          title={help.title}
+          body={help.body}
+          confirmLabel={t('common.confirm')}
+          onClose={() => setHelpStepId(null)}
+        />
+      ) : null}
     </>
+  );
+}
+
+function DiagnosticStepHelpOverlay({
+  title,
+  body,
+  confirmLabel,
+  onClose,
+}: {
+  title: string;
+  body: string;
+  confirmLabel: string;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/45 p-4 supports-backdrop-filter:backdrop-blur-[2px]"
+      role="presentation"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="connection-diag-help-title"
+        className="w-full max-w-md rounded-2xl border border-border/80 bg-card p-5 shadow-xl ring-1 ring-foreground/6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3
+          id="connection-diag-help-title"
+          className="font-display text-base font-semibold tracking-tight"
+        >
+          {title}
+        </h3>
+        <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
+          {body}
+        </p>
+        <div className="mt-4 flex justify-end">
+          <Button type="button" onClick={onClose}>
+            {confirmLabel}
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -124,15 +160,21 @@ function DiagnosticStepRow({
         <StepStatusIcon status={step.status} />
         <div className="min-w-0 flex-1">
           <div className="flex items-start gap-1">
-            <p className="min-w-0 flex-1 text-sm font-semibold">{step.title}</p>
-            <button
-              type="button"
-              className="shrink-0 rounded-md p-0.5 text-muted-foreground hover:bg-muted hover:text-foreground"
-              title={t('chat.connectionDiag.helpTooltip')}
-              onClick={onHelp}
-            >
-              <CircleHelp className="size-3.5" />
-            </button>
+            <div className="flex min-w-0 flex-1 items-center gap-0.5">
+              <p className="truncate text-sm font-semibold">{step.title}</p>
+              <button
+                type="button"
+                className="shrink-0 rounded-md p-0.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                title={t('chat.connectionDiag.helpTooltip')}
+                aria-label={t('chat.connectionDiag.helpTooltip')}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onHelp();
+                }}
+              >
+                <CircleHelp className="size-3.5" />
+              </button>
+            </div>
             {elapsed != null ? (
               <span className="shrink-0 text-[10px] text-muted-foreground">
                 {t('chat.connectionDiag.elapsed', { elapsed })}
