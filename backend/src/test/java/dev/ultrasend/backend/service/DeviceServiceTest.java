@@ -1,5 +1,6 @@
 package dev.ultrasend.backend.service;
 
+import dev.ultrasend.backend.dto.DeviceRegisterRequest;
 import dev.ultrasend.backend.entity.Device;
 import dev.ultrasend.backend.entity.DevicePresenceSession;
 import dev.ultrasend.backend.entity.User;
@@ -63,6 +64,73 @@ class DeviceServiceTest {
 
         verify(deviceRosterPublisher, never()).publishUpsertAfterCommit(any(), any());
         verify(deviceRepository).save(argThat(d -> DeviceService.PRESENCE_ONLINE.equals(d.getPresenceStatus())));
+    }
+
+    @Test
+    void registerWithSessionIdUpsertsPresenceSession() {
+        User user = new User();
+        user.setId(1L);
+        Device device = onlineDevice();
+        device.setDeviceId("edge_abc");
+        device.setDisplayCode(1);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(deviceRepository.findByDeviceId("edge_abc")).thenReturn(Optional.of(device));
+        when(deviceRepository.save(any(Device.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        DeviceRegisterRequest req = new DeviceRegisterRequest();
+        req.setDeviceId("edge_abc");
+        req.setName("Edge");
+        req.setPlatform("web");
+        req.setSessionId("  session-1  ");
+
+        deviceService.register(1L, req);
+
+        verify(devicePresenceSessionRepository).upsertOpenSession(
+                eq(1L),
+                eq("edge_abc"),
+                eq("session-1"),
+                eq("web"),
+                any(Instant.class));
+        verify(devicePresenceSessionRepository, never()).save(any(DevicePresenceSession.class));
+    }
+
+    @Test
+    void registerWithBlankSessionIdSkipsPresenceUpsert() {
+        User user = new User();
+        user.setId(1L);
+        Device device = onlineDevice();
+        device.setDisplayCode(1);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(deviceRepository.findByDeviceId("edge_abc")).thenReturn(Optional.of(device));
+        when(deviceRepository.save(any(Device.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        DeviceRegisterRequest req = new DeviceRegisterRequest();
+        req.setDeviceId("edge_abc");
+        req.setName("Edge");
+        req.setPlatform("web");
+        req.setSessionId("   ");
+
+        deviceService.register(1L, req);
+
+        verify(devicePresenceSessionRepository, never()).upsertOpenSession(
+                any(), any(), any(), any(), any());
+    }
+
+    @Test
+    void markOnlineWithSessionIdUpsertsPresenceSession() {
+        Device device = onlineDevice();
+        when(deviceRepository.findByUser_IdAndDeviceIdAndActiveTrue(1L, "web_1"))
+                .thenReturn(Optional.of(device));
+        when(deviceRepository.save(any(Device.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        deviceService.markOnline(1L, "web_1", "tab_b", "web");
+
+        verify(devicePresenceSessionRepository).upsertOpenSession(
+                eq(1L),
+                eq("web_1"),
+                eq("tab_b"),
+                eq("web"),
+                any(Instant.class));
     }
 
     @Test
