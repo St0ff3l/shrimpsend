@@ -1,10 +1,24 @@
 'use client';
 
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { login as apiLogin, register as apiRegister, saveTokens, clearStorage, getAccessToken, getUserId, setOnRefreshSuccess } from '@/lib/api';
+import {
+  login as apiLogin,
+  register as apiRegister,
+  saveTokens,
+  clearStorage,
+  getAccessToken,
+  getUserId,
+  hasCompleteStoredSession,
+  bootstrapStoredSession,
+  RefreshSessionOutcome,
+  setOnRefreshSuccess,
+  scheduleProactiveTokenRefresh,
+  stopProactiveTokenRefresh,
+} from '@/lib/api';
 import { apiLogout } from '@/lib/api/auth';
 import type { AuthResponse } from '@/lib/api';
 import { getOrCreateDeviceId } from '@/lib/deviceId';
+import { useAuthSessionRefresh } from '@/hooks/useAuthSessionRefresh';
 import { logger } from '@/lib/logger';
 import { analyticsLengthBucket, analyticsTrack } from '@/lib/analytics';
 import { AnalyticsEvents } from '@/lib/analyticsEvents';
@@ -30,28 +44,70 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isReady, setIsReady] = useState(false);
   const prevUserIdRef = useRef<string | null | undefined>(undefined);
 
+  useAuthSessionRefresh(Boolean(accessToken && userId));
+
   useEffect(() => {
     let cancelled = false;
-    queueMicrotask(() => {
-      if (cancelled) return;
+
+    async function loadAndBootstrap() {
+      if (!hasCompleteStoredSession()) {
+        if (getAccessToken() || getUserId()) {
+          logger.warn(TAG, 'loadStored incomplete session (missing refreshToken), clearing');
+          clearStorage();
+        } else {
+          logger.info(TAG, 'loadStored no stored auth');
+        }
+        if (!cancelled) setIsReady(true);
+        return;
+      }
+
       const storedToken = getAccessToken();
       const storedUserId = getUserId();
       if (storedToken && storedUserId) {
         logger.info(TAG, 'loadStored restored userId=', storedUserId);
-        setUserId(storedUserId);
-        setAccessToken(storedToken);
-      } else {
-        logger.info(TAG, 'loadStored no stored auth');
+        if (!cancelled) {
+          setUserId(storedUserId);
+          setAccessToken(storedToken);
+        }
       }
+
+      const outcome = await bootstrapStoredSession();
+      if (cancelled) return;
+
+      if (
+        outcome === RefreshSessionOutcome.permanentFailure
+        || outcome === RefreshSessionOutcome.noRefreshToken
+      ) {
+        logger.warn(TAG, 'bootstrap permanent failure, clearing session outcome=', outcome);
+        clearStorage();
+        setUserId(null);
+        setAccessToken(null);
+      } else if (outcome === RefreshSessionOutcome.success) {
+        const token = getAccessToken();
+        const uid = getUserId();
+        if (token && uid) {
+          setUserId(uid);
+          setAccessToken(token);
+        }
+      } else {
+        logger.warn(TAG, 'bootstrap transient failure, keeping local session');
+        scheduleProactiveTokenRefresh();
+      }
+
       setIsReady(true);
-    });
+    }
+
     setOnRefreshSuccess((data: AuthResponse) => {
       setUserId(data.userId);
       setAccessToken(data.accessToken);
     });
+
+    void loadAndBootstrap();
+
     return () => {
       cancelled = true;
       setOnRefreshSuccess(null);
+      stopProactiveTokenRefresh();
     };
   }, []);
 
@@ -73,6 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       saveTokens(data);
       setUserId(data.userId);
       setAccessToken(data.accessToken);
+      scheduleProactiveTokenRefresh();
       logger.info(TAG, 'login success userId=', data.userId);
       analyticsTrack(AnalyticsEvents.loginSubmit, {
         result: 'success',
@@ -93,6 +150,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       saveTokens(data);
       setUserId(data.userId);
       setAccessToken(data.accessToken);
+      scheduleProactiveTokenRefresh();
       logger.info(TAG, 'register success userId=', data.userId);
       analyticsTrack(AnalyticsEvents.registerSubmit, {
         result: 'success',
@@ -116,6 +174,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch {
       apiOk = false;
     }
+    stopProactiveTokenRefresh();
     clearStorage();
     setUserId(null);
     setAccessToken(null);
@@ -123,8 +182,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const setAuthFromTokens = useCallback((data: AuthResponse) => {
+    saveTokens(data);
     setUserId(data.userId);
     setAccessToken(data.accessToken);
+    scheduleProactiveTokenRefresh();
     logger.info(TAG, 'setAuthFromTokens userId=', data.userId);
   }, []);
 

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Centrifuge } from 'centrifuge';
-import { getAccessToken, getUserId, tryRefreshAndSave } from '@/lib/api';
+import { getAccessToken, getUserId, tryRefreshAndSave, maybeRefreshOnVisible } from '@/lib/api';
 import { getCentrifugoToken } from '@/lib/api';
 import type { MessageEnvelope } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
@@ -144,7 +144,7 @@ export function useCentrifuge(
       const c = centrifugeRef.current;
       if (!c || c.state === 'connected') return;
       logger.info(TAG, 'tab visible, connection state=', c.state, ', triggering reconnect');
-      tryRefreshAndSave().then((ok) => {
+      maybeRefreshOnVisible().then((ok) => {
         if (ok && mountedRef.current) {
           logger.info(TAG, 'visibility refresh ok, will reconnect via effect');
         } else if (mountedRef.current && centrifugeRef.current?.state !== 'connected') {

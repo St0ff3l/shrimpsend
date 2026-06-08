@@ -1,4 +1,23 @@
-export { AuthError, getAccessToken, getUserId, setOnAuthExpired, setOnRefreshSuccess, tryRefreshAndSave, saveTokens, clearStorage } from './client';
+export {
+  AuthError,
+  SessionUnavailableError,
+  RefreshSessionOutcome,
+  getAccessToken,
+  getUserId,
+  getRefreshToken,
+  hasCompleteStoredSession,
+  bootstrapStoredSession,
+  maybeRefreshOnVisible,
+  scheduleProactiveTokenRefresh,
+  stopProactiveTokenRefresh,
+  setOnAuthExpired,
+  setOnRefreshSuccess,
+  tryRefreshAndSave,
+  saveTokens,
+  clearStorage,
+  isAuthFailure,
+  withAuthRetry,
+} from './client';
 export type { AuthResponse } from './client';
 export { login, register, refreshTokens } from './auth';
 export type { DeviceDto } from './devices';

@@ -44,6 +44,7 @@ import 'screens/app_log_screen.dart';
 import 'screens/membership_screen.dart';
 import 'services/app_update_service.dart';
 import 'widgets/app_update_dialog.dart';
+import 'widgets/auth_session_lifecycle.dart';
 import 'widgets/desktop_update_banner.dart';
 import 'services/app_log_file.dart';
 import 'services/database.dart';
@@ -527,9 +528,11 @@ class MyApp extends StatelessWidget {
                                   child: DesktopFileDropScope(
                                     navigatorKey: navigatorKey,
                                     locale: lr.locale,
-                                    child: _UpdateCheckWrapper(
-                                      navigatorKey: navigatorKey,
-                                      child: child,
+                                    child: AuthSessionLifecycle(
+                                      child: _UpdateCheckWrapper(
+                                        navigatorKey: navigatorKey,
+                                        child: child,
+                                      ),
                                     ),
                                   ),
                                 ),
