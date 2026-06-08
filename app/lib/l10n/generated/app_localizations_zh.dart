@@ -2256,6 +2256,44 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get connectionDiagHelpHttpDirectTitle => 'HTTP 局域网直连';
+
+  @override
+  String get connectionDiagHelpHttpDirectBody =>
+      '本机直接向对端的局域网 HTTP 地址发起 /probe 请求，不经过云端服务器。\n\n用于确认：在已知对端局域网地址（如 mDNS 发现）且网络可达时，能否建立最快的 HTTP 文件传输路径。';
+
+  @override
+  String get connectionDiagHelpHttpSignalingTitle => 'HTTP 信令检测';
+
+  @override
+  String get connectionDiagHelpHttpSignalingBody =>
+      '通过云端消息（Centrifugo）通知对端自检其 HTTP 服务，并将结果回传。\n\n用于确认：即使尚未发现对端局域网地址，只要双方在线，对端 HTTP 服务是否正常，并可能获取或更新其局域网地址。';
+
+  @override
+  String get connectionDiagHelpHttpPullTitle => 'HTTP 反向拉取';
+
+  @override
+  String get connectionDiagHelpHttpPullBody =>
+      '通过云端通知对端，尝试访问本机的 HTTP 服务。\n\n用于确认：在 NAT 或网络不对称（只能单向连通）时，对端能否反向拉取本机文件。这是 HTTP 直连不可用时的备选传输方向。';
+
+  @override
+  String get connectionDiagHelpWebrtcTitle => 'WebRTC 连通性';
+
+  @override
+  String get connectionDiagHelpWebrtcBody =>
+      '通过云端交换 ICE 网络候选信息，分析双方是否在同一网段、能否 P2P 直连，或需经中继连通。\n\n用于确认：WebRTC 文件传输路径是否可用（通常比 HTTP 直连慢，但可跨网段）。';
+
+  @override
+  String get connectionDiagHelpS3Title => 'S3 云端';
+
+  @override
+  String get connectionDiagHelpS3Body =>
+      '检测账号的 S3 存储配置是否完整，并向云端发起连通性测试。\n\n用于确认：当所有局域网/直连方式均不可用时，是否可降级到 S3 云中转传输文件。';
+
+  @override
+  String get connectionDiagHelpTooltip => '了解检测原理';
+
+  @override
   String get composerPickAttachmentTitle => '选择附件';
 
   @override

@@ -9,6 +9,44 @@ import '../../network/connection_diagnostic.dart';
 import '../../ui/app_ui.dart';
 import '../busy_status_indicator.dart';
 
+Future<void> showConnectionDiagnosticStepHelp(
+  BuildContext context,
+  ConnectionDiagnosticStepId stepId,
+) {
+  final l10n = AppLocalizations.of(context);
+  final colors = context.appColors;
+  final theme = Theme.of(context);
+  final help = diagnosticStepHelp(l10n, stepId);
+
+  return showDialog<void>(
+    context: context,
+    builder: (ctx) {
+      return AlertDialog(
+        titlePadding: AppDialog.titlePadding,
+        contentPadding: AppDialog.confirmContentPadding,
+        actionsPadding: AppDialog.actionsPadding,
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.medium),
+        title: Text(help.title, style: theme.textTheme.titleMedium),
+        content: SingleChildScrollView(
+          child: Text(
+            help.body,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colors.textSecondary,
+              height: 1.45,
+            ),
+          ),
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(l10n.confirm),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 Future<void> showConnectionDiagnosticSheet(BuildContext context) {
   final colors = context.appColors;
   return showModalBottomSheet<void>(
@@ -202,12 +240,29 @@ class _DiagnosticStepRow extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Expanded(
+                        Flexible(
                           child: Text(
                             step.title,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
                               color: colors.textPrimary,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: IconButton(
+                            onPressed: () => showConnectionDiagnosticStepHelp(
+                              context,
+                              step.id,
+                            ),
+                            padding: EdgeInsets.zero,
+                            tooltip: l10n.connectionDiagHelpTooltip,
+                            icon: Icon(
+                              LucideIcons.circleHelp,
+                              size: 14,
+                              color: colors.textTertiary,
                             ),
                           ),
                         ),
@@ -405,5 +460,45 @@ String diagnosticStepTitle(
       return l10n.connectionDiagStepHttpPull;
     case ConnectionDiagnosticStepId.webrtc:
       return l10n.connectionDiagStepWebrtc;
+  }
+}
+
+class DiagnosticStepHelp {
+  const DiagnosticStepHelp({required this.title, required this.body});
+
+  final String title;
+  final String body;
+}
+
+DiagnosticStepHelp diagnosticStepHelp(
+  AppLocalizations l10n,
+  ConnectionDiagnosticStepId id,
+) {
+  switch (id) {
+    case ConnectionDiagnosticStepId.httpDirect:
+      return DiagnosticStepHelp(
+        title: l10n.connectionDiagHelpHttpDirectTitle,
+        body: l10n.connectionDiagHelpHttpDirectBody,
+      );
+    case ConnectionDiagnosticStepId.httpSignaling:
+      return DiagnosticStepHelp(
+        title: l10n.connectionDiagHelpHttpSignalingTitle,
+        body: l10n.connectionDiagHelpHttpSignalingBody,
+      );
+    case ConnectionDiagnosticStepId.httpPull:
+      return DiagnosticStepHelp(
+        title: l10n.connectionDiagHelpHttpPullTitle,
+        body: l10n.connectionDiagHelpHttpPullBody,
+      );
+    case ConnectionDiagnosticStepId.webrtc:
+      return DiagnosticStepHelp(
+        title: l10n.connectionDiagHelpWebrtcTitle,
+        body: l10n.connectionDiagHelpWebrtcBody,
+      );
+    case ConnectionDiagnosticStepId.s3:
+      return DiagnosticStepHelp(
+        title: l10n.connectionDiagHelpS3Title,
+        body: l10n.connectionDiagHelpS3Body,
+      );
   }
 }
