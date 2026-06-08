@@ -3990,6 +3990,228 @@ abstract class AppLocalizations {
   /// **'WebRTC LAN direct'**
   String get transportModeWebrtcLan;
 
+  /// No description provided for @connectionDiagTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection diagnostic'**
+  String get connectionDiagTitle;
+
+  /// No description provided for @connectionDiagSubtitleRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing connection to {peer}…'**
+  String connectionDiagSubtitleRunning(String peer);
+
+  /// No description provided for @connectionDiagSubtitleDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection test to {peer} complete'**
+  String connectionDiagSubtitleDone(String peer);
+
+  /// No description provided for @connectionDiagContinueInBackground.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue in background'**
+  String get connectionDiagContinueInBackground;
+
+  /// No description provided for @connectionDiagDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get connectionDiagDone;
+
+  /// No description provided for @connectionDiagStepS3.
+  ///
+  /// In en, this message translates to:
+  /// **'S3 cloud'**
+  String get connectionDiagStepS3;
+
+  /// No description provided for @connectionDiagStepHttpDirect.
+  ///
+  /// In en, this message translates to:
+  /// **'HTTP LAN direct'**
+  String get connectionDiagStepHttpDirect;
+
+  /// No description provided for @connectionDiagStepHttpSignaling.
+  ///
+  /// In en, this message translates to:
+  /// **'HTTP signaling'**
+  String get connectionDiagStepHttpSignaling;
+
+  /// No description provided for @connectionDiagStepHttpPull.
+  ///
+  /// In en, this message translates to:
+  /// **'HTTP reverse pull'**
+  String get connectionDiagStepHttpPull;
+
+  /// No description provided for @connectionDiagStepWebrtc.
+  ///
+  /// In en, this message translates to:
+  /// **'WebRTC connectivity'**
+  String get connectionDiagStepWebrtc;
+
+  /// No description provided for @connectionDiagStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting'**
+  String get connectionDiagStatusPending;
+
+  /// No description provided for @connectionDiagStatusRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing'**
+  String get connectionDiagStatusRunning;
+
+  /// No description provided for @connectionDiagStatusSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get connectionDiagStatusSuccess;
+
+  /// No description provided for @connectionDiagStatusFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get connectionDiagStatusFailure;
+
+  /// No description provided for @connectionDiagStatusSkipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get connectionDiagStatusSkipped;
+
+  /// No description provided for @connectionDiagReasonS3Online.
+  ///
+  /// In en, this message translates to:
+  /// **'S3 configured and cloud reachable'**
+  String get connectionDiagReasonS3Online;
+
+  /// No description provided for @connectionDiagReasonS3NotConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'S3 not configured'**
+  String get connectionDiagReasonS3NotConfigured;
+
+  /// No description provided for @connectionDiagReasonS3Unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'S3 configured but cloud unreachable'**
+  String get connectionDiagReasonS3Unavailable;
+
+  /// No description provided for @connectionDiagReasonHttpDirectOk.
+  ///
+  /// In en, this message translates to:
+  /// **'LAN HTTP direct connection succeeded'**
+  String get connectionDiagReasonHttpDirectOk;
+
+  /// No description provided for @connectionDiagReasonHttpDirectFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot reach peer HTTP service (timeout or no response)'**
+  String get connectionDiagReasonHttpDirectFail;
+
+  /// No description provided for @connectionDiagReasonHttpSignalingOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Peer HTTP self-check passed'**
+  String get connectionDiagReasonHttpSignalingOk;
+
+  /// No description provided for @connectionDiagReasonHttpSignalingFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Signaling probe failed; peer HTTP did not respond'**
+  String get connectionDiagReasonHttpSignalingFail;
+
+  /// No description provided for @connectionDiagReasonHttpPullOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Peer can reverse-pull from this device'**
+  String get connectionDiagReasonHttpPullOk;
+
+  /// No description provided for @connectionDiagReasonHttpPullFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Reverse pull failed; peer cannot reach local HTTP'**
+  String get connectionDiagReasonHttpPullFail;
+
+  /// No description provided for @connectionDiagReasonWebrtcOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Same network — WebRTC can connect directly'**
+  String get connectionDiagReasonWebrtcOnline;
+
+  /// No description provided for @connectionDiagReasonWebrtcConnectable.
+  ///
+  /// In en, this message translates to:
+  /// **'Cross-network — WebRTC may connect via relay'**
+  String get connectionDiagReasonWebrtcConnectable;
+
+  /// No description provided for @connectionDiagReasonWebrtcFail.
+  ///
+  /// In en, this message translates to:
+  /// **'WebRTC signaling or ICE unreachable'**
+  String get connectionDiagReasonWebrtcFail;
+
+  /// No description provided for @connectionDiagReasonWebrtcSkippedLanOk.
+  ///
+  /// In en, this message translates to:
+  /// **'LAN HTTP already works — WebRTC skipped'**
+  String get connectionDiagReasonWebrtcSkippedLanOk;
+
+  /// No description provided for @connectionDiagReasonSkippedLanDirectOk.
+  ///
+  /// In en, this message translates to:
+  /// **'HTTP direct succeeded — skipped'**
+  String get connectionDiagReasonSkippedLanDirectOk;
+
+  /// No description provided for @connectionDiagReasonSkippedOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline — cloud signaling probes unavailable'**
+  String get connectionDiagReasonSkippedOffline;
+
+  /// No description provided for @connectionDiagReasonSkippedPeerOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Peer offline with no LAN address — skipped'**
+  String get connectionDiagReasonSkippedPeerOffline;
+
+  /// No description provided for @connectionDiagReasonHttpDirectNoUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'No LAN address found — cannot test HTTP direct'**
+  String get connectionDiagReasonHttpDirectNoUrl;
+
+  /// No description provided for @connectionDiagReasonOfflineCloud.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline — cloud signaling probes unavailable'**
+  String get connectionDiagReasonOfflineCloud;
+
+  /// No description provided for @connectionDiagReasonS3LoginRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in required to test S3'**
+  String get connectionDiagReasonS3LoginRequired;
+
+  /// No description provided for @connectionDiagSummaryRecommend.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended: {mode} ({reason})'**
+  String connectionDiagSummaryRecommend(String mode, String reason);
+
+  /// No description provided for @connectionDiagSummaryNoRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'No available transport route found'**
+  String get connectionDiagSummaryNoRoute;
+
+  /// No description provided for @connectionDiagElapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'{elapsed} elapsed'**
+  String connectionDiagElapsed(String elapsed);
+
   /// No description provided for @composerPickAttachmentTitle.
   ///
   /// In en, this message translates to:

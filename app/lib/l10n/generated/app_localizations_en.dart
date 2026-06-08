@@ -2221,6 +2221,144 @@ class AppLocalizationsEn extends AppLocalizations {
   String get transportModeWebrtcLan => 'WebRTC LAN direct';
 
   @override
+  String get connectionDiagTitle => 'Connection diagnostic';
+
+  @override
+  String connectionDiagSubtitleRunning(String peer) {
+    return 'Testing connection to $peer…';
+  }
+
+  @override
+  String connectionDiagSubtitleDone(String peer) {
+    return 'Connection test to $peer complete';
+  }
+
+  @override
+  String get connectionDiagContinueInBackground => 'Continue in background';
+
+  @override
+  String get connectionDiagDone => 'Done';
+
+  @override
+  String get connectionDiagStepS3 => 'S3 cloud';
+
+  @override
+  String get connectionDiagStepHttpDirect => 'HTTP LAN direct';
+
+  @override
+  String get connectionDiagStepHttpSignaling => 'HTTP signaling';
+
+  @override
+  String get connectionDiagStepHttpPull => 'HTTP reverse pull';
+
+  @override
+  String get connectionDiagStepWebrtc => 'WebRTC connectivity';
+
+  @override
+  String get connectionDiagStatusPending => 'Waiting';
+
+  @override
+  String get connectionDiagStatusRunning => 'Testing';
+
+  @override
+  String get connectionDiagStatusSuccess => 'Available';
+
+  @override
+  String get connectionDiagStatusFailure => 'Unavailable';
+
+  @override
+  String get connectionDiagStatusSkipped => 'Skipped';
+
+  @override
+  String get connectionDiagReasonS3Online =>
+      'S3 configured and cloud reachable';
+
+  @override
+  String get connectionDiagReasonS3NotConfigured => 'S3 not configured';
+
+  @override
+  String get connectionDiagReasonS3Unavailable =>
+      'S3 configured but cloud unreachable';
+
+  @override
+  String get connectionDiagReasonHttpDirectOk =>
+      'LAN HTTP direct connection succeeded';
+
+  @override
+  String get connectionDiagReasonHttpDirectFail =>
+      'Cannot reach peer HTTP service (timeout or no response)';
+
+  @override
+  String get connectionDiagReasonHttpSignalingOk =>
+      'Peer HTTP self-check passed';
+
+  @override
+  String get connectionDiagReasonHttpSignalingFail =>
+      'Signaling probe failed; peer HTTP did not respond';
+
+  @override
+  String get connectionDiagReasonHttpPullOk =>
+      'Peer can reverse-pull from this device';
+
+  @override
+  String get connectionDiagReasonHttpPullFail =>
+      'Reverse pull failed; peer cannot reach local HTTP';
+
+  @override
+  String get connectionDiagReasonWebrtcOnline =>
+      'Same network — WebRTC can connect directly';
+
+  @override
+  String get connectionDiagReasonWebrtcConnectable =>
+      'Cross-network — WebRTC may connect via relay';
+
+  @override
+  String get connectionDiagReasonWebrtcFail =>
+      'WebRTC signaling or ICE unreachable';
+
+  @override
+  String get connectionDiagReasonWebrtcSkippedLanOk =>
+      'LAN HTTP already works — WebRTC skipped';
+
+  @override
+  String get connectionDiagReasonSkippedLanDirectOk =>
+      'HTTP direct succeeded — skipped';
+
+  @override
+  String get connectionDiagReasonSkippedOffline =>
+      'Offline — cloud signaling probes unavailable';
+
+  @override
+  String get connectionDiagReasonSkippedPeerOffline =>
+      'Peer offline with no LAN address — skipped';
+
+  @override
+  String get connectionDiagReasonHttpDirectNoUrl =>
+      'No LAN address found — cannot test HTTP direct';
+
+  @override
+  String get connectionDiagReasonOfflineCloud =>
+      'Offline — cloud signaling probes unavailable';
+
+  @override
+  String get connectionDiagReasonS3LoginRequired =>
+      'Sign in required to test S3';
+
+  @override
+  String connectionDiagSummaryRecommend(String mode, String reason) {
+    return 'Recommended: $mode ($reason)';
+  }
+
+  @override
+  String get connectionDiagSummaryNoRoute =>
+      'No available transport route found';
+
+  @override
+  String connectionDiagElapsed(String elapsed) {
+    return '$elapsed elapsed';
+  }
+
+  @override
   String get composerPickAttachmentTitle => 'Choose attachment';
 
   @override

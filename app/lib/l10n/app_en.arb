@@ -1239,6 +1239,74 @@
   "transportModeLabel": "Transport",
   "transportModeHttpLan": "HTTP LAN direct",
   "transportModeWebrtcLan": "WebRTC LAN direct",
+  "connectionDiagTitle": "Connection diagnostic",
+  "connectionDiagSubtitleRunning": "Testing connection to {peer}…",
+  "@connectionDiagSubtitleRunning": {
+    "placeholders": {
+      "peer": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionDiagSubtitleDone": "Connection test to {peer} complete",
+  "@connectionDiagSubtitleDone": {
+    "placeholders": {
+      "peer": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionDiagContinueInBackground": "Continue in background",
+  "connectionDiagDone": "Done",
+  "connectionDiagStepS3": "S3 cloud",
+  "connectionDiagStepHttpDirect": "HTTP LAN direct",
+  "connectionDiagStepHttpSignaling": "HTTP signaling",
+  "connectionDiagStepHttpPull": "HTTP reverse pull",
+  "connectionDiagStepWebrtc": "WebRTC connectivity",
+  "connectionDiagStatusPending": "Waiting",
+  "connectionDiagStatusRunning": "Testing",
+  "connectionDiagStatusSuccess": "Available",
+  "connectionDiagStatusFailure": "Unavailable",
+  "connectionDiagStatusSkipped": "Skipped",
+  "connectionDiagReasonS3Online": "S3 configured and cloud reachable",
+  "connectionDiagReasonS3NotConfigured": "S3 not configured",
+  "connectionDiagReasonS3Unavailable": "S3 configured but cloud unreachable",
+  "connectionDiagReasonHttpDirectOk": "LAN HTTP direct connection succeeded",
+  "connectionDiagReasonHttpDirectFail": "Cannot reach peer HTTP service (timeout or no response)",
+  "connectionDiagReasonHttpSignalingOk": "Peer HTTP self-check passed",
+  "connectionDiagReasonHttpSignalingFail": "Signaling probe failed; peer HTTP did not respond",
+  "connectionDiagReasonHttpPullOk": "Peer can reverse-pull from this device",
+  "connectionDiagReasonHttpPullFail": "Reverse pull failed; peer cannot reach local HTTP",
+  "connectionDiagReasonWebrtcOnline": "Same network — WebRTC can connect directly",
+  "connectionDiagReasonWebrtcConnectable": "Cross-network — WebRTC may connect via relay",
+  "connectionDiagReasonWebrtcFail": "WebRTC signaling or ICE unreachable",
+  "connectionDiagReasonWebrtcSkippedLanOk": "LAN HTTP already works — WebRTC skipped",
+  "connectionDiagReasonSkippedLanDirectOk": "HTTP direct succeeded — skipped",
+  "connectionDiagReasonSkippedOffline": "Offline — cloud signaling probes unavailable",
+  "connectionDiagReasonSkippedPeerOffline": "Peer offline with no LAN address — skipped",
+  "connectionDiagReasonHttpDirectNoUrl": "No LAN address found — cannot test HTTP direct",
+  "connectionDiagReasonOfflineCloud": "Offline — cloud signaling probes unavailable",
+  "connectionDiagReasonS3LoginRequired": "Sign in required to test S3",
+  "connectionDiagSummaryRecommend": "Recommended: {mode} ({reason})",
+  "@connectionDiagSummaryRecommend": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionDiagSummaryNoRoute": "No available transport route found",
+  "connectionDiagElapsed": "{elapsed} elapsed",
+  "@connectionDiagElapsed": {
+    "placeholders": {
+      "elapsed": {
+        "type": "String"
+      }
+    }
+  },
   "composerPickAttachmentTitle": "Choose attachment",
   "composerAttachImageVideo": "Photos & videos",
   "composerAttachImageVideoDesc": "Pick photos or videos from your gallery",
