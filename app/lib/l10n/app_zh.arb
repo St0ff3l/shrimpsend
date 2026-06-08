@@ -222,6 +222,7 @@
   "chatS3StatusOnlineSendAll": "在线 · 发送到所有设备",
   "chatS3StatusUnavailableCheck": "不可用 · 请检查 S3 配置",
   "chatDeviceOnline": "在线",
+  "chatDevicePullOnline": "可拉取",
   "chatDeviceChecking": "检测中…",
   "chatDeviceOffline": "离线",
   "chatHeaderDeviceNumberTooltip": "设备号：{code}",

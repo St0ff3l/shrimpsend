@@ -669,6 +669,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get chatDeviceOnline => '在线';
 
   @override
+  String get chatDevicePullOnline => '可拉取';
+
+  @override
   String get chatDeviceChecking => '检测中…';
 
   @override

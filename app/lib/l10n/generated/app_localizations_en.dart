@@ -698,6 +698,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatDeviceOnline => 'Online';
 
   @override
+  String get chatDevicePullOnline => 'Pull available';
+
+  @override
   String get chatDeviceChecking => 'Checking…';
 
   @override

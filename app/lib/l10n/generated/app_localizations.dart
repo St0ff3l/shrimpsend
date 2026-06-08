@@ -1350,6 +1350,12 @@ abstract class AppLocalizations {
   /// **'Online'**
   String get chatDeviceOnline;
 
+  /// No description provided for @chatDevicePullOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull available'**
+  String get chatDevicePullOnline;
+
   /// No description provided for @chatDeviceChecking.
   ///
   /// In en, this message translates to:

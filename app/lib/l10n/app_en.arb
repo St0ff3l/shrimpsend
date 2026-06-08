@@ -311,6 +311,7 @@
   "chatS3StatusOnlineSendAll": "Online · send to all devices",
   "chatS3StatusUnavailableCheck": "Unavailable · check S3 settings",
   "chatDeviceOnline": "Online",
+  "chatDevicePullOnline": "Pull available",
   "chatDeviceChecking": "Checking…",
   "chatDeviceOffline": "Offline",
   "chatHeaderDeviceNumberTooltip": "Device no.: {code}",
