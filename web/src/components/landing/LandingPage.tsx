@@ -3,8 +3,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useI18n } from '@/contexts/I18nContext';
-import { isClientDownloadOverseas } from '@/lib/clientReleaseDownload';
-import { OPEN_SOURCE_RELEASES_URL } from '@/lib/openSource';
+import { getClientReleaseDownloadUrl, isClientDownloadOverseas } from '@/lib/clientReleaseDownload';
 import { SiteFooter } from '@/components/landing/SiteFooter';
 import { SiteNav } from '@/components/landing/SiteNav';
 import { buttonVariants } from '@/components/ui/button';
@@ -505,7 +504,7 @@ export function LandingPage({ localePath, siteOrigin }: { localePath: LocalePath
   const { t } = useI18n();
   const { accessToken } = useAuth();
   const pricingRegion = getPricingRegion(siteOrigin);
-  const releaseHref = OPEN_SOURCE_RELEASES_URL;
+  const releaseHref = getClientReleaseDownloadUrl({ siteOrigin });
   const purchaseHref = accessToken ? '/settings/membership' : '/login?next=%2Fsettings%2Fmembership';
   const webTrialHref = accessToken ? '/chat' : '/login?next=%2Fchat';
   const visiblePricingPlans = pricingPlans.filter((plan) => plan.region === pricingRegion);
