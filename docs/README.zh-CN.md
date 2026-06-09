@@ -17,6 +17,21 @@
   <a href="https://github.com/shrimpsend/shrimpsend"><img src="https://img.shields.io/badge/源码-shrimpsend-181717?logo=github" alt="源码仓库" /></a>
 </p>
 
+<p align="center">
+  <img src="../marketing/readme-banner.png" alt="虾传 — 任意网络下都能稳定传文件" width="900" />
+</p>
+
+## 官方托管版本
+
+虾传 / ShrimpSend 基于同一份开源代码，提供两个官方托管站点，请按所在地区选择：
+
+| 版本 | 网址 | 适用 |
+|------|------|------|
+| **国内版** | [xiachuan.net](https://xiachuan.net) | 中国大陆用户 |
+| **国际版** | [shrimpsend.com](https://shrimpsend.com) | 中国大陆以外用户 |
+
+你也可以在自有服务器上按 [AGPL](../LICENSE) [自托管](#部署指南) 完整服务栈。
+
 本仓库（**`ultrasend`**）是 **ShrimpSend / 虾传** 的开源源码。面向个人多设备，在手机、电脑与浏览器之间互传文本、剪贴板、图片、视频和大文件。它专为**复杂网络**设计：能直连时尽量跑满带宽，在 NAT 与受限 Wi‑Fi 下仍可用，大文件断网可续传。它不是网盘，也不是「上传生成链接再转发」的工具。
 
 ## 为何选择虾传
