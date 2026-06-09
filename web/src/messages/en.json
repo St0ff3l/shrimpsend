@@ -123,9 +123,9 @@
     "downloadRegionMainland": "Mainland downloads",
     "downloadRegionOverseas": "International downloads",
     "downloadPanelTitle": "Install ShrimpSend on your other devices",
-    "downloadPanelSubtitle": "Install the desktop or mobile app before signing in. Open 123pan or Google Drive for your region and pick the installer for your platform.",
+    "downloadPanelSubtitle": "Install the desktop or mobile app before signing in. Open 123pan or GitHub Releases for your region and pick the installer for your platform.",
     "downloadReleasesGitee": "123pan Download",
-    "downloadReleasesGithub": "Google Drive Download",
+    "downloadReleasesGithub": "GitHub Releases Download",
     "downloadReleasesCta": "Opens in a new tab — choose your platform installer",
     "downloadPlatformsHint": "macOS, Windows, Android, iOS, and more"
   },
@@ -260,7 +260,7 @@
     "faqS3Q": "When should I configure S3?",
     "faqS3A": "Use S3-compatible storage when you often send large files across cities or networks, or want file staging in your own object storage.",
     "downloadsTitle": "Download for every platform",
-    "downloadsHint": "Open 123pan or Google Drive for your region to download installers for each platform."
+    "downloadsHint": "Open 123pan or GitHub Releases for your region to download installers for each platform."
   },
   "settings": {
     "title": "Settings",

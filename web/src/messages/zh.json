@@ -123,9 +123,9 @@
     "downloadRegionMainland": "中国大陆下载",
     "downloadRegionOverseas": "国际版下载",
     "downloadPanelTitle": "在其他设备上安装虾传",
-    "downloadPanelSubtitle": "登录网页版前，也可先安装桌面端或移动端。请根据当前服务区域前往 123 云盘或 Google Drive，按平台选择安装包下载。",
+    "downloadPanelSubtitle": "登录网页版前，也可先安装桌面端或移动端。请根据当前服务区域前往 123 云盘或 GitHub Releases，按平台选择安装包下载。",
     "downloadReleasesGitee": "123 云盘下载",
-    "downloadReleasesGithub": "Google Drive 下载",
+    "downloadReleasesGithub": "GitHub Releases 下载",
     "downloadReleasesCta": "在新标签页打开，选择对应平台安装包",
     "downloadPlatformsHint": "支持 macOS、Windows、Android、iOS 等平台"
   },
@@ -260,7 +260,7 @@
     "faqS3Q": "什么时候需要配置 S3？",
     "faqS3A": "当你经常跨城市、跨网络传大文件，或希望文件暂存到自己的对象存储时，S3 兼容存储会更稳定。",
     "downloadsTitle": "全平台客户端",
-    "downloadsHint": "根据当前服务区域前往 123 云盘或 Google Drive 下载各平台安装包。"
+    "downloadsHint": "根据当前服务区域前往 123 云盘或 GitHub Releases 下载各平台安装包。"
   },
   "settings": {
     "title": "设置",

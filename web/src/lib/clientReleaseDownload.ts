@@ -1,12 +1,12 @@
 import { getApiUrl } from '@/lib/config';
+import { OPEN_SOURCE_RELEASES_URL } from '@/lib/openSource';
 
 /** 国内分发：123 云盘分享页 */
 export const CLIENT_RELEASE_URL_MAINLAND =
-  'https://1816849228.share.123pan.cn/123pan/cXByVv-Z76m';
+  'https://1816849228.share.123pan.cn/123pan/cXByVv-YjG1';
 
-/** 出海分发：Google Drive 分享文件夹 */
-export const CLIENT_RELEASE_URL_OVERSEAS =
-  'https://drive.google.com/drive/folders/1_BL255lRlZkXGcO447htvtpHItpzJGaA?usp=drive_link';
+/** 出海分发：GitHub Releases */
+export const CLIENT_RELEASE_URL_OVERSEAS = OPEN_SOURCE_RELEASES_URL;
 
 export type WebDeploymentRegionHint = {
   /** 请求 Host（SSR 从 headers 传入） */
