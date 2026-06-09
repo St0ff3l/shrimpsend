@@ -17,6 +17,21 @@
   <a href="https://github.com/shrimpsend/shrimpsend"><img src="https://img.shields.io/badge/Source-shrimpsend-181717?logo=github" alt="Source repository" /></a>
 </p>
 
+<p align="center">
+  <img src="marketing/readme-banner.png" alt="ShrimpSend — file transfer that works across any network" width="900" />
+</p>
+
+## Official hosted services
+
+ShrimpSend / 虾传 runs two official hosted editions from the same open-source codebase. Pick the site that matches where you are:
+
+| Edition | Website | For |
+|---------|---------|-----|
+| **China (国内版)** | [xiachuan.net](https://xiachuan.net) | Users in mainland China |
+| **International** | [shrimpsend.com](https://shrimpsend.com) | Users outside mainland China |
+
+You can also [self-host](#deployment) the full stack on your own infrastructure under AGPL.
+
 This repository (**`ultrasend`**) is the open-source codebase for **ShrimpSend** / **虾传** — a self-hostable relay for your personal devices. Send text, clipboard snippets, images, videos, and large files between phones, desktops, and browsers. It is built for **complex networks**: go as fast as your LAN allows on direct paths, keep transfers alive across NAT and restrictive Wi‑Fi, and resume large files after disconnects. It is not a cloud drive and not an “upload, get a link, forward the link” workflow.
 
 ## Why ShrimpSend
