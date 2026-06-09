@@ -59,6 +59,7 @@ import 'services/saf_storage_service.dart';
 import 'services/windows_launch_at_startup_service.dart';
 import 'utils/runtime_platform.dart';
 import 'utils/windows_distribution_channel.dart';
+import 'services/native_tab_bar_service.dart';
 
 class _NoProxyHttpOverrides extends HttpOverrides {
   @override
@@ -475,6 +476,7 @@ class MyApp extends StatelessWidget {
                                 navigatorObservers: [
                                   if (OpenpanelBootstrap.isInitialized)
                                     OpenpanelObserver(),
+                                  NativeTabBarNavigatorObserver(),
                                 ],
                                 locale: lr.locale,
                                 title: taskTitle,
