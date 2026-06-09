@@ -228,11 +228,11 @@ class NativeTabBarView: UIView, UITabBarDelegate {
             systemTabBar.bottomAnchor.constraint(equalTo: bottomAnchor),
             systemTabBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -49),
             
-            // outboxButton on the right: centerY at systemTabBar top + 24.5 (center of 49pt content area)
-            outboxButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            // outboxButton on the right: moved slightly to the left (constant: -24) and down (centerY at top + 32)
+            outboxButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -24),
             outboxButton.widthAnchor.constraint(equalToConstant: 56),
             outboxButton.heightAnchor.constraint(equalToConstant: 56),
-            outboxButton.centerYAnchor.constraint(equalTo: systemTabBar.topAnchor, constant: 24.5)
+            outboxButton.centerYAnchor.constraint(equalTo: systemTabBar.topAnchor, constant: 32)
         ])
         
         outboxButton.addTarget(self, action: #selector(outboxTapped), for: .touchUpInside)
