@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <img src="marketing/readme-banner.webp" alt="ShrimpSend — file transfer that works across any network" width="900" />
+  <img src="marketing/readme-banner.png" alt="ShrimpSend — file transfer that works across any network" />
 </p>
 
 ## Official hosted services

@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <img src="../marketing/readme-banner.webp" alt="虾传 — 任意网络下都能稳定传文件" width="900" />
+  <img src="../marketing/readme-banner.png" alt="虾传 — 任意网络下都能稳定传文件" />
 </p>
 
 ## 官方托管版本
