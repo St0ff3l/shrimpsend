@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useI18n } from '@/contexts/I18nContext';
 import { getClientReleaseDownloadUrl, isClientDownloadOverseas } from '@/lib/clientReleaseDownload';
-import { LandingShowcaseImage } from '@/components/landing/LandingShowcaseImage';
 import { SiteFooter } from '@/components/landing/SiteFooter';
 import { SiteNav } from '@/components/landing/SiteNav';
 import { buttonVariants } from '@/components/ui/button';
@@ -180,6 +179,103 @@ function getPricingRegion(siteOrigin: string): 'mainland' | 'overseas' {
 
 function GlowOrb({ className }: { className?: string }) {
   return <div className={cn('landing-glow-orb motion-safe:animate-app-glow-drift', className)} aria-hidden />;
+}
+
+function HeroVisual() {
+  const { t } = useI18n();
+  const devices = [
+    { icon: Laptop, name: 'MacBook Pro', meta: t('landing.heroDeviceLocal'), active: true },
+    { icon: Smartphone, name: 'iPhone 15', meta: t('landing.heroDeviceOnline'), active: true },
+    { icon: Globe2, name: 'Web', meta: t('landing.heroDeviceBrowser'), active: false },
+  ] as const;
+
+  return (
+    <div className="relative mx-auto h-[460px] w-full max-w-[600px] lg:h-[540px]">
+      <div className="landing-orbit landing-orbit-1" aria-hidden />
+      <div className="landing-orbit landing-orbit-2" aria-hidden />
+
+      <div className="landing-device-card absolute left-[3%] top-[7%] w-[min(76vw,315px)] rounded-3xl p-4 shadow-2xl motion-safe:animate-app-fade-up">
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="size-2.5 rounded-full bg-primary shadow-[0_0_16px_color-mix(in_oklch,var(--primary)_80%,transparent)]" />
+            <span className="font-mono text-[11px] text-foreground/80">{t('landing.heroPanelTitle')}</span>
+          </div>
+          <span className="rounded-full bg-primary/12 px-2 py-0.5 font-mono text-[10px] text-primary">
+            {t('landing.heroPanelBadge')}
+          </span>
+        </div>
+
+        <div className="rounded-2xl border border-primary/20 bg-primary/[0.08] px-4 py-3">
+          <div className="flex items-start gap-3">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary ring-1 ring-primary/25">
+              <RefreshCw className="size-4" />
+            </span>
+            <div>
+              <p className="text-sm font-semibold text-foreground">{t('landing.heroMessageTitle')}</p>
+              <p className="mt-1 text-xs leading-5 text-muted-foreground">{t('landing.heroMessageDesc')}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 space-y-2.5">
+          {devices.map(({ icon: Icon, name, meta, active }) => (
+            <div key={name} className="flex items-center gap-3 rounded-2xl bg-white/[0.07] px-3 py-2.5 ring-1 ring-white/[0.08]">
+              <span className="flex size-8 items-center justify-center rounded-xl bg-primary/12 text-primary">
+                <Icon className="size-4" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-xs font-medium text-foreground/90">{name}</p>
+                <p className="font-mono text-[10px] text-muted-foreground">{meta}</p>
+              </div>
+              <span className={cn('size-2.5 rounded-full', active ? 'bg-primary shadow-[0_0_12px_var(--primary)]' : 'bg-muted-foreground/35')} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="landing-device-card absolute right-[2%] top-[18%] hidden w-[230px] rotate-[5deg] rounded-3xl p-4 shadow-2xl sm:block">
+        <div className="mb-3 flex items-center justify-between">
+          <span className="font-mono text-[10px] text-muted-foreground">{t('landing.heroPathTitle')}</span>
+          <Router className="size-4 text-primary" />
+        </div>
+        <div className="space-y-2.5">
+          <div className="rounded-2xl border border-primary/18 bg-primary/[0.09] px-3 py-2">
+            <p className="text-xs font-semibold">{t('landing.heroPathLan')}</p>
+            <p className="font-mono text-[10px] text-muted-foreground">WebRTC / LAN</p>
+          </div>
+          <div className="rounded-2xl bg-white/[0.06] px-3 py-2 ring-1 ring-white/[0.08]">
+            <p className="text-xs font-semibold">{t('landing.heroPathS3')}</p>
+            <p className="font-mono text-[10px] text-muted-foreground">S3 compatible</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="landing-device-card absolute bottom-[13%] right-[4%] w-[min(70vw,265px)] rounded-3xl p-4 shadow-2xl motion-safe:animate-app-fade-up app-stagger-3">
+        <div className="flex items-center gap-3 rounded-2xl bg-white/[0.07] px-3 py-2.5 ring-1 ring-white/[0.08]">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
+            <FileImage className="size-4" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs font-semibold">project-build.apk</p>
+            <p className="font-mono text-[10px] text-muted-foreground">{t('landing.heroResumeLabel')}</p>
+          </div>
+          <RefreshCw className="size-4 text-primary" />
+        </div>
+        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/12">
+          <div className="h-full w-[68%] rounded-full bg-primary shadow-[0_0_18px_color-mix(in_oklch,var(--primary)_80%,transparent)]" />
+        </div>
+        <p className="mt-3 text-center text-xs font-medium text-muted-foreground">{t('landing.heroTransferStatus')}</p>
+      </div>
+
+      <div className="absolute bottom-[4%] left-[8%] flex items-center gap-3 rounded-3xl border border-white/12 bg-white/[0.07] px-4 py-3 shadow-2xl backdrop-blur-xl">
+        <Server className="size-8 text-primary" />
+        <div>
+          <p className="text-xs font-semibold text-foreground">{t('landing.heroS3Title')}</p>
+          <p className="font-mono text-[10px] text-muted-foreground">{t('landing.heroS3Desc')}</p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function HowItWorksVisual() {
@@ -453,7 +549,7 @@ export function LandingPage({ localePath, siteOrigin }: { localePath: LocalePath
           <p className="mt-3 text-xs text-muted-foreground">{t('landing.heroFootnote')}</p>
         </div>
 
-        <LandingShowcaseImage variant="hero" />
+        <HeroVisual />
       </section>
 
       <section className="relative z-10 mx-auto w-full max-w-7xl px-5 md:px-8">
