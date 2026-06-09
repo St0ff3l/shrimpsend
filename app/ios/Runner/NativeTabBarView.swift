@@ -176,7 +176,6 @@ class NativeTabBarView: UIView, UITabBarDelegate {
     
     private let systemTabBar = UITabBar()
     private let outboxButton = OutboxButton()
-    private var outboxCenterYConstraint: NSLayoutConstraint?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -186,23 +185,6 @@ class NativeTabBarView: UIView, UITabBarDelegate {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        systemTabBar.layoutIfNeeded()
-        
-        for subview in systemTabBar.subviews {
-            let className = NSStringFromClass(subview.classForCoder)
-            if className.contains("TabBarButton") {
-                let centerInSelf = systemTabBar.convert(subview.center, to: self)
-                if outboxCenterYConstraint?.constant != centerInSelf.y {
-                    outboxCenterYConstraint?.constant = centerInSelf.y
-                }
-                break
-            }
-        }
     }
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
@@ -246,15 +228,12 @@ class NativeTabBarView: UIView, UITabBarDelegate {
             systemTabBar.bottomAnchor.constraint(equalTo: bottomAnchor),
             systemTabBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -49),
             
-            // outboxButton on the right
+            // outboxButton on the right: centerY at systemTabBar top + 24.5 (center of 49pt content area)
             outboxButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             outboxButton.widthAnchor.constraint(equalToConstant: 56),
-            outboxButton.heightAnchor.constraint(equalToConstant: 56)
+            outboxButton.heightAnchor.constraint(equalToConstant: 56),
+            outboxButton.centerYAnchor.constraint(equalTo: systemTabBar.topAnchor, constant: 24.5)
         ])
-        
-        let centerYConstraint = outboxButton.centerYAnchor.constraint(equalTo: self.topAnchor, constant: 40)
-        centerYConstraint.isActive = true
-        self.outboxCenterYConstraint = centerYConstraint
         
         outboxButton.addTarget(self, action: #selector(outboxTapped), for: .touchUpInside)
     }
