@@ -1,36 +1,19 @@
 #!/usr/bin/env node
-/** Optimize marketing images: resize, recompress PNG, generate WebP for landing assets. */
+/** Convert marketing banner source to lossless WebP (no resize) for README + landing page. */
 
 import { createRequire } from 'node:module';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { access, copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const PUBLIC_DIR = path.join(ROOT, 'web', 'public');
-const LANDING_DIR = path.join(PUBLIC_DIR, 'landing');
-
-const MAX_WIDTH = 1200;
-const WEBP_QUALITY = 85;
-const WEBP_EFFORT = 6;
+const BANNER_SOURCE = path.join(ROOT, 'marketing', 'banner-source.png');
+const BANNER_SOURCE_2X = path.join(ROOT, 'marketing', 'banner-source@2x.png');
+const LANDING_ASSETS = path.join(ROOT, 'web', 'src', 'lib', 'landingAssets.ts');
 
 const require = createRequire(path.join(ROOT, 'web', 'package.json'));
 const sharp = require('sharp');
-
-/** @type {{ input: string; outputPng: string; webp?: string }[]} */
-const JOBS = [
-  {
-    input: path.join(ROOT, 'marketing', 'hero-showcase-source.png'),
-    outputPng: path.join(LANDING_DIR, 'hero-showcase.png'),
-    webp: path.join(LANDING_DIR, 'hero-showcase.webp'),
-  },
-  {
-    input: path.join(ROOT, 'marketing', 'readme-banner.png'),
-    outputPng: path.join(ROOT, 'marketing', 'readme-banner.png'),
-    preferJpeg: true,
-  },
-];
 
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
@@ -41,104 +24,93 @@ function labelFor(filePath) {
   return path.relative(ROOT, filePath);
 }
 
-async function optimizeJob({ input, outputPng, webp, preferJpeg }) {
-  const originalBuffer = await readFile(input);
+async function fileExists(filePath) {
+  try {
+    await access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function extForFormat(format) {
+  if (format === 'jpeg') return '.jpg';
+  if (format === 'png') return '.png';
+  if (format === 'webp') return '.webp';
+  return '.bin';
+}
+
+async function convertBanner({ inputPath, suffix = '' }) {
+  const originalBuffer = await readFile(inputPath);
   const beforeSize = originalBuffer.length;
-  const metadata = await sharp(originalBuffer).metadata();
-  const needsResize = (metadata.width ?? 0) > MAX_WIDTH;
+  const sourceMeta = await sharp(originalBuffer).metadata();
+  const format = sourceMeta.format ?? 'jpeg';
+  const ext = extForFormat(format);
 
-  let pipeline = sharp(originalBuffer);
-  if (needsResize) {
-    pipeline = pipeline.resize(MAX_WIDTH, null, { withoutEnlargement: true });
+  const webpBuffer = await sharp(originalBuffer).webp({ lossless: true }).toBuffer();
+  const webpMeta = await sharp(webpBuffer).metadata();
+
+  const webpOutputs = [
+    path.join(ROOT, 'marketing', `readme-banner${suffix}.webp`),
+    path.join(ROOT, 'web', 'public', 'landing', `hero-showcase${suffix}.webp`),
+  ];
+  const nativeOutput = path.join(ROOT, 'web', 'public', 'landing', `hero-showcase${suffix}${ext}`);
+
+  console.log(`Source ${labelFor(inputPath)}`.padEnd(44), formatBytes(beforeSize).padStart(8));
+  console.log(`WebP (lossless) ${suffix || '1x'}`.padEnd(44), formatBytes(webpBuffer.length).padStart(8));
+  console.log(`Dimensions: ${webpMeta.width}×${webpMeta.height}`);
+
+  for (const outputPath of webpOutputs) {
+    await mkdir(path.dirname(outputPath), { recursive: true });
+    await writeFile(outputPath, webpBuffer);
+    console.log(`  → ${labelFor(outputPath)}`);
   }
 
-  const useJpeg = preferJpeg || metadata.format === 'jpeg';
-  let savedBuffer;
-  let info;
+  await mkdir(path.dirname(nativeOutput), { recursive: true });
+  await copyFile(inputPath, nativeOutput);
+  console.log(`  → ${labelFor(nativeOutput)} (verbatim copy, no re-encode)`);
 
-  if (useJpeg) {
-    const result = await pipeline
-      .jpeg({ quality: WEBP_QUALITY, mozjpeg: true })
-      .toBuffer({ resolveWithObject: true });
-    savedBuffer = result.data;
-    info = result.info;
-  } else {
-    const result = await pipeline
-      .png({ compressionLevel: 9, adaptiveFiltering: true })
-      .toBuffer({ resolveWithObject: true });
-    savedBuffer = needsResize || result.data.length < beforeSize ? result.data : originalBuffer;
-    info = result.info;
+  if ((webpMeta.width ?? 0) < 1920 && !suffix) {
+    console.warn(
+      '\n⚠ Source is below 1920px wide — hero will look soft on Retina displays.',
+      'Add marketing/banner-source@2x.png (≥2048px wide) for sharp 2x rendering.\n',
+    );
   }
-
-  await mkdir(path.dirname(outputPng), { recursive: true });
-  await writeFile(outputPng, savedBuffer);
-
-  let webpSize = null;
-  if (webp) {
-    const webpBuffer = await sharp(savedBuffer)
-      .webp({ quality: WEBP_QUALITY, effort: WEBP_EFFORT })
-      .toBuffer();
-    await writeFile(webp, webpBuffer);
-    webpSize = webpBuffer.length;
-  }
-
-  const finalMeta = await sharp(savedBuffer).metadata();
 
   return {
-    input: labelFor(input),
-    outputPng: labelFor(outputPng),
-    webp: webp ? labelFor(webp) : null,
-    width: finalMeta.width ?? info.width,
-    height: finalMeta.height ?? info.height,
-    beforeSize,
-    afterPngSize: savedBuffer.length,
-    webpSize,
+    width: webpMeta.width ?? 0,
+    height: webpMeta.height ?? 0,
+    has2x: suffix === '@2x',
   };
 }
 
+async function writeLandingAssets({ width, height, has2x }) {
+  const content = `/** Marketing showcase — lossless WebP + verbatim native copy (no resize, no lossy re-encode). */
+export const LANDING_HERO_SHOWCASE_SRC = '/landing/hero-showcase.webp';
+export const LANDING_HERO_SHOWCASE_SRC_2X = '/landing/hero-showcase@2x.webp';
+export const LANDING_HERO_SHOWCASE_HAS_2X = ${has2x};
+
+export const LANDING_HERO_SHOWCASE_WIDTH = ${width};
+export const LANDING_HERO_SHOWCASE_HEIGHT = ${height};
+`;
+  await writeFile(LANDING_ASSETS, content);
+  console.log(`  → ${labelFor(LANDING_ASSETS)}`);
+}
+
 async function main() {
-  console.log('Optimizing marketing images...\n');
-  console.log('Input'.padEnd(40), 'Before', 'PNG', 'WebP', 'Saved');
-  console.log('-'.repeat(88));
+  console.log('Converting marketing banner to lossless WebP (no resize)...\n');
 
-  let totalBefore = 0;
-  let totalPng = 0;
-  let totalWebp = 0;
+  const primary = await convertBanner({ inputPath: BANNER_SOURCE });
+  let has2x = false;
 
-  for (const job of JOBS) {
-    const result = await optimizeJob(job);
-    totalBefore += result.beforeSize;
-    totalPng += result.afterPngSize;
-    if (result.webpSize != null) {
-      totalWebp += result.webpSize;
-    }
-
-    const saved = result.webpSize != null
-      ? result.beforeSize - result.webpSize
-      : result.beforeSize - result.afterPngSize;
-
-    console.log(
-      result.input.padEnd(40),
-      formatBytes(result.beforeSize).padStart(8),
-      formatBytes(result.afterPngSize).padStart(8),
-      result.webpSize != null ? formatBytes(result.webpSize).padStart(8) : '—'.padStart(8),
-      `${saved >= 0 ? '-' : '+'}${formatBytes(Math.abs(saved)).padStart(8)}`,
-    );
-    if (result.webp) {
-      console.log(`  → ${result.outputPng}`);
-      console.log(`  → ${result.webp} (${result.width}×${result.height})`);
-    } else {
-      console.log(`  → ${result.outputPng} (${result.width}×${result.height})`);
-    }
+  if (await fileExists(BANNER_SOURCE_2X)) {
+    console.log('');
+    await convertBanner({ inputPath: BANNER_SOURCE_2X, suffix: '@2x' });
+    has2x = true;
   }
 
-  console.log('-'.repeat(88));
-  console.log(
-    'TOTAL'.padEnd(40),
-    formatBytes(totalBefore).padStart(8),
-    formatBytes(totalPng).padStart(8),
-    totalWebp > 0 ? formatBytes(totalWebp).padStart(8) : '—'.padStart(8),
-  );
+  console.log('');
+  await writeLandingAssets({ width: primary.width, height: primary.height, has2x });
 }
 
 main().catch((error) => {

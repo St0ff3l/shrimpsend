@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <img src="marketing/readme-banner.png" alt="ShrimpSend — file transfer that works across any network" width="900" />
+  <img src="marketing/readme-banner.webp" alt="ShrimpSend — file transfer that works across any network" width="900" />
 </p>
 
 ## Official hosted services
@@ -39,6 +39,7 @@ This repository (**`ultrasend`**) is the open-source codebase for **ShrimpSend**
 - **No install for recipients** — send directly to browsers and temporary devices when the other side cannot install software.
 - **Resume after disconnects** — large native client ↔ client transfers continue from the interrupted position instead of restarting from 0%.
 - **Works on restrictive networks** — server-assisted relay when hotel Wi‑Fi, campus networks, or carrier NAT block direct reachability.
+- **Breaks through one-way networks** — firewalls and NAT often allow traffic in only one direction (e.g. phone → PC works, PC → phone does not). After sign-in, the server coordinates reachability probes between your devices; if direct HTTP push fails, ShrimpSend automatically **reverse-pulls** the file from the reachable side, or falls back to WebRTC / S3 relay. See [shared/protocol.md](shared/protocol.md#反向拉取-reverse-pull).
 - **LAN-first, still built for speed** — prefer direct LAN / WebRTC on the same network; use relay or S3-compatible fallback only when needed.
 - **Real-time sync** — [Centrifugo](https://centrifugal.dev/) pushes updates to every signed-in client on channel `user#<userId>`.
 - **Self-host friendly** — run the full stack on your infrastructure under [AGPL-3.0-or-later](LICENSE); production secrets stay in private ops templates ([docs/SELF_HOST.md](docs/SELF_HOST.md)).

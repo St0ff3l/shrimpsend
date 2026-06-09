@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import type { LucideIcon } from 'lucide-react';
 import {
+  ArrowLeftRight,
   Download,
   RefreshCw,
   Cpu,
@@ -38,21 +39,22 @@ export function LoginLandingHero({ className }: Props) {
     });
   }, []);
 
-  /** 核心：免安装、续传、复杂网络 */
+  /** 核心：免安装、续传、复杂网络、单向网络 */
   const primaryFeatures: FeatureItem[] = [
     { icon: Globe2, titleKey: 'landing.featureNoInstallTitle', descKey: 'landing.featureNoInstallDesc', stagger: 'app-stagger-1' },
     { icon: RefreshCw, titleKey: 'landing.featureResumeTitle', descKey: 'landing.featureResumeDesc', stagger: 'app-stagger-2' },
     { icon: Router, titleKey: 'landing.featureRestrictiveNetworkTitle', descKey: 'landing.featureRestrictiveNetworkDesc', stagger: 'app-stagger-3' },
+    { icon: ArrowLeftRight, titleKey: 'landing.featureBreakOneWayTitle', descKey: 'landing.featureBreakOneWayDesc', stagger: 'app-stagger-4' },
   ];
 
   /** 更多：本地发现、并发与传输栈、进阶能力与体验 */
   const secondaryFeatures: FeatureItem[] = [
-    { icon: Radio, titleKey: 'landing.featureOfflineMdnsTitle', descKey: 'landing.featureOfflineMdnsDesc', stagger: 'app-stagger-4' },
-    { icon: Layers, titleKey: 'landing.featureMultiParallelTitle', descKey: 'landing.featureMultiParallelDesc', stagger: 'app-stagger-5' },
-    { icon: Cpu, titleKey: 'landing.featureMultiThreadTitle', descKey: 'landing.featureMultiThreadDesc', stagger: 'app-stagger-6' },
-    { icon: Cable, titleKey: 'landing.featureWebrtcTitle', descKey: 'landing.featureWebrtcDesc', stagger: 'app-stagger-7' },
-    { icon: CloudUpload, titleKey: 'landing.featureS3WanTitle', descKey: 'landing.featureS3WanDesc', stagger: 'app-stagger-8' },
-    { icon: Sparkles, titleKey: 'landing.featureMinimalUiTitle', descKey: 'landing.featureMinimalUiDesc', stagger: 'app-stagger-9' },
+    { icon: Radio, titleKey: 'landing.featureOfflineMdnsTitle', descKey: 'landing.featureOfflineMdnsDesc', stagger: 'app-stagger-5' },
+    { icon: Layers, titleKey: 'landing.featureMultiParallelTitle', descKey: 'landing.featureMultiParallelDesc', stagger: 'app-stagger-6' },
+    { icon: Cpu, titleKey: 'landing.featureMultiThreadTitle', descKey: 'landing.featureMultiThreadDesc', stagger: 'app-stagger-7' },
+    { icon: Cable, titleKey: 'landing.featureWebrtcTitle', descKey: 'landing.featureWebrtcDesc', stagger: 'app-stagger-8' },
+    { icon: CloudUpload, titleKey: 'landing.featureS3WanTitle', descKey: 'landing.featureS3WanDesc', stagger: 'app-stagger-9' },
+    { icon: Sparkles, titleKey: 'landing.featureMinimalUiTitle', descKey: 'landing.featureMinimalUiDesc', stagger: 'app-stagger-10' },
   ];
 
   return (
