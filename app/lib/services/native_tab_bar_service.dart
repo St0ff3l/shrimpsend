@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io' show Platform;
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class NativeTabBarService {
@@ -71,5 +75,52 @@ class NativeTabBarService {
     } on PlatformException catch (e) {
       print('NativeTabBarService: failed to update state: $e');
     }
+  }
+
+  /// Show or hide the native bottom bar with animation.
+  /// Used to hide the bar when a Flutter modal sheet or route is shown on top.
+  Future<void> setVisible(bool visible) async {
+    if (!Platform.isIOS) return;
+    try {
+      await _channel.invokeMethod('setVisible', visible);
+    } on PlatformException catch (e) {
+      print('NativeTabBarService: failed to set visible: $e');
+    }
+  }
+}
+
+class NativeTabBarNavigatorObserver extends NavigatorObserver {
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPush(route, previousRoute);
+    _updateVisibility(route);
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPop(route, previousRoute);
+    _updateVisibility(previousRoute);
+  }
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didRemove(route, previousRoute);
+    _updateVisibility(previousRoute);
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    if (newRoute != null) {
+      _updateVisibility(newRoute);
+    }
+  }
+
+  void _updateVisibility(Route<dynamic>? activeRoute) {
+    if (!Platform.isIOS) return;
+    if (activeRoute == null) return;
+    final name = activeRoute.settings.name;
+    final isHome = name == '/' || name == '/devices';
+    unawaited(NativeTabBarService.instance.setVisible(isHome));
   }
 }

@@ -15,7 +15,7 @@ const double _pendingManageSheetMaxHeightFactor = 0.8;
 const double _pendingChipMaxWidth = 150;
 
 /// Opens the same pending-files list as [PendingFilesBar]「管理」.
-void showPendingFilesManageSheet(
+Future<void> showPendingFilesManageSheet(
   BuildContext context, {
   required List<PlatformFile> files,
   required void Function(PlatformFile file) onRemove,
@@ -24,7 +24,7 @@ void showPendingFilesManageSheet(
   final colors = _pendingBarColors(context);
   final maxHeight =
       MediaQuery.of(context).size.height * _pendingManageSheetMaxHeightFactor;
-  showModalBottomSheet<void>(
+  return showModalBottomSheet<void>(
     context: context,
     backgroundColor: colors.surface,
     isScrollControlled: true,

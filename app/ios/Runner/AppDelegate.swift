@@ -57,6 +57,13 @@ import UIKit
           } else {
             result(FlutterError(code: "INVALID_ARG", message: "arguments must be a dictionary", details: nil))
           }
+        } else if call.method == "setVisible" {
+          if let visible = call.arguments as? Bool {
+            nativeTabBarController.setForceHidden(!visible)
+            result(true)
+          } else {
+            result(FlutterError(code: "INVALID_ARG", message: "argument must be a boolean", details: nil))
+          }
         } else {
           result(FlutterMethodNotImplemented)
         }
@@ -78,6 +85,20 @@ import UIKit
   }
 }
 
+class PassThroughView: UIView {
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        for subview in subviews {
+            if !subview.isHidden && subview.isUserInteractionEnabled {
+                let localPoint = convert(point, to: subview)
+                if subview.point(inside: localPoint, with: event) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+}
+
 class NativeTabBarController: NSObject, NativeTabBarViewDelegate {
     private let flutterViewController: FlutterViewController
     private let channel: FlutterMethodChannel
@@ -87,6 +108,8 @@ class NativeTabBarController: NSObject, NativeTabBarViewDelegate {
     private var bottomConstraint: NSLayoutConstraint?
     
     private var isBarVisible = false
+    private var isDesiredVisible = false
+    private var isForceHidden = false
     
     init(flutterViewController: FlutterViewController, channel: FlutterMethodChannel) {
         self.flutterViewController = flutterViewController
@@ -96,7 +119,7 @@ class NativeTabBarController: NSObject, NativeTabBarViewDelegate {
     }
     
     private func setupTabBar() {
-        let container = UIView()
+        let container = PassThroughView()
         container.translatesAutoresizingMaskIntoConstraints = false
         container.backgroundColor = .clear
         container.layer.masksToBounds = false
@@ -150,12 +173,20 @@ class NativeTabBarController: NSObject, NativeTabBarViewDelegate {
             settingsLabel: settingsLabel
         )
         
-        setVisible(visible)
+        self.isDesiredVisible = visible
+        updateVisibility()
     }
     
-    private func setVisible(_ visible: Bool) {
-        guard isBarVisible != visible else { return }
-        isBarVisible = visible
+    func setForceHidden(_ forceHidden: Bool) {
+        guard self.isForceHidden != forceHidden else { return }
+        self.isForceHidden = forceHidden
+        updateVisibility()
+    }
+    
+    private func updateVisibility() {
+        let shouldBeVisible = isDesiredVisible && !isForceHidden
+        guard isBarVisible != shouldBeVisible else { return }
+        isBarVisible = shouldBeVisible
         
         flutterViewController.view.layoutIfNeeded()
         
@@ -167,7 +198,7 @@ class NativeTabBarController: NSObject, NativeTabBarViewDelegate {
             options: [.curveEaseInOut, .allowUserInteraction],
             animations: { [weak self] in
                 guard let self = self else { return }
-                if visible {
+                if shouldBeVisible {
                     self.containerView?.alpha = 1
                     self.containerView?.transform = .identity
                     self.bottomConstraint?.constant = 0

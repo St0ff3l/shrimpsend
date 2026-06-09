@@ -176,6 +176,7 @@ class NativeTabBarView: UIView, UITabBarDelegate {
     
     private let systemTabBar = UITabBar()
     private let outboxButton = OutboxButton()
+    private var outboxCenterYConstraint: NSLayoutConstraint?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -185,6 +186,32 @@ class NativeTabBarView: UIView, UITabBarDelegate {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateOutboxAlignment()
+    }
+    
+    override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        updateOutboxAlignment()
+    }
+    
+    private func updateOutboxAlignment() {
+        let bottomInset = safeAreaInsets.bottom
+        let targetConstant: CGFloat = bottomInset > 0 ? -5 : -24.5
+        if outboxCenterYConstraint?.constant != targetConstant {
+            outboxCenterYConstraint?.constant = targetConstant
+        }
+    }
+    
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let tabBarPoint = convert(point, to: systemTabBar)
+        let outboxPoint = convert(point, to: outboxButton)
+        
+        return (!systemTabBar.isHidden && systemTabBar.point(inside: tabBarPoint, with: event)) ||
+               (!outboxButton.isHidden && outboxButton.point(inside: outboxPoint, with: event))
     }
     
     private func setupView() {
@@ -214,18 +241,21 @@ class NativeTabBarView: UIView, UITabBarDelegate {
         addSubview(outboxButton)
         
         NSLayoutConstraint.activate([
-            // systemTabBar spanning full width at bottom, standard height 49 + safe area bottom inset
-            systemTabBar.leadingAnchor.constraint(equalTo: leadingAnchor),
-            systemTabBar.trailingAnchor.constraint(equalTo: trailingAnchor),
+            // systemTabBar on the left: bottom at view bottom, top at safeAreaLayoutGuide.bottom - 49
+            systemTabBar.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            systemTabBar.trailingAnchor.constraint(equalTo: outboxButton.leadingAnchor, constant: -14),
             systemTabBar.bottomAnchor.constraint(equalTo: bottomAnchor),
             systemTabBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -49),
             
-            // outboxButton floating in bottom right, 20pt from edge, 16pt above the system tab bar
-            outboxButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            outboxButton.bottomAnchor.constraint(equalTo: systemTabBar.topAnchor, constant: -16),
+            // outboxButton on the right
+            outboxButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             outboxButton.widthAnchor.constraint(equalToConstant: 56),
             outboxButton.heightAnchor.constraint(equalToConstant: 56)
         ])
+        
+        let centerYConstraint = outboxButton.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -24.5)
+        centerYConstraint.isActive = true
+        self.outboxCenterYConstraint = centerYConstraint
         
         outboxButton.addTarget(self, action: #selector(outboxTapped), for: .touchUpInside)
     }
