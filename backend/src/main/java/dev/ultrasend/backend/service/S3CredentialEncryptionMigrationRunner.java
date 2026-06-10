@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ public class S3CredentialEncryptionMigrationRunner {
     private final S3ConfigRepository s3ConfigRepository;
     private final UserDataEncryptionService userDataEncryption;
 
+    @Order(2)
     @EventListener(ApplicationReadyEvent.class)
     public void migrateOnStartup() {
         if (!properties.isMigrateS3OnStartup()) {

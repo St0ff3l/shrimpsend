@@ -28,4 +28,10 @@ public class UserDataEncryptionProperties {
      * One-shot migration for legacy enc:v1: message payload.text rows.
      */
     private boolean migrateMessagesOnStartup = false;
+
+    /**
+     * One-shot backfill for users.data_encryption_key_enc. Also runs automatically when
+     * {@link #migrateS3OnStartup} or {@link #migrateMessagesOnStartup} is enabled.
+     */
+    private boolean migrateUserDekOnStartup = false;
 }

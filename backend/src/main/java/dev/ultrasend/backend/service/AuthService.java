@@ -32,6 +32,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AppJwtService jwtService;
     private final VerificationCodeService verificationCodeService;
+    private final UserDataEncryptionService userDataEncryption;
 
     @Transactional
     public AuthResponse register(RegisterRequest req) {
@@ -54,6 +55,7 @@ public class AuthService {
                 .passwordHash(passwordEncoder.encode(req.getPassword()))
                 .build();
         user = userRepository.save(user);
+        userDataEncryption.ensureUserKey(user.getId());
         String userId = user.getId().toString();
         log.info("register created user userId={}", userId);
         Device d = deviceService.bindDeviceForSuccessfulAuth(
@@ -80,6 +82,7 @@ public class AuthService {
             throw new IllegalArgumentException("邮箱或密码错误");
         }
         deviceService.assertCanAuthenticateWithDevice(user.getId(), req.getDeviceId(), req.getPlatform());
+        userDataEncryption.ensureUserKey(user.getId());
         Device d = deviceService.bindDeviceForSuccessfulAuth(
                 user.getId(), req.getDeviceId(), req.getPlatform(), null);
         String userId = user.getId().toString();
@@ -108,6 +111,7 @@ public class AuthService {
                     return new IllegalArgumentException("该邮箱未注册");
                 });
         deviceService.assertCanAuthenticateWithDevice(user.getId(), req.getDeviceId(), req.getPlatform());
+        userDataEncryption.ensureUserKey(user.getId());
         Device d = deviceService.bindDeviceForSuccessfulAuth(
                 user.getId(), req.getDeviceId(), req.getPlatform(), null);
         String userId = user.getId().toString();

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,7 @@ public class MessageTextEncryptionMigrationRunner {
     private final UserDataEncryptionService userDataEncryption;
     private final ObjectMapper objectMapper;
 
+    @Order(3)
     @EventListener(ApplicationReadyEvent.class)
     public void migrateOnStartup() {
         if (!properties.isMigrateMessagesOnStartup()) {
