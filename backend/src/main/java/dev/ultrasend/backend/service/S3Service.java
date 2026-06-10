@@ -225,7 +225,6 @@ public class S3Service {
         presigner.close();
 
         String uploadUrl = presigned.url().toString();
-        String downloadUrl = config.getEndpoint().replaceFirst("/$", "") + "/" + config.getBucket() + "/" + key;
         return PresignUploadResponse.builder()
                 .uploadUrl(uploadUrl)
                 .key(key)

@@ -24,7 +24,7 @@ struct S3SettingsPage {
       this.region = c.region ?? '';
       this.bucket = c.bucket ?? '';
       this.ak = c.accessKeyId ?? '';
-      this.sk = c.secretAccessKey ?? '';
+      this.sk = '';
     } catch (e) {
       promptAction.showToast({ message: `${e}` });
     }
@@ -32,13 +32,16 @@ struct S3SettingsPage {
 
   private async save(): Promise<void> {
     try {
-      await S3Api.saveConfig({
+      const body: Record<string, Object> = {
         'endpoint': this.endpoint,
         'region': this.region.length > 0 ? this.region : 'cn-east-1',
         'bucket': this.bucket,
-        'accessKeyId': this.ak,
-        'secretAccessKey': this.sk
-      });
+        'accessKeyId': this.ak
+      };
+      if (this.sk.length > 0) {
+        body['secretAccessKey'] = this.sk;
+      }
+      await S3Api.saveConfig(body);
       promptAction.showToast({ message: '已保存' });
       await this.load();
     } catch (e) {
