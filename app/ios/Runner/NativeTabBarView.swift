@@ -22,7 +22,7 @@ extension UIColor {
 }
 
 class OutboxButton: UIControl {
-    private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
+    private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
     private let colorOverlayView = UIView()
     private let iconView = UIImageView()
     private let badgeLabel = UILabel()
@@ -107,8 +107,8 @@ class OutboxButton: UIControl {
         if #available(iOS 13.0, *) {
             layer.borderColor = UIColor { trait in
                 return trait.userInterfaceStyle == .dark
-                    ? UIColor(white: 1.0, alpha: 0.15)
-                    : UIColor(white: 0.0, alpha: 0.06)
+                    ? UIColor(white: 1.0, alpha: 0.35)
+                    : UIColor(white: 1.0, alpha: 0.5)
             }.resolvedColor(with: traitCollection).cgColor
         }
     }
@@ -124,11 +124,11 @@ class OutboxButton: UIControl {
         if #available(iOS 13.0, *) {
             layer.borderColor = UIColor { trait in
                 return trait.userInterfaceStyle == .dark
-                    ? UIColor(white: 1.0, alpha: 0.15)
-                    : UIColor(white: 0.0, alpha: 0.06)
+                    ? UIColor(white: 1.0, alpha: 0.35)
+                    : UIColor(white: 1.0, alpha: 0.5)
             }.resolvedColor(with: traitCollection).cgColor
         } else {
-            layer.borderColor = UIColor(white: 0.0, alpha: 0.06).cgColor
+            layer.borderColor = UIColor(white: 1.0, alpha: 0.5).cgColor
         }
     }
     
@@ -136,11 +136,11 @@ class OutboxButton: UIControl {
         if #available(iOS 13.0, *) {
             colorOverlayView.backgroundColor = UIColor { trait in
                 return trait.userInterfaceStyle == .dark
-                    ? UIColor(white: 0.0, alpha: 0.15)
-                    : UIColor(white: 1.0, alpha: 0.75)
+                    ? UIColor(white: 0.1, alpha: 0.15)
+                    : UIColor(white: 1.0, alpha: 0.15)
             }
         } else {
-            colorOverlayView.backgroundColor = UIColor(white: 1.0, alpha: 0.75)
+            colorOverlayView.backgroundColor = UIColor(white: 1.0, alpha: 0.15)
         }
     }
     
@@ -216,6 +216,20 @@ class NativeTabBarView: UIView, UITabBarDelegate {
     private func updateAppearance() {
         let appearance = UITabBarAppearance()
         appearance.configureWithDefaultBackground()
+        appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        
+        if #available(iOS 13.0, *) {
+            appearance.backgroundColor = UIColor { trait in
+                return trait.userInterfaceStyle == .dark
+                    ? UIColor(white: 0.1, alpha: 0.15)
+                    : UIColor(white: 1.0, alpha: 0.15)
+            }
+        } else {
+            appearance.backgroundColor = UIColor(white: 1.0, alpha: 0.15)
+        }
+        
+        appearance.shadowColor = .clear
+        
         systemTabBar.standardAppearance = appearance
         if #available(iOS 15.0, *) {
             systemTabBar.scrollEdgeAppearance = appearance
