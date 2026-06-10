@@ -11,7 +11,6 @@ export interface S3ConfigDetail {
   region?: string;
   bucket?: string;
   accessKeyId?: string;
-  secretAccessKey?: string;
 }
 
 export interface PresignUploadResponse {
@@ -32,8 +31,7 @@ export class S3Api {
       endpoint: j['endpoint'] !== undefined ? `${j['endpoint']}` : undefined,
       region: j['region'] !== undefined ? `${j['region']}` : undefined,
       bucket: j['bucket'] !== undefined ? `${j['bucket']}` : undefined,
-      accessKeyId: j['accessKeyId'] !== undefined ? `${j['accessKeyId']}` : undefined,
-      secretAccessKey: j['secretAccessKey'] !== undefined ? `${j['secretAccessKey']}` : undefined
+      accessKeyId: j['accessKeyId'] !== undefined ? `${j['accessKeyId']}` : undefined
     };
   }
 

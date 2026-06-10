@@ -46,7 +46,6 @@ public class S3ConfigResponse {
     private String region;
     private String bucket;
     private String accessKeyId;
-    private String secretAccessKey;
 
     /** true = Path-style; false = virtual-hosted. */
     private Boolean pathStyleAccessEnabled;

@@ -34,6 +34,8 @@ class AuthServiceRefreshTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private VerificationCodeService verificationCodeService;
+    @Mock
+    private UserDataEncryptionService userDataEncryption;
 
     private AppJwtService jwtService;
     private AuthService authService;
@@ -51,7 +53,8 @@ class AuthServiceRefreshTest {
                 deviceService,
                 passwordEncoder,
                 jwtService,
-                verificationCodeService);
+                verificationCodeService,
+                userDataEncryption);
     }
 
     @Test
